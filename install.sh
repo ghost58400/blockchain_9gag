@@ -1,7 +1,7 @@
 #!/bin/bash
 
 dhclient
-yum update
+yum update -y
 yum install -y nano wget htop ntpdate
 ntpdate pool.ntp.org
 
