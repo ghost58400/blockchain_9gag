@@ -4,7 +4,6 @@ chain_name=chain1
 ip=192.168.32.146
 port=1234
 
-dhclient
 multichain-cli $chain_name stop
 sleep 2
 rm -rf ~/.multichain/$chain_name
@@ -23,6 +22,6 @@ default_privkey=$(echo $hex_priv | xxd -p -r)
 default_address=$(echo $hex_addr | xxd -p -r)
 
 
-#faire une seule ligne en raw
+#faire une seule ligne en raw sans ajouter privkey au wallet
 multichain-cli $chain_name importprivkey $default_privkey
 multichain-cli $chain_name sendfrom $default_address $my_addr 0
