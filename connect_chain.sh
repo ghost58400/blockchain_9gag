@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-if [ $# -ne 2 ]
+if [ $# -ne 3 ]
   then
-    echo "Usage : connect_chain.sh IP NICKNAME"
-    echo "Where IP is the ip address of the node you want to connect to and where NICKNAME is the nickname you want to be identified by."
+    echo "Usage : connect_chain.sh IP NICKNAME CHAIN_NAME"
+    echo "Where IP is the ip address of the node you want to connect to, NICKNAME is the nickname you want to be identified by and CHAIN_NAME is the name of the chain you want to connect to."
     exit
 fi
 
-chain_name=chain1
+chain_name=$3
 ip=$1
 nickname=$2
 port=1234
