@@ -35,7 +35,6 @@ with open(pathconf,"r") as f:
 
 rpchost = '127.0.0.1'
 rpcport = '1235'
-chainname = 'chain1'
 
 apirpc = Savoir(rpcuser, rpcpasswd, rpchost, rpcport, chainname)
 # on se connecte au noeud IPFS
