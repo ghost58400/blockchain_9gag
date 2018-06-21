@@ -374,114 +374,22 @@ a.random-meme:hover{
 }
 /* end top nav bar */
 
-/* begin sub-nav bar */
-
-.sub-navbar{
-	position:fixed;
-	background-color:#fff;
-	width:100%;
-	border-bottom:1px solid #E7E4DA;
-	top:65px;
-	right:0;
-	left:0;
-	z-index:1999;
-	box-shadow: 0 5px 5px -5px #ccc;
-	-moz-box-shadow:0 5px 5px -5px #ccc;
-	-webkit-box-shadow:0 5px 5px -5px #ccc;
-}
-
-.sub-navwrap{
-	height: 35px;
-	width: 960px;
-	margin: 0 auto;
-	position: relative;
-	overflow:hidden;
-	text-transform: lowercase;
-}
-
-.sub-heading{
-	float:left;
-	height:25px;
-	display:block;
-	margin-top:5px;
-	width:555px;
-	overflow:hidden;
-	margin-left:5px;
-}
-.sub-heading ul li span{
-	color:#999;
-}
-.sub-heading ul{
-	position:relative;
-	list-style-type:none;
-	margin:0px;
-	padding:0px;
-	display:block;
-	float:left;
-	height:25px;
-	overflow:hidden;
-}
-.sub-heading ul li{
-	display:inline-block;
-	float:left;
-	padding-top:4px;
-	margin-right: 15px;
-}
-.sub-heading ul li a{
-	display:inline-block;
-	float:left;
-	color:#8ca7dd;
-}
-.sub-heading ul li a:hover{
-	color:#8ca7dd;
-}
-.sub-heading ul li a.current{
-border-bottom: 2px solid #8ca7dd;
-padding-bottom: 2px;
-color: #111;
-}
-.sub-heading ul li a:hover{
-border-bottom: 2px solid #8ca7dd;
-padding-bottom: 2px;
-color: #111;
-}
-
-.fade a{
-	float:right;
-	background:#555;
-	border-radius:4px;
-	-webkit-border-radius:4px;
-	-moz-border-radius:4px;
-	padding:5px;
-	color:#fff;
-}
-.fade a:hover{
-	background:#8ca7dd;
-	color:#fff;
-}
-.fade{
-	margin-top: 0px;
-	display: block;
-	position: absolute;
-	right: 0;
-	z-index: 100;
-	height: 25px;
-	width: 50px;
-	background: -moz-linear-gradient(left,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 14%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,0)), color-stop(14%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(left,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 14%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(left,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 14%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(left,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 14%); /* IE10+ */
-	background: linear-gradient(to right,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 14%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 ); /* IE6-9 */
-}
-.more-cats{
-	display:none;
-}
-/* end sub-nar bar */
-
 /*begin page content */
-
+html {
+  height:100%;
+  background:black
+}
+body {
+  min-height:100%;
+  max-width:1100px;
+  min-width:600px;
+  margin:0 auto;
+  background:white;
+  color:black;
+}
+main {
+  padding:1em;
+}
 a {
 	color:#222;
 	text-decoration:none;
@@ -566,61 +474,6 @@ a:hover {
 
 <div ng-controller="TaskController">
 
-    <!--  Add New Task -->
-    <div class="modal fade" id="add_new_task_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Add Task</h4>
-                </div>
-                <div class="modal-body">
-
-                    <ul class="alert alert-danger" ng-if="errors.length > 0">
-                        <li ng-repeat="error in errors">
-                            {{ error }}
-                        </li>
-                    </ul>
-
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input ng-model="task.name" type="text" id="name" class="form-control"/>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea ng-model="task.description" class="form-control" name="description"></textarea>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" ng-click="addTask()">Add Task</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Update Task -->
-    <div class="modal fade" id="modal_update_task" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="modal-body">
-
-                    <ul class="alert alert-danger" ng-if="errors.length > 0">
-                        <li ng-repeat="error in errors">
-                            {{ error }}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- // Modal -->
 </div>
 
