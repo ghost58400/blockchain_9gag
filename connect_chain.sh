@@ -9,6 +9,7 @@ sleep 2
 rm -rf ~/.multichain/$chain_name
 
 multichaind $chain_name@$ip:$port -daemon -autosubscribe=streams
+ipfs daemon &
 sleep 2
 
 json_myaddr=$(multichain-cli $chain_name getaddresses)
@@ -30,5 +31,3 @@ txid=$(multichain-cli $chain_name createrawsendfrom $default_address {\"$my_addr
 signed_hex_json=$(multichain-cli $chain_name signrawtransaction $txid null \[\"$default_privkey\"])
 signed_hex=$(echo $signed_hex_json | python -c "import sys, json; print json.load(sys.stdin)['hex']")
 multichain-cli $chain_name sendrawtransaction $signed_hex
-
-ipfs daemon &

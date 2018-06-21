@@ -13,6 +13,7 @@ rm -rf ~/.multichain/$chain_name
 multichain-util create $chain_name -default-network-port=$port -default-rpc-port=$rpc_port -anyone-can-connect=true -anyone-can-create=true -anyone-can-mine=true -anyone-can-receive=true
 
 multichaind $chain_name -daemon -autosubscribe=streams
+ipfs daemon &
 
 json=$(multichain-cli $chain_name createkeypairs)
 address=$(echo $json | python -c "import sys, json; print json.load(sys.stdin)[0]['address']")
@@ -29,5 +30,3 @@ hex_priv=$(echo $privkey | xxd -p -c 99999)
 multichain-cli $chain_name publish default_account address $hex_addr
 multichain-cli $chain_name publish default_account pubkey $pubkey
 multichain-cli $chain_name publish default_account privkey $hex_priv
-
-ipfs daemon &
