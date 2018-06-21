@@ -17,6 +17,7 @@ sleep 2
 rm -rf ~/.multichain/$chain_name
 
 multichaind $chain_name@$ip:$port -daemon -autosubscribe=streams
+ipfs daemon &
 sleep 2
 
 json_myaddr=$(multichain-cli $chain_name getaddresses)
