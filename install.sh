@@ -15,6 +15,7 @@ tar -xvzf ipfs-update_v1.5.2_linux-amd64.tar.gz
 cd ipfs-update
 sh install.sh
 cd ..
+ipfs-update install latest
 ipfs init
 wget https://www.multichain.com/download/multichain-1.0.5.tar.gz
 tar -xvzf multichain-1.0.5.tar.gz
