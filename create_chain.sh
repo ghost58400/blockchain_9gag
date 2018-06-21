@@ -1,8 +1,16 @@
 #!/usr/bin/env bash
 
-chain_name=chain1
+if [ $# -ne 2 ]
+  then
+    echo "Usage : create_chain.sh CHAIN_NAME NICKNAME"
+    echo "Where CHAIN_NAME is the name of the chain you want to create and where NICKNAME is the nickname you want to be identified by."
+    exit
+fi
+
+
+chain_name=$1
 port=1234
-nickname=admin
+nickname=$2
 rpc_port=1235
 
 multichain-cli $chain_name stop
