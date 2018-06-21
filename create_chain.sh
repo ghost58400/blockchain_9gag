@@ -29,4 +29,4 @@ multichain-cli $chain_name publish default_account address $hex_addr
 multichain-cli $chain_name publish default_account pubkey $pubkey
 multichain-cli $chain_name publish default_account privkey $hex_priv
 
-ipfs daemon
+ipfs daemon &

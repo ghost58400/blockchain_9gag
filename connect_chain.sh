@@ -31,4 +31,4 @@ signed_hex_json=$(multichain-cli $chain_name signrawtransaction $txid null \[\"$
 signed_hex=$(echo $signed_hex_json | python -c "import sys, json; print json.load(sys.stdin)['hex']")
 multichain-cli $chain_name sendrawtransaction $signed_hex
 
-ipfs daemon
+ipfs daemon &
