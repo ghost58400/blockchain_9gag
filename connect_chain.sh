@@ -36,13 +36,12 @@ default_address=$(echo -n $hex_addr | xxd -p -r)
 multichain-cli $chain_name importaddress $default_address
 txid=$(multichain-cli $chain_name createrawsendfrom $default_address {\"$my_addr\":0})
 signed_hex_json=$(multichain-cli $chain_name signrawtransaction $txid null \[\"$default_privkey\"])
-signed_hex=$(echo $signed_hex_json | python -c "import sys, json; print json.load(sys.stdin)['hex']")
+signed_hex=$(echo -n $signed_hex_json | python -c "import sys, json; print json.load(sys.stdin)['hex']")
 multichain-cli $chain_name sendrawtransaction $signed_hex
 
-#faire une seule ligne en raw sans ajouter privkey au wallet
-multichain-cli $chain_name importprivkey $default_privkey
-multichain-cli $chain_name sendfrom $default_address $my_addr 0
+sleep 20
 
 hex_nick=$(echo -n $nickname | xxd -p -c 99999)
 multichain-cli $chain_name publish nickname_resolve pseudo $hex_nick
-ipfs daemon
+
+ipfs daemon &
