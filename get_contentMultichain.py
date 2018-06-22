@@ -11,7 +11,7 @@ if len(sys.argv) < 2:
   print("Usage: <chain>")
   sys.exit(-1)
 
-chainname = str(sys.arg[1])
+chainname = str(sys.argv[1])
 pathconf = "/root/.multichain/" + chainname + "/multichain.conf"
 rpcuser = ""
 rpcpassword = ""
@@ -34,7 +34,7 @@ with open("/root/.multichain/chain1/multichain.conf","r") as f:
 rpchost = '127.0.0.1'
 rpcport = '1235'
 
-apirpc = Savoir(rpcuser, rpcpasswd, rpchost, rpcport, chainname)
+apirpc = Savoir(rpcuser, rpcpassword, rpchost, rpcport, chainname)
 # on se connecte au noeud IPFS
 api = ipfsapi.connect('127.0.0.1', 5001)
 
