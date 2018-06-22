@@ -31,6 +31,9 @@ with open("/root/.multichain/chain1/multichain.conf","r") as f:
         print("Couldn't retrieve rpcpassword from " + chainname)
         sys.exit(-1)
 
+rpcuser.replace('\n', '')
+rpcpassword.replace('\n', '')
+
 rpchost = '127.0.0.1'
 rpcport = '1235'
 
