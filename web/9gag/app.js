@@ -1,8 +1,8 @@
 
-angular.module('App', ['ngRoute','App.post',]).
+angular.module('App', ['ngRoute','App.post',])
 
 //routage
-config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+    .config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
 
     $locationProvider.hashPrefix('!');
 
