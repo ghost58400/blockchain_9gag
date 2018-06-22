@@ -61,5 +61,5 @@ for item in streams:
 
 print(posts)
 for item in posts:
-    print(item['name'])
+    print(item['title'])
     print(api.cat(item['ipfs']))
