@@ -45,23 +45,21 @@ api = ipfsapi.connect('127.0.0.1', 5001)
 s = apirpc.liststreams()
 streams = []
 for i in s:
-    if i['name'] != 'root' and i['name'] != 'default_account':
+    if i['name'] != 'root' and i['name'] != 'default_account' and i['name'] != 'nickname_resolve':
         streams.append(i['name'])
 
 posts = []
 for item in streams:
     stream = apirpc.liststreamitems(item)
-    nom = ''
+    nom = binascii.unhexlify(item)
     ipfs = ''
     for it in stream:
-        if it['key'] == 'title':
-            nom = binascii.unhexlify(it['data'])
         if it['key'] == 'ipfs':
             ipfs = binascii.unhexlify(it['data'])
-    if nom != '' and ipfs != '':
+    if ipfs != '':
         posts.append({'title': nom, 'ipfs': ipfs})
 
 print(posts)
 for item in posts:
-    print(item['name'])
+    print(item['title'])
     print(api.cat(item['ipfs']))
