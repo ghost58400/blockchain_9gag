@@ -19,17 +19,16 @@
             <h1><a href="/">Memes.com : all your memes</a></h1>
             <div class="menu-items">
                 <ul>
-                    <li><a href="news/">best</a></li>
-                    <li><a href="/" class="current">what's hot</a></li>
+                    <li><a href="#!/news/">best</a></li>
+                    <li><a href="#!/home/" class="current">what's hot</a></li>
 
                 </ul>
             </div>
             <div class="user-functions">
                 <ul>
-                    <li><a href="random/" class="random-meme" title="randomize">random memes</a></li>
-                    <li><a href="submit/" class="upload-meme"><span>upload a funny</span></a></li>
-                    <li><a href="caption/" class="make-meme"><span>caption a meme</span></a></li>
-                    <li><a href="create_post.html"><span>Create a post</span></a></li>
+                    <li><a href="#!/show_post/" class="random-meme" title="randomize">random memes</a></li>
+                    <li><a href="#!/create_post/" class="upload-meme"><span>upload a funny</span></a></li>
+                    <li><a href="#!/caption/" class="make-meme"><span>caption a meme</span></a></li>
                 </ul>
             </div>
             <div class="nav-search">
@@ -40,9 +39,9 @@
             <div class="menu-items user-login">
                 <ul>
                     <li id="shownsfw"><a href="javascript:void(0)" onclick="toggleNSFW();" id="shownsfwlink">show
-                            NSFW</a></li>
+                        NSFW</a></li>
                     <li id="fblogin"><a href="javascript:void(0)" onclick="doLogin();" id="fbloginlink">login</a><a
-                                href="javascript:void(0)" id="fblogintext" style="display:none;"></a></li>
+                            href="javascript:void(0)" id="fblogintext" style="display:none;"></a></li>
                 </ul>
             </div>
             <div class="clear"></div>
@@ -55,7 +54,6 @@
 </div>
 
 
-
 <!-- Jquery JS file -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 <!-- AngularJS files -->
@@ -64,5 +62,7 @@
 <!-- Bootstrap JS file -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.js"></script>
 
+<script src="app.js" type="text/javascript" rel="script"></script>
+<script src="post/post.js" type="text/javascript" rel="script"></script>
 </body>
 </html>
