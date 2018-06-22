@@ -10,14 +10,13 @@ import ipfsapi
 
 
 def resolve_name(account):
-    #ajouter prise en compte du plus récent
+    #ajouter prise en compte du plus recent
     nicknames = apirpc.liststreamitems('nickname_resolve')
     ret = 'name not found'
     for nickname in nicknames:
         if nickname['publishers'][0] == account:
             if nickname['key'] == 'pseudo':
                 ret = binascii.unhexlify(nickname['data'])
-        #print(nickname)
     return ret
 
 
