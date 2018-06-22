@@ -1,0 +1,5 @@
+# ignore the following folders
+.git
+.gitignore
+README.md
+.dockerignore

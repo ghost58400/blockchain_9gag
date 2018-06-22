@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-
-dhclient
+echo "-------------"
+echo "INSTALLING THE NEEDED PACKAGES"
+echo "-------------"
 echo dhclient >> /etc/rc.d/rc.local
 chmod +x /etc/rc.d/rc.local
 yum update -y
@@ -20,4 +21,6 @@ wget https://www.multichain.com/download/multichain-1.0.5.tar.gz
 tar -xvzf multichain-1.0.5.tar.gz
 cd multichain-1.0.5
 mv multichaind multichain-cli multichain-util /usr/bin/
-ip a
+echo "-------------"
+echo "INSTALLATION FINISHED"
+echo "-------------"
