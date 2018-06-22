@@ -11,9 +11,12 @@ import ipfsapi
 
 def resolve_name(account):
     nicknames = apirpc.liststreamitems('nickname_resolve')
+    ret = 'name not found'
     for nickname in nicknames:
-        print(nickname)
-    return ''
+        if nickname['publishers'][0] == account:
+            ret = binascii.unhexlify(nickname['pseudo'])
+        #print(nickname)
+    return ret
 
 
 if len(sys.argv) < 2:
