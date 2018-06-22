@@ -9,8 +9,8 @@ fi
 
 
 chain_name=$1
-port=1234
 nickname=$2
+port=1234
 rpc_port=1235
 
 multichain-cli $chain_name stop
