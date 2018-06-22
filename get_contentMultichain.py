@@ -8,6 +8,14 @@ import ipfsapi
 # print("You need to install ipfs and/or Savoir, see googledocs instructions")
 # sys.exit(-1)
 
+
+def resolve_name(account):
+    nicknames = apirpc.liststreamitems('nickname_resolve')
+    for nickname in nicknames:
+        print(nickname)
+    return ''
+
+
 if len(sys.argv) < 2:
     print("Usage: <chain>")
     sys.exit(-1)
@@ -62,7 +70,8 @@ for item in streams:
         if it['key'] == 'type':
             type_contenu = binascii.unhexlify(it['data'])
     if ipfs != '' and type_contenu != '' and author_account != '':
-        posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author_account})
+        author = resolve_name(author_account)
+        posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author})
 
 print(posts)
 for item in posts:
