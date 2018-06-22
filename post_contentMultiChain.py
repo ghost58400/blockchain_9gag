@@ -2,6 +2,7 @@ import sys,os
 
 from Savoir import Savoir
 import ipfsapi
+import binascii
 #except:
  # print("You need to install ipfs and/or Savoir, see googledocs instructions")
   #sys.exit(-1)
