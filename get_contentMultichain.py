@@ -53,14 +53,14 @@ for item in streams:
     stream = apirpc.liststreamitems(item)
     nom = binascii.unhexlify(item)
     ipfs = ''
-    type = ''
+    type_contenu = ''
     for it in stream:
         if it['key'] == 'ipfs':
             ipfs = binascii.unhexlify(it['data'])
         if it['key'] == 'type':
-            type = binascii.unhexlify(it['data'])
-    if ipfs != '' and type != '':
-        posts.append({'title': nom, 'ipfs': ipfs, 'type': type})
+            type_contenu = binascii.unhexlify(it['data'])
+    if ipfs != '' and type_contenu != '':
+        posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu})
 
 print(posts)
 for item in posts:
