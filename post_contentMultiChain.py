@@ -11,11 +11,11 @@ import binascii
 #listpermissions <nom du stream>.*
 
 #on teste le fichier a poster
-if len(sys.argv) < 5:
-  print("Usage: <file> <name post> <stream> <chain>")
+if len(sys.argv) < 4:
+  print("Usage: <file> <name post> <chain>")
   sys.exit(-1)
 
-chainname = str(sys.argv[4])
+chainname = str(sys.argv[3])
 pathconf = "/root/.multichain/" + chainname + "/multichain.conf"
 rpcuser = ""
 rpcpassword = ""
@@ -56,7 +56,9 @@ if ext not in ext_allowed:
 #on ajoute le fichier
 res = api.add(sys.argv[1])
 print(res)
-apirpc.create('stream', sys.argv[3], False)
-apirpc.publish(sys.argv[3], "ipfs", binascii.hexlify(res['Hash']))
-apirpc.publish(sys.argv[3], "name", binascii.hexlify(sys.argv[2]))
+
+streamname = binascii.hexlify(sys.argv[2])
+
+apirpc.create('stream', streamname, False)
+apirpc.publish(streamname, "ipfs", binascii.hexlify(res['Hash']))
 print(apirpc.liststreamitems(sys.argv[3]))
