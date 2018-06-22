@@ -45,7 +45,7 @@ api = ipfsapi.connect('127.0.0.1', 5001)
 s = apirpc.liststreams()
 streams = []
 for i in s:
-    if i['name'] != 'root' and i['name'] != 'default_account':
+    if i['name'] != 'root' and i['name'] != 'default_account' and i['name'] != 'nickname_resolve':
         streams.append(i['name'])
 
 posts = []
