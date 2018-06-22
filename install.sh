@@ -13,7 +13,7 @@ pip install ipfsapi
 #remplacer from Savoir.Savoir import *
 #par from Savoir import Savoir
 #dans /usr/lib/python2.7/site-packages/Savoir/__init__.py
-sed -i -e "s/from Savoir.Savoir import */from Savoir import Savoir/g" /usr/lib/python2.7/site-packages/Savoir/__init__.py
+sed -i -e "s/from Savoir.Savoir import \*/from Savoir import Savoir/g" /usr/lib/python2.7/site-packages/Savoir/__init__.py
 
 ntpdate pool.ntp.org
 
