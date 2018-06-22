@@ -6,7 +6,7 @@ echo dhclient >> /etc/rc.d/rc.local
 chmod +x /etc/rc.d/rc.local
 yum -y --enablerepo=extras install epel-release
 yum update -y
-yum install -y nano wget ntpdate vim-common python-pip
+yum install -y nano wget ntpdate vim-common python-pip dhclient net-tools
 pip install --upgrade pip
 pip install flask
 pip install Savoir
