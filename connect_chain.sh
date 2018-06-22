@@ -7,9 +7,9 @@ if [ $# -ne 3 ]
     exit
 fi
 
-chain_name=$3
 ip=$1
 nickname=$2
+chain_name=$3
 port=1234
 
 multichain-cli $chain_name stop
