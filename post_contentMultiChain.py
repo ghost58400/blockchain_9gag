@@ -33,6 +33,9 @@ with open(pathconf,"r") as f:
         print("Couldn't retrieve rpcpassword from " + chainname)
         sys.exit(-1)
 
+rpcuser = rpcuser.replace('\n', '')
+rpcpassword = rpcpassword.replace('\n', '')
+
 rpchost = '127.0.0.1'
 rpcport = '1235'
 
