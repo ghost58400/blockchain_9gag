@@ -53,13 +53,20 @@ for item in streams:
     stream = apirpc.liststreamitems(item)
     nom = binascii.unhexlify(item)
     ipfs = ''
+    type_contenu = ''
+    author_account = ''
     for it in stream:
         if it['key'] == 'ipfs':
             ipfs = binascii.unhexlify(it['data'])
-    if ipfs != '':
-        posts.append({'title': nom, 'ipfs': ipfs})
+            author_account = it['publishers'][0]
+        if it['key'] == 'type':
+            type_contenu = binascii.unhexlify(it['data'])
+    if ipfs != '' and type_contenu != '' and author_account != '':
+        posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author_account})
 
 print(posts)
 for item in posts:
     print(item['title'])
+    print(item['type'])
+    print(item['author'])
     print(api.cat(item['ipfs']))
