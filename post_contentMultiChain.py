@@ -11,8 +11,8 @@ import binascii
 #listpermissions <nom du stream>.*
 
 #on teste le fichier a poster
-if len(sys.argv) < 4:
-  print("Usage: <file> <name post> <chain>")
+if len(sys.argv) < 5:
+  print("Usage: <file> <name post> <chain> <type>")
   sys.exit(-1)
 
 chainname = str(sys.argv[3])
@@ -51,5 +51,6 @@ print(res)
 streamname = binascii.hexlify(sys.argv[2])
 
 apirpc.create('stream', streamname, False)
-apirpc.publish(streamname, "ipfs", binascii.hexlify(res['Hash']))
+apirpc.publish(streamname, 'ipfs', binascii.hexlify(res['Hash']))
+apirpc.publish(streamname, 'type', binascii.hexlify(sys.argv[4]))
 print(apirpc.liststreamitems(sys.argv[3]))
