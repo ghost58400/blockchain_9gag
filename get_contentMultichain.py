@@ -54,16 +54,19 @@ for item in streams:
     nom = binascii.unhexlify(item)
     ipfs = ''
     type_contenu = ''
+    author_account = ''
     for it in stream:
         if it['key'] == 'ipfs':
             ipfs = binascii.unhexlify(it['data'])
+            author_account = it['publishers'][0]
         if it['key'] == 'type':
             type_contenu = binascii.unhexlify(it['data'])
-    if ipfs != '' and type_contenu != '':
-        posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu})
+    if ipfs != '' and type_contenu != '' and author_account != '':
+        posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author_account})
 
 print(posts)
 for item in posts:
     print(item['title'])
     print(item['type'])
+    print(item['author'])
     print(api.cat(item['ipfs']))
