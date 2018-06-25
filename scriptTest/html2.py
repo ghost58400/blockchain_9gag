@@ -20,7 +20,7 @@ foot = """
   </html>
 """
 images = []
-for file in os.listdir('/home/energie/Script/Imgur100/'):
+for file in os.listdir('meme/'):
   if os.path.isfile(os.path.join('/home/energie/Script/Imgur100/', file)):
     name, ext = os.path.splitext(os.path.join('/home/energie/Script/Imgur100/', file))
     if ext == ".jpg":
