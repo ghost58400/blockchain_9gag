@@ -47,7 +47,26 @@ def connectChain(ip, chain_name, nickname, port=1234):
     json_addr = apirpc.liststreamkeyitems("default_account", "address")
     json_priv = apirpc.liststreamkeyitems("default_account", "privkey")
 
+    hex_addr = json.load(json_addr[0]['data'])
+    hex_priv = json.load(json_priv[0]['data'])
+    my_addr = json.load(json_myaddr[0])
 
+    default_privkey = hex_priv.decode("hex")
+    default_address = hex_addr.decode("hex")
+
+    apirpc.importaddress(default_address)
+    txid = apirpc.createrawsendfrom(default_address, '{"my_addr":0}')
+    signed_hex_json = apirpc.signrawtransaction(txid, "null", "[" + str(default_privkey) + "]")
+    signed_hex = json.load(signed_hex_json['hex'])
+    apirpc.sendrawtransaction(signed_hex)
+
+    print("Please wait...")
+    time.sleep(20)
+
+    hex_nick = nickname.encode("hex")
+    apirpc.publish("nickname_resolve", "pseudo", str(hex_nick))
+
+    print("---------- Terminé ------------")
 
 
 
