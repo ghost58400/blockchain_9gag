@@ -14,7 +14,7 @@ angular.module('App.post', ['ngRoute'])
             controller: 'PostController'
         });
         $routeProvider.when('/show_post', {
-            templateUrl: 'static/post/show_post_html',
+            templateUrl: 'static/post/show_post.html',
             controller: 'PostController'
         });
     }])

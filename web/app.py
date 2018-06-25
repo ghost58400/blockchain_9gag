@@ -14,6 +14,23 @@ def index():
     return send_from_directory('static', 'index.html')
 
 
+@app.route('/chain_name')
+def chain_name():
+    return get_chain_name()
+
+
+@app.route('/connect/<chain_name>/<ip>/<port>')
+def connect(chain_name, ip, port):
+    connect_chain(ip, port, chain_name)
+    return 'ok'
+
+
+@app.route('/create_blockchain/<chain_name>')
+def create_blockchain(chain_name):
+    create_chain(chain_name)
+    return 'ok'
+
+
 @app.route('/get_posts')
 def get_posts():
     api = get_api('localhost', '1235', 'chain1')
