@@ -1,25 +1,25 @@
 import binascii
-
+import os
 from Savoir import Savoir
-
-default_rpc_port = '1235'
-default_rpc_host = '127.0.0.1'
+from consts import *
 
 
 def get_chain_name():
-    file = open('chain_name.txt', 'r')
+    file = open(os.path.dirname(os.path.realpath(__file__)) + '/chain_name.txt', 'r')
     val = file.read()
     file.close()
     return val
 
 
 def set_chain_name(name):
-    file = open('chain_name.txt', 'w')
+    file = open(os.path.dirname(os.path.realpath(__file__)) + '/chain_name.txt', 'w')
     file.write(name)
     file.close()
 
 
-def get_api(host=default_rpc_host, port=default_rpc_port, chain_name=get_chain_name()):
+def get_api(host=default_rpc_host, port=default_rpc_port, chain_name=''):
+    if chain_name == '':
+        chain_name = get_chain_name()
     pathconf = "/root/.multichain/" + chain_name + "/multichain.conf"
     rpcuser = ""
     rpcpassword = ""
