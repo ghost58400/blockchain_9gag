@@ -1,4 +1,5 @@
 import binascii
+import os
 
 from Savoir import Savoir
 
@@ -7,14 +8,14 @@ default_rpc_host = '127.0.0.1'
 
 
 def get_chain_name():
-    file = open('chain_name.txt', 'r')
+    file = open(os.path.dirname(os.path.realpath(__file__)) + '/chain_name.txt', 'r')
     val = file.read()
     file.close()
     return val
 
 
 def set_chain_name(name):
-    file = open('chain_name.txt', 'w')
+    file = open(os.path.dirname(os.path.realpath(__file__)) + '/chain_name.txt', 'w')
     file.write(name)
     file.close()
 
