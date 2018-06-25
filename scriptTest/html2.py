@@ -1,4 +1,5 @@
-import os
+import os,sys
+from Naked.toolshed.shell import muterun_js
 head = """
 
 <html>
@@ -12,24 +13,32 @@ head = """
 """
 
 foot = """
+    	<script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
+	<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+	<script src="./index.js"></script>
     </body>
   </html>
 """
 images = []
-#with open("index.html", 'w') as f:
-for file in os.listdir('/home/energie/Script/Imgur100/'):
-  if os.path.isfile(os.path.join('/home/energie/Script/Imgur100/', file)):
-    name, ext = os.path.splitext(os.path.join('/home/energie/Script/Imgur100/', file))
+for file in os.listdir('/root/scriptTest/meme/'):
+  if os.path.isfile(os.path.join('/root/scriptTest/meme/', file)):
+    name, ext = os.path.splitext(os.path.join('/root/scriptTest/meme/', file))
     if ext == ".jpg":
       images.append(file)
 i = 1
 for img in images:
-  cont = '<div class=\"container\" style=\"text-align:center;\" id=\"post_'+str(i)+'\">\n<h2>'+img[:-4]+'</h2>\n<img style=\"width:auto;height:auto;max-width:500px;max-height:500px;\" src=\"' + img + '\"'
-  i += 1
+  response = muterun_js('deploy.js')
+  if response.exitcode == 0:
+    addr = str(response.stdout[:-1])[2:-1]
+    print(addr)
+  else:
+    print('Deploy contract error')
+    sys.exit(-1)
+  cont = '<div class=\"container\" style=\"text-align:center;\" id=\"post_'+str(i)+'\">\n<h2>'+img[:-4]+'</h2>\n<img id=\"'+addr+'\" style=\"width:auto;height:auto;max-width:500px;max-height:500px;\" src=\"' + img + '\"'
   cont += " />\n"
-  cont += """<p id="like_"""+ str(i) +""""></p><p id="dislike_"""+ str(i)  +""""></p><a style=\"margin:10px;\" href="#" onclick="Like()" class="btn btn-primary">Like</a><a href="#" onclick="Dislike()" class="btn btn-danger">Dislike</a>"""
+  cont += """<p><em id="like_"""+ str(i) +""""></em><em id="dislike_"""+ str(i)  +""""></em></p><a style=\"margin:10px;\" onclick="Like("""+str(i)+""")" class="btn btn-primary">Like</a><a onclick="Dislike("""+str(i)+""")" class="btn btn-danger">Dislike</a>"""
   cont += "</div>\n"
-
+  i += 1
   head += cont
 
 head += foot

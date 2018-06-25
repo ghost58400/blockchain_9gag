@@ -1,20 +1,25 @@
 import binascii
+import json
+import os
+import shutil
+import time
+from subprocess import call
 
 from Savoir import Savoir
-
-default_rpc_port = '1235'
-default_rpc_host = '127.0.0.1'
+from consts import *
+import ipfsapi
 
 
 def get_chain_name():
-    file = open('chain_name.txt', 'r')
+    file = open(os.path.dirname(os.path.realpath(__file__)) + '/chain_name.txt', 'r')
     val = file.read()
     file.close()
+    val = val.replace('\n', '')
     return val
 
 
 def set_chain_name(name):
-    file = open('chain_name.txt', 'w')
+    file = open(os.path.dirname(os.path.realpath(__file__)) + '/chain_name.txt', 'w')
     file.write(name)
     file.close()
 
@@ -84,8 +89,41 @@ def get_all_posts(api):
     return posts
 
 
-def connect_chain(ip, port, chain_name):
+def connect_chain(ip, port, chain_name, nickname):
     # heavy stuff
+    apirpc = get_api()
+    api = ipfsapi.connect('127.0.0.1', 5001)
+    apirpc.stop()
+    time.sleep(2)
+    shutil.rmtree("/root/.multichain/" + str(chain_name))
+    call("multichaind", str(chain_name) + "@" + str(ip) + ":" + str(port), "-daemon", "-autosubscribe=streams")
+    call("ipfs", "daemon")
+    time.sleep(2)
+    json_myaddr = apirpc.getaddresses
+    json_addr = apirpc.liststreamkeyitems("default_account", "address")
+    json_priv = apirpc.liststreamkeyitems("default_account", "privkey")
+
+    hex_addr = json.load(json_addr[0]['data'])
+    hex_priv = json.load(json_priv[0]['data'])
+    my_addr = json.load(json_myaddr[0])
+
+    default_privkey = hex_priv.decode("hex")
+    default_address = hex_addr.decode("hex")
+
+    apirpc.importaddress(default_address)
+    txid = apirpc.createrawsendfrom(default_address, '{"my_addr":0}')
+    signed_hex_json = apirpc.signrawtransaction(txid, "null", "[" + str(default_privkey) + "]")
+    signed_hex = json.load(signed_hex_json['hex'])
+    apirpc.sendrawtransaction(signed_hex)
+
+    print("Please wait...")
+    time.sleep(20)
+
+    hex_nick = nickname.encode("hex")
+    apirpc.publish("nickname_resolve", "pseudo", str(hex_nick))
+
+    print("---------- Finished ------------")
+
     set_chain_name(chain_name)
 
 

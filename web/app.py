@@ -17,9 +17,9 @@ def chain_name():
     return get_chain_name()
 
 
-@app.route('/connect/<chain_name>/<ip>/<port>')
-def connect(chain_name, ip, port):
-    connect_chain(ip, port, chain_name)
+@app.route('/connect/<chain_name>/<ip>/<port>/<nickname>')
+def connect(chain_name, ip, port, nickname):
+    connect_chain(ip, port, chain_name, nickname)
     return 'ok'
 
 
@@ -31,6 +31,8 @@ def create_blockchain(chain_name):
 
 @app.route('/get_posts')
 def get_posts():
+    if get_chain_name() == '':
+        return 'pas de chaine configuree'
     posts = get_all_posts(get_api())
     return jsonify(posts)
     # return jsonify(streams)
