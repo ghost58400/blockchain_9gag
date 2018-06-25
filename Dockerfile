@@ -1,9 +1,9 @@
 FROM centos
 
-ADD . /root
+ADD ./install.sh /root
 WORKDIR /root
-RUN yum install -y dhclient net-tools
 RUN sh /root/install.sh
-RUN rm -rf /root/.git*
+RUN rm -f /root/install.sh
+ADD . /root
 
 CMD ["/bin/bash"]

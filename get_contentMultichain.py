@@ -10,12 +10,13 @@ import ipfsapi
 
 
 def resolve_name(account):
+    #ajouter prise en compte du plus recent
     nicknames = apirpc.liststreamitems('nickname_resolve')
     ret = 'name not found'
     for nickname in nicknames:
         if nickname['publishers'][0] == account:
-            ret = binascii.unhexlify(nickname['pseudo'])
-        #print(nickname)
+            if nickname['key'] == 'pseudo':
+                ret = binascii.unhexlify(nickname['data'])
     return ret
 
 
@@ -82,3 +83,4 @@ for item in posts:
     print(item['type'])
     print(item['author'])
     print(api.cat(item['ipfs']))
+    print('https://ipfs.io/ipns/' + item['ipfs'])
