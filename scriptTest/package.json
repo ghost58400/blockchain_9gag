@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "blockchain_9gag",
   "author": "",
-  "repository": "git@github.com:llSourcell/ghost58400/blockchain_9gag.git",
+  "repository": "",
   "devDependencies": {
     "ethereumjs-testrpc": "^4.1.3",
     "solc": "^0.4.17",
