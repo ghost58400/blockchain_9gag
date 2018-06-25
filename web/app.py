@@ -1,5 +1,6 @@
 #! /usr/bin/python
 # -*- coding:utf-8 -*-
+from threading import Thread
 
 from flask import Flask, send_from_directory, jsonify
 from chain_utils import *
@@ -23,9 +24,9 @@ def connect(chain_name, ip, port, nickname):
     return 'ok'
 
 
-@app.route('/create_blockchain/<chain_name>')
-def create_blockchain(chain_name):
-    create_chain(chain_name)
+@app.route('/create_blockchain/<chain_name>/<nickname>')
+def create_blockchain(chain_name, nickname):
+    Thread(target=create_chain, args=[chain_name, nickname]).start()
     return 'ok'
 
 
@@ -49,12 +50,12 @@ def new_post():
 @app.route('/show_post/<num_stream>', methods=['GET'])
 def show_post(num_stream):
     return "Post : {}".format(num_stream)
-
-
 # stream = récupération stream
 # return jsonify(stream)
 
 
 if __name__ == '__main__':
-    app.debug = True
-    app.run(host='0.0.0.0', port=80)
+    name = get_chain_name()
+    if name != '':
+        call("multichaind " + name + " -daemon", shell=True)
+    app.run(host='0.0.0.0', port=80, debug=False)

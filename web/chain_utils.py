@@ -1,5 +1,4 @@
 import binascii
-import json
 import os
 import shutil
 import time
@@ -102,9 +101,9 @@ def connect_chain(ip, port, chain_name, nickname):
     json_addr = apirpc.liststreamkeyitems("default_account", "address")
     json_priv = apirpc.liststreamkeyitems("default_account", "privkey")
 
-    hex_addr = json.load(json_addr[0]['data'])
-    hex_priv = json.load(json_priv[0]['data'])
-    my_addr = json.load(json_myaddr[0])
+    hex_addr = json_addr[0]['data']
+    hex_priv = json_priv[0]['data']
+    my_addr = json_myaddr[0]
 
     default_privkey = hex_priv.decode("hex")
     default_address = hex_addr.decode("hex")
@@ -112,7 +111,7 @@ def connect_chain(ip, port, chain_name, nickname):
     apirpc.importaddress(default_address)
     txid = apirpc.createrawsendfrom(default_address, '{"my_addr":0}')
     signed_hex_json = apirpc.signrawtransaction(txid, "null", "[" + str(default_privkey) + "]")
-    signed_hex = json.load(signed_hex_json['hex'])
+    signed_hex = signed_hex_json['hex']
     apirpc.sendrawtransaction(signed_hex)
 
     print("Please wait...")
@@ -126,6 +125,45 @@ def connect_chain(ip, port, chain_name, nickname):
     set_chain_name(chain_name)
 
 
-def create_chain(chain_name):
-    # heavy stuff
+def create_chain(chain_name, nickname):
+    """ Create a new chain where 'chain_name' is the name of the chain you want to create and where 'nickname' is the nickname you want to be identified by."""
     set_chain_name(chain_name)
+    call("multichain-cli " + chain_name + " stop", shell=True)
+    time.sleep(2)
+    #call("firewall-cmd", "--permanent", "--zone=public", "--add-port=" + port + "/tcp")
+    #call("systemctl", "restart", "firewalld.service")
+    call('rm -rf /root/.multichain/' + chain_name, shell=True)
+    call("multichain-util create " + chain_name + " -default-network-port=" + default_chain_port + " -default-rpc-port=" + default_rpc_port + " -anyone-can-connect=true -anyone-can-create=true -anyone-can-mine=true -anyone-can-receive=true", shell=True)
+    call("multichaind " + chain_name + " -daemon -autosubscribe=streams", shell=True)
+
+    time.sleep(5)
+
+    apirpc = get_api()
+
+    json_rep = apirpc.createkeypairs()
+    address = json_rep[0]['address']
+    pubkey = json_rep[0]['pubkey']
+    privkey = json_rep[0]['privkey']
+
+    print(apirpc.create("stream", "default_account", False))
+    print(apirpc.send(address, 0))
+
+    hex_addr = address.encode("hex")
+    hex_priv = privkey.encode("hex")
+
+    time.sleep(2)
+
+    print(apirpc.publish("default_account", "address", hex_addr))
+    print(apirpc.publish("default_account", "pubkey", pubkey))
+    print(apirpc.publish("default_account", "privkey", hex_priv))
+
+    print(apirpc.create("stream", "nickname_resolve", True))
+
+    time.sleep(2)
+
+    hex_nick = nickname.encode("hex")
+
+    #a modifier avec les groupes : 
+    print(apirpc.publish("nickname_resolve", "nickname", hex_nick))
+    #apirpc.publish("nickname_resolve", "pubkey", pubkey)
+    print('create chain finished')
