@@ -5,9 +5,9 @@ import time
 import shutil
 from subprocess import call
 import json
-
 from Savoir import Savoir
 import ipfsapi
+
 
 def getSavoirOptions(chain_name, rpchost='127.0.0.1', rpcport='1235'):
     """ Return rpc_user, rpcpassword, rpchost, rpcport, and chain_name for the chain 'chain_name' """
@@ -30,17 +30,17 @@ def getSavoirOptions(chain_name, rpchost='127.0.0.1', rpcport='1235'):
 
     return rpcuser, rpcpassword, rpchost, rpcport, chain_name
 
-def connectChain(ip, chain_name, nickname, port=1234):
+
+def connectChain(ip, chain_name, nickname, port='1234'):
     """ Connect to the chain at 'ip' address where 'chain_name' is the name of the chain you want to create and where 'nickname' is the nickname you want to be identified by."""
     apirpc = Savoir(getSavoirOptions(chain_name))
-    api = ipfsapi.connect('127.0.0.1', 5001)
     apirpc.stop()
     time.sleep(2)
     shutil.rmtree("/root/.multichain/" + str(chain_name))
     call("multichaind", str(chain_name) + "@" + str(ip) + ":" + str(port), "-daemon", "-autosubscribe=streams")
     call("ipfs", "daemon")
     time.sleep(2)
-    json_myaddr = apirpc.getaddresses
+    json_myaddr = apirpc.getaddresses()
     json_addr = apirpc.liststreamkeyitems("default_account", "address")
     json_priv = apirpc.liststreamkeyitems("default_account", "privkey")
 
@@ -60,11 +60,12 @@ def connectChain(ip, chain_name, nickname, port=1234):
     print("Please wait...")
     time.sleep(20)
 
+    pubkey = json.load(apirpc.getaddresses("true")[0]['pubkey'])
     hex_nick = nickname.encode("hex")
-    apirpc.publish("nickname_resolve", "pseudo", str(hex_nick))
+    apirpc.publish("nickname_resolve", "nickname", str(hex_nick))
+    apirpc.publish("nickname_resolve", "pubkey", pubkey)
 
     print("---------- Finished -----------")
-
 
 
 def createChain(chain_name, nickname, port='1234', rpcport='1235'):
@@ -107,6 +108,24 @@ def createChain(chain_name, nickname, port='1234', rpcport='1235'):
     time.sleep(2)
 
     hex_nick = str(nickname).encode("hex")
-    apirpc.publish("nickname_resolve", hex_nick)
+    apirpc.publish("nickname_resolve", "nickname", hex_nick)
+    apirpc.publish("nickname_resolve", "pubkey", pubkey)
 
     print("--------- Finished ----------")
+
+
+def createGroup(chain_name, group_name, *users):
+    """ Create a group in chain 'chain_name', with the name 'group_name' and composed with
+    users *users.
+    Ex usage: createGroup("chain1", "insa_group", "benoit", "vladimir", "rodolphe")"""
+    apirpc = Savoir(getSavoirOptions(chain_name))
+    api = ipfsapi.connect('127.0.0.1', 5001)
+    streamname = binascii.hexlify("[Group]" + str(group_name))
+    apirpc.create('stream', streamname, "False")
+
+    for user in users:
+        pass
+
+def getPublicKey(nickname, apirpc):
+    """ Return the public key of user 'nickname', None if user not found. """
+    pass
