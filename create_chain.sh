@@ -24,6 +24,8 @@ multichain-util create $chain_name -default-network-port=$port -default-rpc-port
 multichaind $chain_name -daemon -autosubscribe=streams
 ipfs daemon &
 
+sleep 5
+
 json=$(multichain-cli $chain_name createkeypairs)
 address=$(echo -n $json | python -c "import sys, json; print json.load(sys.stdin)[0]['address']")
 pubkey=$(echo -n $json | python -c "import sys, json; print json.load(sys.stdin)[0]['pubkey']")
@@ -36,11 +38,19 @@ multichain-cli $chain_name send $address 0
 hex_addr=$(echo -n $address | xxd -p -c 99999)
 hex_priv=$(echo -n $privkey | xxd -p -c 99999)
 
+sleep 2
+
 multichain-cli $chain_name publish default_account address $hex_addr
 multichain-cli $chain_name publish default_account pubkey $pubkey
 multichain-cli $chain_name publish default_account privkey $hex_priv
 
 multichain-cli $chain_name create stream nickname_resolve true
 
+sleep 2
+
 hex_nick=$(echo -n $nickname | xxd -p -c 99999)
 multichain-cli $chain_name publish nickname_resolve pseudo $hex_nick
+
+ip a
+
+echo '-------------- termine --------------'
