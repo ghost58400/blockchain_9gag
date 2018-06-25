@@ -2,19 +2,19 @@ angular.module('App.post', ['ngRoute'])
 
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/login', {
-            templateUrl: 'login.html',
+            templateUrl: 'static/login.html',
             controller: 'LoginController'
         });
         $routeProvider.when('/home', {
-            templateUrl: 'post/all_posts.html',
+            templateUrl: 'static/post/all_posts.html',
             controller: 'PostController'
         });
         $routeProvider.when('/create_post', {
-            templateUrl: 'post/create_post.html',
+            templateUrl: 'static/post/create_post.html',
             controller: 'PostController'
         });
         $routeProvider.when('/show_post', {
-            templateUrl: 'post/show_post_html',
+            templateUrl: 'static/post/show_post_html',
             controller: 'PostController'
         });
     }])
