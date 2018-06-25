@@ -29,12 +29,12 @@ i = 1
 for img in images:
   response = muterun_js('deploy.js')
   if response.exitcode == 0:
-    addr = str(response.stdout[:-1])[2:-1]
+    addr = response.stdout[:-1]
     print(addr)
   else:
     print('Deploy contract error')
     sys.exit(-1)
-  cont = '<div class=\"container\" style=\"text-align:center;\" id=\"post_'+str(i)+'\">\n<h2>'+img[:-4]+'</h2>\n<img id=\"'+addr+'\" style=\"width:auto;height:auto;max-width:500px;max-height:500px;\" src=\"' + img + '\"'
+  cont = '<div class=\"container\" style=\"text-align:center;\" id=\"post_'+str(i)+'\">\n<h2>'+img[:-4]+'</h2>\n<img id=\"'+addr+'\" style=\"width:auto;height:auto;max-width:500px;max-height:500px;\" src=\"meme/' + img + '\"'
   cont += " />\n"
   cont += """<p><em id="like_"""+ str(i) +""""></em><em id="dislike_"""+ str(i)  +""""></em></p><a style=\"margin:10px;\" onclick="Like("""+str(i)+""")" class="btn btn-primary">Like</a><a onclick="Dislike("""+str(i)+""")" class="btn btn-danger">Dislike</a>"""
   cont += "</div>\n"

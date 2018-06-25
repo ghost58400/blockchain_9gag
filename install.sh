@@ -12,6 +12,7 @@ pip install flask
 pip install Savoir
 pip install ipfsapi
 pip install Naked
+
 #remplacer from Savoir.Savoir import *
 #par from Savoir import Savoir
 #dans /usr/lib/python2.7/site-packages/Savoir/__init__.py
@@ -32,6 +33,7 @@ wget https://www.multichain.com/download/multichain-1.0.5.tar.gz
 tar -xvzf multichain-1.0.5.tar.gz
 cd multichain-1.0.5
 mv multichaind multichain-cli multichain-util /usr/bin/
+echo 'python /root/web/app.py >> /root/web/log.txt 2>> /root/web/log.txt &' >> /root/.bashrc
 echo 'echo "To create a new chain with the current node, please run ./create_chain.sh."' >> /root/.bashrc
 echo 'echo "To join a chain with the current node, please run ./connect_chain.sh."' >> /root/.bashrc
 echo "-------------"

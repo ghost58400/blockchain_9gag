@@ -1,5 +1,6 @@
 FROM centos
 
+EXPOSE 80
 ADD ./install.sh /root
 WORKDIR /root
 RUN sh /root/install.sh
