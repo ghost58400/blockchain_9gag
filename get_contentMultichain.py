@@ -83,3 +83,4 @@ for item in posts:
     print(item['type'])
     print(item['author'])
     print(api.cat(item['ipfs']))
+    print('https://ipfs.io/ipns/' + item['ipfs'])
