@@ -31,6 +31,8 @@ wget https://www.multichain.com/download/multichain-1.0.5.tar.gz
 tar -xvzf multichain-1.0.5.tar.gz
 cd multichain-1.0.5
 mv multichaind multichain-cli multichain-util /usr/bin/
+echo 'echo "To create a new chain with the current node, please run ./create_chain.sh."' >> /root/.bashrc
+echo 'echo "To join a chain with the current node, please run ./connect_chain.sh."' >> /root/.bashrc
 echo "-------------"
 echo "INSTALLATION FINISHED"
 echo "-------------"

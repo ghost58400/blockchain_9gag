@@ -44,3 +44,5 @@ multichain-cli $chain_name create stream nickname_resolve true
 
 hex_nick=$(echo -n $nickname | xxd -p -c 99999)
 multichain-cli $chain_name publish nickname_resolve pseudo $hex_nick
+
+sleep 3
