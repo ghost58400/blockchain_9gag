@@ -1,5 +1,5 @@
 import sys,os
-from Naked.toolshed.shell import muterun_js
+
 from Savoir import Savoir
 import ipfsapi
 import binascii
@@ -44,21 +44,13 @@ apirpc = Savoir(rpcuser, rpcpassword, rpchost, rpcport, chainname)
 # on se connecte au noeud IPFS
 api = ipfsapi.connect('127.0.0.1', 5001)
 
-
 #on ajoute le fichier
 res = api.add(sys.argv[1])
 print(res)
-response = muterun_js('/root/scriptTest/deploy.js')
-if response.exitcode == 0:
-  addr = response.stdout[:-1]
-  print(addr)
-else:
-  print('Deploy contract error')
-  sys.exit(-1)
+
 streamname = binascii.hexlify(sys.argv[2])
 
 apirpc.create('stream', streamname, False)
 apirpc.publish(streamname, 'ipfs', binascii.hexlify(res['Hash']))
 apirpc.publish(streamname, 'type', binascii.hexlify(sys.argv[4]))
-apirpc.publish(streamname, 'smartcontract', binascii.hexlify(addr))
 print(apirpc.liststreamitems(sys.argv[3]))
