@@ -92,7 +92,6 @@ def get_all_posts(api):
 def connect_chain(ip, port, chain_name, nickname):
     # heavy stuff
     apirpc = get_api()
-    api = ipfsapi.connect('127.0.0.1', 5001)
     apirpc.stop()
     time.sleep(2)
     shutil.rmtree("/root/.multichain/" + str(chain_name))
