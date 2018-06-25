@@ -12,6 +12,7 @@ pip install flask
 pip install Savoir
 pip install ipfsapi
 pip install Naked
+
 #remplacer from Savoir.Savoir import *
 #par from Savoir import Savoir
 #dans /usr/lib/python2.7/site-packages/Savoir/__init__.py
