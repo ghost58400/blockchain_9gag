@@ -6,15 +6,15 @@ angular.module('App', ['ngRoute','App.post', 'App.login', 'App.chain',])
 
     $locationProvider.hashPrefix('!');
 
-    $routeProvider.otherwise({redirectTo: '/login'});
+    $routeProvider.otherwise({redirectTo: '/connect_chain'});
 
 }])
 
 .config(['$routeProvider', function ($routeProvider) {
-    $routeProvider.when('/login', {
-        templateUrl: 'static/login/login.html',
-        controller: 'LoginController'
-    });
+    // $routeProvider.when('/login', {
+    //     templateUrl: 'static/login/login.html',
+    //     controller: 'LoginController'
+    // });
     $routeProvider.when('/home', {
         templateUrl: 'static/post/all_posts.html',
         controller: 'PostController'
@@ -24,7 +24,11 @@ angular.module('App', ['ngRoute','App.post', 'App.login', 'App.chain',])
         controller: 'PostController'
     });
     $routeProvider.when('/show_post', {
-        templateUrl: 'static/post/show_post_html',
+        templateUrl: 'static/post/show_post.html',
         controller: 'PostController'
     });
-}])
+    $routeProvider.when('/connect_chain', {
+        templateUrl: 'static/chain/connect_chain.html',
+        controller: 'ChainController'
+    });
+}]);
