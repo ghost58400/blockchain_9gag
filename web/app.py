@@ -1,9 +1,7 @@
 #! /usr/bin/python
 # -*- coding:utf-8 -*-
 
-from flask import Flask, render_template, send_from_directory
-import json
-
+from flask import Flask, send_from_directory, jsonify
 from chain_utils import *
 
 app = Flask(__name__)
@@ -33,8 +31,8 @@ def create_blockchain(chain_name):
 
 @app.route('/get_posts')
 def get_posts():
-    api = get_api('localhost', '1235', 'chain1')
-    return get_all_posts(api)
+    posts = get_all_posts(get_api())
+    return jsonify(posts)
     # return jsonify(streams)
 
 

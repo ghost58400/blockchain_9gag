@@ -19,7 +19,9 @@ def set_chain_name(name):
     file.close()
 
 
-def get_api(host=default_rpc_host, port=default_rpc_port, chain_name=get_chain_name()):
+def get_api(host=default_rpc_host, port=default_rpc_port, chain_name=''):
+    if chain_name == '':
+        chain_name = get_chain_name()
     pathconf = "/root/.multichain/" + chain_name + "/multichain.conf"
     rpcuser = ""
     rpcpassword = ""
