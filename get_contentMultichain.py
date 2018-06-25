@@ -67,20 +67,24 @@ for item in streams:
     ipfs = ''
     type_contenu = ''
     author_account = ''
+    smartAddr = ''
     for it in stream:
         if it['key'] == 'ipfs':
             ipfs = binascii.unhexlify(it['data'])
             author_account = it['publishers'][0]
         if it['key'] == 'type':
             type_contenu = binascii.unhexlify(it['data'])
+        if it['key'] == 'smartcontract':
+            smartAddr = binascii.unhexlify(it['data']) 
     if ipfs != '' and type_contenu != '' and author_account != '':
         author = resolve_name(author_account)
-        posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author})
+        posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author, 'smartcontract': smartAddr})
 
 print(posts)
 for item in posts:
     print(item['title'])
     print(item['type'])
     print(item['author'])
-    print(api.cat(item['ipfs']))
-    print('https://ipfs.io/ipns/' + item['ipfs'])
+    print(item['smartcontract'])
+    #print(api.cat(item['ipfs']))
+    print('https://ipfs.io/ipfs/' + item['ipfs'])
