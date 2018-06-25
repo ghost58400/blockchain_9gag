@@ -63,5 +63,4 @@ def get_all_posts(api):
             author = resolve_name(author_account, api)
             posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author})
 
-
     return posts

@@ -40,7 +40,12 @@ signed_hex_json=$(multichain-cli $chain_name signrawtransaction $txid null \[\"$
 signed_hex=$(echo -n $signed_hex_json | python -c "import sys, json; print json.load(sys.stdin)['hex']")
 multichain-cli $chain_name sendrawtransaction $signed_hex
 
+echo 'please wait...'
 sleep 20
 
 hex_nick=$(echo -n $nickname | xxd -p -c 99999)
 multichain-cli $chain_name publish nickname_resolve pseudo $hex_nick
+
+ip a
+
+echo '-------------- termine --------------'

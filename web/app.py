@@ -1,16 +1,21 @@
 #! /usr/bin/python
 # -*- coding:utf-8 -*-
 
-from flask import Flask
+from flask import Flask, render_template, send_from_directory
 import json
 
-from web.utils import *
+from chain_utils import *
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def index():
+    return send_from_directory('9gag', 'index.html')
+
+
+@app.route('/get_posts')
+def get_posts():
     api = get_api('localhost', '1235', 'chain1')
     return get_all_posts(api)
     # return jsonify(streams)
@@ -35,4 +40,4 @@ def show_post(num_stream):
 
 if __name__ == '__main__':
     app.debug = True
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port=8081)
