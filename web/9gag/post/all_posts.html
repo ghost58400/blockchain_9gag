@@ -1,10 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="row" id="posts" tabindex="-1">
+    <h3>
+        Posts :
+    </h3>
+    <ul id="list_posts">
+        <li ng-repeat="stream in list_stream">
+            <div class="card">
+                <div ng-if="stream.type == 'img'" id="data" class="card_img-top">
+                    <img src="{{ stream.data }}" alt="Image not found">
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">{{ stream.title }}</h3>
+                    <div ng-if="stream.type != 'img'" id="data" class="card-text">
+                        <p>{{ stream.data }}</p>
+                    </div>
+                    <div id="vote">
+                        <button ng-click="upvote(stream)"><span class="glyphicon glyphicon-arrow-up"></span></button>
+                        <button ng-click="downvote(stream)"><span class="glyphicon glyphicon-arrow-down"></span></button>
+                    </div>
+                </div>
+            </div>
+        </li>
 
-</body>
-</html>
+    </ul>
+</div>
