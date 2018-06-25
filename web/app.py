@@ -18,9 +18,9 @@ def chain_name():
     return get_chain_name()
 
 
-@app.route('/connect/<chain_name>/<ip>/<port>/<nickname>')
-def connect(chain_name, ip, port, nickname):
-    connect_chain(ip, port, chain_name, nickname)
+@app.route('/connect_blockchain/<chain_name>/<ip>/<port>/<nickname>')
+def connect_blockchain(chain_name, ip, port, nickname):
+    Thread(target=connect_chain, args=[ip, port, chain_name, nickname]).start()
     return 'ok'
 
 

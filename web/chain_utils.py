@@ -1,9 +1,7 @@
 import binascii
 import os
-import shutil
 import time
 from subprocess import call
-
 from Savoir import Savoir
 from consts import *
 import ipfsapi
@@ -88,16 +86,24 @@ def get_all_posts(api):
     return posts
 
 
+
+
+
+
+
 def connect_chain(ip, port, chain_name, nickname):
-    # heavy stuff
+    """ Connect to the chain at 'ip' address where 'chain_name' is the name of the chain you want to create and where 'nickname' is the nickname you want to be identified by."""
+    set_chain_name(chain_name)
+
+    call("multichain-cli " + chain_name + " stop", shell=True)
+    time.sleep(2)
+    call('rm -rf /root/.multichain/' + chain_name, shell=True)
+
+    call("multichaind " + chain_name + "@" + ip + ":" + port + " -daemon -autosubscribe=streams", shell=True)
+    time.sleep(2)
+
     apirpc = get_api()
-    apirpc.stop()
-    time.sleep(2)
-    shutil.rmtree("/root/.multichain/" + str(chain_name))
-    call("multichaind", str(chain_name) + "@" + str(ip) + ":" + str(port), "-daemon", "-autosubscribe=streams")
-    call("ipfs", "daemon")
-    time.sleep(2)
-    json_myaddr = apirpc.getaddresses
+    json_myaddr = apirpc.getaddresses()
     json_addr = apirpc.liststreamkeyitems("default_account", "address")
     json_priv = apirpc.liststreamkeyitems("default_account", "privkey")
 
@@ -109,20 +115,27 @@ def connect_chain(ip, port, chain_name, nickname):
     default_address = hex_addr.decode("hex")
 
     apirpc.importaddress(default_address)
-    txid = apirpc.createrawsendfrom(default_address, '{"my_addr":0}')
-    signed_hex_json = apirpc.signrawtransaction(txid, "null", "[" + str(default_privkey) + "]")
+
+    txid = apirpc.createrawsendfrom(default_address, {my_addr:0})
+    signed_hex_json = apirpc.signrawtransaction(txid, None, [default_privkey])
+
     signed_hex = signed_hex_json['hex']
     apirpc.sendrawtransaction(signed_hex)
 
     print("Please wait...")
     time.sleep(20)
 
+    # a revoir
+    #pubkey = apirpc.getaddresses("true")[0]['pubkey']
     hex_nick = nickname.encode("hex")
-    apirpc.publish("nickname_resolve", "pseudo", str(hex_nick))
+    apirpc.publish("nickname_resolve", "nickname", str(hex_nick))
+    #apirpc.publish("nickname_resolve", "pubkey", pubkey)
 
-    print("---------- Finished ------------")
 
-    set_chain_name(chain_name)
+
+
+
+
 
 
 def create_chain(chain_name, nickname):
@@ -130,8 +143,8 @@ def create_chain(chain_name, nickname):
     set_chain_name(chain_name)
     call("multichain-cli " + chain_name + " stop", shell=True)
     time.sleep(2)
-    #call("firewall-cmd", "--permanent", "--zone=public", "--add-port=" + port + "/tcp")
-    #call("systemctl", "restart", "firewalld.service")
+    # call("firewall-cmd", "--permanent", "--zone=public", "--add-port=" + port + "/tcp")
+    # call("systemctl", "restart", "firewalld.service")
     call('rm -rf /root/.multichain/' + chain_name, shell=True)
     call("multichain-util create " + chain_name + " -default-network-port=" + default_chain_port + " -default-rpc-port=" + default_rpc_port + " -anyone-can-connect=true -anyone-can-create=true -anyone-can-mine=true -anyone-can-receive=true", shell=True)
     call("multichaind " + chain_name + " -daemon -autosubscribe=streams", shell=True)
@@ -163,7 +176,7 @@ def create_chain(chain_name, nickname):
 
     hex_nick = nickname.encode("hex")
 
-    #a modifier avec les groupes : 
+    # a modifier avec les groupes :
     print(apirpc.publish("nickname_resolve", "nickname", hex_nick))
-    #apirpc.publish("nickname_resolve", "pubkey", pubkey)
+    # apirpc.publish("nickname_resolve", "pubkey", pubkey)
     print('create chain finished')
