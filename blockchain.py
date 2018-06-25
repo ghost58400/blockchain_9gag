@@ -9,13 +9,13 @@ import json
 from Savoir import Savoir
 import ipfsapi
 
-def getSavoirOptions(chain_name):
+def getSavoirOptions(chain_name, rpchost='127.0.0.1', rpcport='1235'):
     """ Return rpc_user, rpcpassword, rpchost, rpcport, and chain_name for the chain 'chain_name' """
-    pathconf = "/root/.multichain/" + chainname + "/multichain.conf"
+    pathconf = "/root/.multichain/" + chain_name + "/multichain.conf"
     rpcuser = ""
     rpcpassword = ""
 
-    with open("/root/.multichain/chain1/multichain.conf", "r") as f:
+    with open(pathconf, "r") as f:
         line_list = [c for c in f.readlines()]
         for line in line_list:
             if "rpcuser=" in line:
@@ -28,16 +28,13 @@ def getSavoirOptions(chain_name):
     rpcuser = rpcuser.replace('\n', '')
     rpcpassword = rpcpassword.replace('\n', '')
 
-    rpchost = '127.0.0.1'
-    rpcport = '1235'
-
     return rpcuser, rpcpassword, rpchost, rpcport, chain_name
 
 def connectChain(ip, chain_name, nickname, port=1234):
     """ Connect to the chain at 'ip' address where 'chain_name' is the name of the chain you want to create and where 'nickname' is the nickname you want to be identified by."""
     apirpc = Savoir(getSavoirOptions(chain_name))
     api = ipfsapi.connect('127.0.0.1', 5001)
-    apirpc.stop
+    apirpc.stop()
     time.sleep(2)
     shutil.rmtree("/root/.multichain/" + str(chain_name))
     call("multichaind", str(chain_name) + "@" + str(ip) + ":" + str(port), "-daemon", "-autosubscribe=streams")
@@ -66,10 +63,50 @@ def connectChain(ip, chain_name, nickname, port=1234):
     hex_nick = nickname.encode("hex")
     apirpc.publish("nickname_resolve", "pseudo", str(hex_nick))
 
-    print("---------- Terminé ------------")
+    print("---------- Finished -----------")
 
 
 
-def createChain(chain_name, nickname):
+def createChain(chain_name, nickname, port='1234', rpcport='1235'):
     """ Create a new chain where 'chain_name' is the name of the chain you want to create and where 'nickname' is the nickname you want to be identified by."""
-    pass
+    call("multichain-cli", chain_name, "stop")
+    time.sleep(2)
+    call("firewall-cmd", "--permanent", "--zone=public", "--add-port=" + port + "/tcp")
+    call("systemctl", "restart", "firewalld.service")
+    shutil.move("/root/.multichain/multichain.conf", "/root")
+    shutil.rmtree("/root/.multichain/" + str(chain_name))
+    shutil.move("/root//multichain.conf", "/root/.multichain/")
+    call("multichain-util", "create", chain_name, "-default-network-port=" + port, "-default-rpc-port=" + rpc_port, "-anyone-can-connect=true", "-anyone-can-create=true", "-anyone-can-mine=true", "-anyone-can-receive=true")
+    call("multichaind", chain_name, "-daemon", "autosubscribe=streams")
+    call("ipfs", "daemon")
+
+    time.sleep(5)
+
+    apirpc = Savoir(getSavoirOptions(chain_name))
+    api = ipfsapi.connect('127.0.0.1', 5001)
+
+    json = apirpc.createkeypairs()
+    address = json.load(json[0]['address'])
+    pubkey = json.load(json[0]['pubkey'])
+    privkey = json.load(json[0]['privkey'])
+
+    apirpc.create("stream", "default_account", "false")
+    apirpc.send(address, "0")
+
+    hex_addr = address.encode("hex")
+    hex_priv = privkey.encode("hex")
+
+    time.sleep(2)
+
+    apirpc.publish("default_account", "address", hex_addr)
+    apirpc.publish("default_account", "pubkey", pubkey)
+    apirpc.publish("default_account", "privkey", hex_priv)
+
+    apirpc.create("stream", "nickname_resolve", "true")
+
+    time.sleep(2)
+
+    hex_nick = str(nickname).encode("hex")
+    apirpc.publish("nickname_resolve", hex_nick)
+
+    print("--------- Finished ----------")
