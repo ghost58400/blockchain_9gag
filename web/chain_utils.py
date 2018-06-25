@@ -1,8 +1,25 @@
 import binascii
+
 from Savoir import Savoir
 
+default_rpc_port = '1235'
+default_rpc_host = '127.0.0.1'
 
-def get_api(host, port, chain_name):
+
+def get_chain_name():
+    file = open('chain_name.txt', 'r')
+    val = file.read()
+    file.close()
+    return val
+
+
+def set_chain_name(name):
+    file = open('chain_name.txt', 'w')
+    file.write(name)
+    file.close()
+
+
+def get_api(host=default_rpc_host, port=default_rpc_port, chain_name=get_chain_name()):
     pathconf = "/root/.multichain/" + chain_name + "/multichain.conf"
     rpcuser = ""
     rpcpassword = ""
@@ -28,7 +45,7 @@ def get_api(host, port, chain_name):
 
 
 def resolve_name(account, api):
-    #ajouter prise en compte du plus recent, pour changement pseudo
+    # ajouter prise en compte du plus recent, pour changement pseudo
     nicknames = api.liststreamitems('nickname_resolve')
     ret = 'name not found'
     for nickname in nicknames:
@@ -39,7 +56,6 @@ def resolve_name(account, api):
 
 
 def get_all_posts(api):
-
     raw_stream_names = api.liststreams()
     streams = []
     for stream in raw_stream_names:
@@ -64,3 +80,13 @@ def get_all_posts(api):
             posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author})
 
     return posts
+
+
+def connect_chain(ip, port, chain_name):
+    # heavy stuff
+    set_chain_name(chain_name)
+
+
+def create_chain(chain_name):
+    # heavy stuff
+    set_chain_name(chain_name)
