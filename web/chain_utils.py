@@ -54,6 +54,7 @@ def resolve_name(account, api):
     ret = 'name not found'
     for nickname in nicknames:
         if nickname['publishers'][0] == account:
+            # a changer avec systeme de groupe
             if nickname['key'] == 'pseudo':
                 ret = binascii.unhexlify(nickname['data'])
     return ret
@@ -114,13 +115,13 @@ def connect_chain(ip, port, chain_name, nickname):
     default_privkey = hex_priv.decode("hex")
     default_address = hex_addr.decode("hex")
 
-    apirpc.importaddress(default_address)
+    print(apirpc.importaddress(default_address))
 
     txid = apirpc.createrawsendfrom(default_address, {my_addr:0})
     signed_hex_json = apirpc.signrawtransaction(txid, None, [default_privkey])
 
     signed_hex = signed_hex_json['hex']
-    apirpc.sendrawtransaction(signed_hex)
+    print(apirpc.sendrawtransaction(signed_hex))
 
     print("Please wait...")
     time.sleep(20)
@@ -128,9 +129,9 @@ def connect_chain(ip, port, chain_name, nickname):
     # a revoir
     #pubkey = apirpc.getaddresses("true")[0]['pubkey']
     hex_nick = nickname.encode("hex")
-    apirpc.publish("nickname_resolve", "nickname", str(hex_nick))
+    print(apirpc.publish("nickname_resolve", "nickname", str(hex_nick)))
     #apirpc.publish("nickname_resolve", "pubkey", pubkey)
-
+    print('connect chain finished')
 
 
 
