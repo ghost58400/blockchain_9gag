@@ -17,6 +17,7 @@ angular.module('App.chain', ['ngRoute'])
                         if (e.data !== '') {
                             console.log("/connect_blockchain");
                             console.log(e.data);
+                            window.location.href = "#!/home";
                         }
                     }, function error(e) {
                         console.log("error connect_blockchain");
@@ -34,8 +35,9 @@ angular.module('App.chain', ['ngRoute'])
                     .then(function success(e) {
                         $scope.errors = [];
                         if (e.data !== '') {
-                            console.log("/connect_blockchain");
+                            console.log("/create_blockchain");
                             console.log(e.data);
+                            window.location.href = "#!/home";
                         }
                     }, function error(e) {
                             console.log("error create chain");
@@ -46,28 +48,23 @@ angular.module('App.chain', ['ngRoute'])
 
         $scope.userstate = '';
 
-        $scope.is_user_connected = function () {
-            // $http.get('/state')
-            //     .then(function success(e) {
-            //         console.log(e);
-            //         $scope.errors = [];
-            //         if (e.data !== '') {
-            //             console.log("/state");
-            //             $scope.userstate = e.data;
-            //             console.log($scope.list_stream);
-            //         }
-            //     }, function error(e) {
-            //         console.log("error isconnected");
-            //         $scope.errors = e.data.errors;
-            //         $scope.userstate = "error";
-            //     });
-            // return $scope.userstate;
-            console.log("/state");
-            console.log($http.get('/state'));
-            return $http.get('/state');
+        var is_user_connected = function () {
+            $http.get('/state')
+                .then(function success(e) {
+                    $scope.errors = [];
+                    if (e.data !== '') {
+                        console.log("/state");
+                        document.getElementById("state_user").innerHTML = e.data;
+                        return String(e.data);
+                    }
+                }, function error(e) {
+                    console.log("error isconnected");
+                    $scope.errors = e.data.errors;
+                    $scope.userstate = "error";
+                    return String(e.data);
+                });
         };
 
-        window.onload = function() {
-            window.getElementById("state_user").innerHTML = $scope.is_user_connected();
-        }
+        is_user_connected();
+
     });
