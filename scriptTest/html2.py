@@ -27,7 +27,7 @@ for file in os.listdir('/root/scriptTest/meme/'):
       images.append(file)
 i = 1
 for img in images:
-  response = muterun_js('deploy.js')
+  response = muterun_js('EtherUtils.js')
   if response.exitcode == 0:
     addr = response.stdout[:-1]
     print(addr)

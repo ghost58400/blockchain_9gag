@@ -6,7 +6,7 @@ echo dhclient >> /etc/rc.d/rc.local
 chmod +x /etc/rc.d/rc.local
 yum -y --enablerepo=extras install epel-release
 yum update -y
-yum install -y nano screen wget ntpdate vim-common python-pip dhclient net-tools nodejs git
+yum install -y nano screen wget ntpdate vim-common python-pip dhclient net-tools nodejs git make gcc gcc-c++
 pip install --upgrade pip
 pip install flask
 pip install Savoir
@@ -34,6 +34,9 @@ wget https://www.multichain.com/download/multichain-1.0.5.tar.gz
 tar -xvzf multichain-1.0.5.tar.gz
 cd multichain-1.0.5
 mv multichaind multichain-cli multichain-util /usr/bin/
+mkdir /root/keys
+touch /root/keys/public.pem
+touch /root/keys/private.pem
 echo 'ipfs daemon &' >> /root/.bashrc
 echo 'python /root/web/app.py >> /root/web/log.txt 2>> /root/web/log.txt &' >> /root/.bashrc
 echo "-------------"

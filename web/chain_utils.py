@@ -55,19 +55,22 @@ def get_api(host=default_rpc_host, port=default_rpc_port, chain_name=''):
     rpcuser = ""
     rpcpassword = ""
 
-    with open(pathconf, "r") as f:
-        line_list = [c for c in f.readlines()]
-        for line in line_list:
-            if "rpcuser=" in line:
-                rpcuser = line.split("=")[1]
-            elif "rpcpassword=" in line:
-                rpcpassword = line.split("=")[1]
-        if rpcuser == "":
-            print("Couldn't retrieve rpcuser from " + chain_name)
-            return None
-        elif rpcpassword == "":
-            print("Couldn't retrieve rpcpassword from " + chain_name)
-            return None
+    try:
+        with open(pathconf, "r") as f:
+            line_list = [c for c in f.readlines()]
+            for line in line_list:
+                if "rpcuser=" in line:
+                    rpcuser = line.split("=")[1]
+                elif "rpcpassword=" in line:
+                    rpcpassword = line.split("=")[1]
+            if rpcuser == "":
+                print("Couldn't retrieve rpcuser from " + chain_name)
+                return None
+            elif rpcpassword == "":
+                print("Couldn't retrieve rpcpassword from " + chain_name)
+                return None
+    except:
+        return None
 
     rpcuser = rpcuser.replace('\n', '')
     rpcpassword = rpcpassword.replace('\n', '')
@@ -92,6 +95,8 @@ def resolve_address(pubkey, api):
     return None
 
 def get_all_posts(api):
+    if api is None:
+        return []
     fsapi = ipfsapi.connect('127.0.0.1', 5001)
     raw_stream_names = api.liststreams()
     streams = []
@@ -145,7 +150,7 @@ def get_all_posts(api):
             post['ipfs'] = fsapi.get_json(post['ipfs'])
     return posts
 
-def connect_chain(ip="172.17.0.2", port="1234", chain_name="chain1", nickname="user"):
+def connect_chain(ip, port, chain_name, nickname):
     """ Connect to the chain at 'ip' address where 'chain_name' is the name of the chain you want to create and where 'nickname' is the nickname you want to be identified by."""
     set_chain_name(chain_name)
     set_state('Connecting to chain ' + get_chain_name())
@@ -154,7 +159,7 @@ def connect_chain(ip="172.17.0.2", port="1234", chain_name="chain1", nickname="u
     time.sleep(2)
     call('rm -rf /root/.multichain/' + chain_name, shell=True)
 
-    call("multichaind " + chain_name + "@" + ip + ":" + port + " -daemon -autosubscribe=streams", shell=True)
+    call("nohup multichaind " + chain_name + "@" + ip + ":" + port + " -daemon -autosubscribe=streams", shell=True)
     time.sleep(2)
 
     apirpc = get_api()
@@ -187,7 +192,7 @@ def connect_chain(ip="172.17.0.2", port="1234", chain_name="chain1", nickname="u
     generate_key_pair()
     apirpc.publish("nickname_resolve", pubkey, str(hex_nick))
 
-def create_chain(chain_name="chain1", nickname="admin"):
+def create_chain(chain_name, nickname):
     """ Create a new chain where 'chain_name' is the name of the chain you want to create and where 'nickname' is the nickname you want to be identified by."""
     set_chain_name(chain_name)
     set_state('Creating chain ' + get_chain_name())
@@ -197,11 +202,13 @@ def create_chain(chain_name="chain1", nickname="admin"):
     # call("systemctl", "restart", "firewalld.service")
     call('rm -rf /root/.multichain/' + chain_name, shell=True)
     call("multichain-util create " + chain_name + " -default-network-port=" + default_chain_port + " -default-rpc-port=" + default_rpc_port + " -anyone-can-connect=true -anyone-can-create=true -anyone-can-mine=true -anyone-can-receive=true", shell=True)
-    call("multichaind " + chain_name + " -daemon -autosubscribe=streams", shell=True)
+    call("nohup multichaind " + chain_name + " -daemon -autosubscribe=streams", shell=True)
 
     time.sleep(5)
 
     apirpc = get_api()
+    print('api :')
+    print(apirpc)
 
     json_rep = apirpc.createkeypairs()
     address = json_rep[0]['address']

@@ -1,29 +1,28 @@
 <div class="row justify-content-md-center" id="posts" tabindex="-1">
-    <h3>
+    <h3 class="col-md-12">
         Posts :
     </h3>
-    <ul id="list_posts">
-        <li ng-repeat="stream in list_stream">
-            <div class="card w-80">
-                <div ng-if="stream.type == 'Image'" id="data" class="card-img-top">
-                    <img class="img-fluid img-thumbnail" src="{{ stream.data }}" alt="Image not found">
-                </div>
-                <div class="card-body">
-                    <h3 class="card-title">{{ stream.title }}</h3>
-                    <div ng-if="stream.type == 'Text'" id="data" class="card-text">
-                        <p>{{ stream.data }}</p>
-                    </div>
-                </div>
-                <div ng-if="stream.type != 'Image' && stream.type != 'Text'">
-                    <p>Unknown type of post. Sorry.</p>
-                </div>
-                <div class="card-footer">
-                    <label for="upvote_btn">{{ stream.upvotes }}</label>
-                    <button id="upvote_btn" ng-click="upvote(stream)"><span class="glyphicon glyphicon-arrow-up"></span></button>
-                    <label for="downvote_btn">{{ stream.downvotes }}</label>
-                    <button id="downvote_btn" ng-click="downvote(stream)"><span class="glyphicon glyphicon-arrow-down"></span></button>
-                </div>
+
+    <div ng-repeat="stream in list_stream" class="card">
+        <div ng-if="stream.type == 'Image'" id="data" class="card-img-top">
+            <img class="img-fluid img-thumbnail" src="{{ stream.ipfs }}" alt="Image not found">
+        </div>
+        <div class="card-body">
+            <h3 class="card-title">{{ stream.title }}</h3>
+            <div id="data" class="card-text">
+                <p>{{ stream.ipfs }}</p>
             </div>
-        </li>
-    </ul>
+        </div>
+        <div ng-if="stream.type != 'Image' && stream.type != 'Text'">
+            <p>Unknown type of post. Sorry.</p>
+        </div>
+        <div class="card-footer">
+            <h5>Author : {{ stream.author }}</h5>
+            <label for="upvote_btn">{{ stream.upvotes }}</label>
+            <a class="btn" id="upvote_btn" ng-click="upvote(stream)"><span class="glyphicon glyphicon-arrow-up"></span></a>
+            <label for="downvote_btn">{{ stream.downvotes }}</label>
+            <a class="btn" id="downvote_btn" ng-click="downvote(stream)"><span
+                    class="glyphicon glyphicon-arrow-down"></span></a>
+        </div>
+    </div>
 </div>
