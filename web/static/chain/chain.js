@@ -30,7 +30,7 @@ angular.module('App.chain', ['ngRoute'])
 
         $scope.createChain = function () {
             if ($scope.new_chain_name !== null && $scope.new_chain_nickname !== null ) {
-                $http.get('/create_chain/'+String($scope.new_chain_name)+'/'+String($scope.new_chain_nickname))
+                $http.get('/create_blockchain/'+String($scope.new_chain_name)+'/'+String($scope.new_chain_nickname))
                     .then(function success(e) {
                         $scope.errors = [];
                         if (e.data !== '') {
