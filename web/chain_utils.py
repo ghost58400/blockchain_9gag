@@ -79,6 +79,7 @@ def resolve_address(pubkey, api):
     return None
 
 def get_all_posts(api):
+    fsapi = ipfsapi.connect('127.0.0.1', 5001)
     raw_stream_names = api.liststreams()
     streams = []
     for stream in raw_stream_names:
@@ -86,9 +87,9 @@ def get_all_posts(api):
             streams.append(stream['name'])
 
     posts = []
-    for stream in streams:
-        stream = api.liststreamitems(stream)
-        nom = binascii.unhexlify(stream)
+    for stream_name in streams:
+        stream = api.liststreamitems(stream_name)
+        nom = binascii.unhexlify(stream_name)
         ipfs = ''
         type_contenu = ''
         author_account = ''
@@ -102,6 +103,11 @@ def get_all_posts(api):
             author = resolve_name(author_account, api)
             posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author})
 
+    for post in posts:
+        if post['type'] == 'Image':
+            post['ipfs'] = 'https://ipfs.io/ipfs/' + post['ipfs']
+        else:
+            post['ipfs'] = fsapi.get_json(post['ipfs'])
     return posts
 
 def connect_chain(ip="172.17.0.2", port="1234", chain_name="chain1", nickname="user"):
@@ -228,17 +234,27 @@ def post_group(chain_name, group_name, name_post, file, type):
         apirpc.publish(streamname, 'type', binascii.hexlify(sys.argv[4]))
 
 
-
-def create_post(title, content, type, privkey):
-    print(title)
-    print(content)
-    print(type)
-    print(privkey)
+def create_post(title, content, type):
     apirpc = get_api()
     api = ipfsapi.connect('127.0.0.1', 5001)
+    streamname = binascii.hexlify(title)
+    if type == 'Text':
+        res = api.add_json(content)
+    if type == 'Image':
+        res = api.add(content)
+        res = res['Hash']
 
-    if type == 'text':
-        #convert content to txt file
-        pass
+    print(res)
+
+    apirpc.create('stream', streamname, False)
+    apirpc.publish(streamname, 'ipfs', binascii.hexlify(res))
+    apirpc.publish(streamname, 'type', binascii.hexlify(type))
+    print(apirpc.liststreamitems(streamname))
+
+
+
+
+
+
 
 
