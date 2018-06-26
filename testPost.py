@@ -1,12 +1,12 @@
-import os, sys
-images = []
-for file in os.listdir('/root/scriptTest/meme/'):
-  if os.path.isfile(os.path.join('/root/scriptTest/meme/', file)):
-    name, ext = os.path.splitext(os.path.join('/root/scriptTest/meme/', file))
-    if ext == ".jpg":
-      images.append(file)
+cd web && python
+from chain_utils import *
+create_chain("chain1", "admin")
+create_group()
+add_to_group()
+post_group("incroyable", "/root/scriptTest/meme/RIP.jpg", "jpg")cd web && python
 
-i = 1
-for img in images:
-  os.system("python post_contentMultiChain.py \""+os.path.join('/root/scriptTest/meme/', img)+"\" Post_"+str(i)+" chain1 image")
-  i += 1
+cd web && python
+from chain_utils import *
+connect_chain()
+join_group()
+post_group("incroyable", "/root/scriptTest/meme/RIP.jpg", "jpg")

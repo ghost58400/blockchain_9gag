@@ -5,7 +5,16 @@ from subprocess import call
 from Savoir import Savoir
 from consts import *
 import ipfsapi
+import rsa
+import json
 
+def get_myaddr():
+    api = get_api()
+    listaddr = api.getaddresses(True)
+    for addr in listaddr:
+        if addr['ismine'] == True:
+            return addr['address']
+    return None
 
 def get_chain_name():
     file = open(os.path.dirname(os.path.realpath(__file__)) + '/chain_name.txt', 'r')
@@ -19,7 +28,6 @@ def set_chain_name(name):
     file.write(name)
     file.close()
 
-
 def get_state():
     file = open(os.path.dirname(os.path.realpath(__file__)) + '/state.txt', 'r')
     val = file.read()
@@ -27,12 +35,18 @@ def get_state():
     val = val.replace('\n', '')
     return val
 
+def generate_key_pair():
+    """ Generate two files in the keys/ folder, with your public and private rsa key """
+    (pubkey, privkey) = rsa.newkeys(2048)
+    with open("/root/keys/public.pem", "w") as f:
+        f.write(pubkey.save_pkcs1())
+    with open("/root/keys/private.pem", "w") as f:
+        f.write(privkey.save_pkcs1())
 
 def set_state(state):
     file = open(os.path.dirname(os.path.realpath(__file__)) + '/state.txt', 'w')
     file.write(state)
     file.close()
-
 
 def get_api(host=default_rpc_host, port=default_rpc_port, chain_name=''):
     if chain_name == '':
@@ -70,19 +84,18 @@ def resolve_name(account, api):
     return ret
 
 def resolve_address(pubkey, api):
-    """ Return the address of user 'nickname', None if user not found.
-    Warning : function does not handle th situation where different users have the same nickname"""
+    """ Return the address of user identified by 'pubkey'"""
     nicknames = api.liststreamitems('nickname_resolve')
     for nickname in nicknames:
         if nickname['key'] == pubkey:
-            return nick['publishers'][0]
+            return nickname['publishers'][0]
     return None
 
 def get_all_posts(api):
     raw_stream_names = api.liststreams()
     streams = []
     for stream in raw_stream_names:
-        if stream['name'] != 'root' and stream['name'] != 'default_account' and stream['name'] != 'nickname_resolve':
+        if stream['name'] != 'root' and stream['name'] != 'default_account' and stream['name'] != 'nickname_resolve' and stream['name'][0] != '[':
             streams.append(stream['name'])
 
     posts = []
@@ -113,7 +126,7 @@ def connect_chain(ip="172.17.0.2", port="1234", chain_name="chain1", nickname="u
     time.sleep(2)
     call('rm -rf /root/.multichain/' + chain_name, shell=True)
 
-    call("nohup multichaind " + chain_name + "@" + ip + ":" + port + " -daemon -autosubscribe=streams", shell=True)
+    call("multichaind " + chain_name + "@" + ip + ":" + port + " -daemon -autosubscribe=streams", shell=True)
     time.sleep(2)
 
     apirpc = get_api()
@@ -143,10 +156,10 @@ def connect_chain(ip="172.17.0.2", port="1234", chain_name="chain1", nickname="u
     pubkey = apirpc.getaddresses(True)[0]['pubkey']
     print(pubkey)
     hex_nick = nickname.encode("hex")
+    generate_key_pair()
     apirpc.publish("nickname_resolve", pubkey, str(hex_nick))
 
-
-def create_chain(chain_name, nickname):
+def create_chain(chain_name="chain1", nickname="admin"):
     """ Create a new chain where 'chain_name' is the name of the chain you want to create and where 'nickname' is the nickname you want to be identified by."""
     set_chain_name(chain_name)
     set_state('Creating chain ' + get_chain_name())
@@ -156,7 +169,7 @@ def create_chain(chain_name, nickname):
     # call("systemctl", "restart", "firewalld.service")
     call('rm -rf /root/.multichain/' + chain_name, shell=True)
     call("multichain-util create " + chain_name + " -default-network-port=" + default_chain_port + " -default-rpc-port=" + default_rpc_port + " -anyone-can-connect=true -anyone-can-create=true -anyone-can-mine=true -anyone-can-receive=true", shell=True)
-    call("nohup multichaind " + chain_name + " -daemon -autosubscribe=streams", shell=True)
+    call("multichaind " + chain_name + " -daemon -autosubscribe=streams", shell=True)
 
     time.sleep(5)
 
@@ -184,61 +197,84 @@ def create_chain(chain_name, nickname):
     time.sleep(2)
 
     hex_nick = nickname.encode("hex")
-
+    generate_key_pair()
     # a modifier avec les groupes :
     print(apirpc.publish("nickname_resolve", pubkey, str(hex_nick)))
     # apirpc.publish("nickname_resolve", "pubkey", pubkey)
     print('create chain finished')
 
-def create_group(chain_name, group_name, pubkey):
-    """ Create a group in chain 'chain_name', with the name 'group_name' and composed with
-    the user identified by the pubkey 'pubkey'.
-    Ex usage: createGroup("chain1", "insa_group", "09ab5...") """
+def create_group(chain_name="chain1", group_name="illuminati"):
+    """ Create a group in chain 'chain_name', with the name 'group_name'.
+    Ex usage: createGroup("chain1", "insa_group") """
     apirpc = get_api()
-    streamname = binascii.hexlify("[Group]" + str(group_name))
-    apirpc.create('stream', streamname, False)
-    apirpc.publish(streamname, pubkey, '')
+    with open('/root/keys/public.pem', mode='rb') as f:
+        pubkey = f.read()
+    streamname = "[Group]" + binascii.hexlify(str(group_name))
+    apirpc.create('stream', streamname[0:32], False)
+    apirpc.publish(streamname[0:32], get_myaddr(), binascii.hexlify(pubkey))
 
-def add_to_group(chain_name, group_name, pubkey):
-    """ Add the user identified by 'pubkey' to to the group 'group_name' in 'chain_name' """
+def join_group(chain_name="chain1", group_name="illuminati"):
+    """ Join a group in chain 'chain_name', with the name 'group_name'.
+    Ex usage: createGroup("chain1", "insa_group") """
     apirpc = get_api()
-    streamname = binascii.hexlify("[Group]" + str(group_name))
-    apirpc.publish(streamname, pubkey, '')
-    address = resolve_address(pubkey, apirpc)
-    if address is None:
-        print("Couldn't grant permission to add other people to the group.")
-    else:
-        apirpc.grant(address, streamname + ".write")
+    with open('/root/keys/public.pem', mode='rb') as f:
+        pubkey = f.read()
+    streamname = "[Group]" + binascii.hexlify(str(group_name))
+    apirpc.publish(streamname[0:32], get_myaddr(), binascii.hexlify(pubkey))
 
+def add_to_group(address, chain_name="chain1", group_name="illuminati"):
+    """ Add the user identified by 'address' to the group 'group_name' in 'chain_name' """
+    apirpc = get_api()
+    streamname = "[Group]" + binascii.hexlify(str(group_name))
+    apirpc.grant(address, streamname[0:32] + ".write")
 
-def post_group(chain_name, group_name, name_post, file, type):
+def post_group(name_post, file, type, chain_name="chain1", group_name="illuminati"):
     """ Post a file in a group """
     apirpc = get_api()
     api = ipfsapi.connect('127.0.0.1', 5001)
     res = api.add(file)
-    streamname = binascii.hexlify("[" + str(group_name) + "]" + str(name_post))
-    groupstream = binascii.hexlify("[Group]" + str(group_name))
+    streamname = ("[" + binascii.hexlify(str(group_name) + "]" + str(name_post)))[0:32]
+    print(streamname)
+    groupstream = ("[Group]" + binascii.hexlify(str(group_name)))[0:32]
     apirpc.create('stream', streamname, False)
-    listkeys = apirpc.liststreamkeys(groupstream)
+    listkeys = apirpc.liststreamitems(groupstream)
 
-    value = json.dumps({'ipfs': binascii.hexlify(res['Hash']), 'type': binascii.hexlify(str(type))})
+    message = json.dumps({'ipfs': binascii.hexlify(res['Hash']), 'type': binascii.hexlify(str(type))}).encode('utf8')
+
     for key in listkeys:
-        # a finir
-        apirpc.publish(streamname, 'ipfs', binascii.hexlify(res['Hash']))
-        apirpc.publish(streamname, 'type', binascii.hexlify(sys.argv[4]))
+        print(binascii.unhexlify(key['data']))
+        print(key['key'])
+        pubkey = rsa.PublicKey.load_pkcs1(binascii.unhexlify(key['data']))
+        crypto = rsa.encrypt(message, pubkey)
+        apirpc.publish(streamname, key['key'], binascii.hexlify(crypto))
 
-
-
-def create_post(title, content, type, privkey):
-    print(title)
-    print(content)
-    print(type)
-    print(privkey)
-    apirpc = get_api()
-    api = ipfsapi.connect('127.0.0.1', 5001)
-
-    if type == 'text':
-        #convert content to txt file
-        pass
-
-
+# WORK IN PROGRESS
+# def get_all_posts_group(api, group_name="illuminati"):
+#     """ EXTREME """
+#     posts = []
+#     groupstream = ("[Group]" + binascii.hexlify(str(group_name)))[0:32]
+#     with open('/root/keys/public.pem', mode='rb') as f:
+#         pubkey = f.read()
+#     with open('/root/keys/private.pem', mode='rb') as f:
+#         private = f.read()
+#     private = rsa.PrivateKey.load_pkcs1(private)
+#     raw_stream_names = api.liststreams()
+#     streams = []
+#     for stream in raw_stream_names:
+#         if stream['name'] != 'root' and stream['name'] != 'default_account' and stream['name'] != 'nickname_resolve' and stream['name'][0] == '[' and stream['name'][0:7] != "[Group]":
+#             streams.append(stream['name'])
+#     for content in streams:
+#         liststream = api.liststreamkeyitems(content, binascii.hexlify(pubkey))
+#         print(liststream)
+#         nom = '[' + binascii.unhexlify(liststream[1:])
+#         if nom.find("[" + str(group_name) + "]") < 0:
+#             continue
+#         content = binascii.unhexlify(rsa.decrypt(content['data'], private)).decode('utf8')
+#         content = json.load(content)
+#         ipfs = content['ipfs']
+#         author_account = content['publishers'][0]
+#         type_contenu = content['type']
+#         author = resolve_name(author_account, api)
+#         posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author})
+#         print(json.dumps({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author}))
+#     return posts
