@@ -21,6 +21,20 @@ def set_chain_name(name):
     file.close()
 
 
+def get_state():
+    file = open(os.path.dirname(os.path.realpath(__file__)) + '/state.txt', 'r')
+    val = file.read()
+    file.close()
+    val = val.replace('\n', '')
+    return val
+
+
+def set_state(state):
+    file = open(os.path.dirname(os.path.realpath(__file__)) + '/state.txt', 'w')
+    file.write(state)
+    file.close()
+
+
 def get_api(host=default_rpc_host, port=default_rpc_port, chain_name=''):
     if chain_name == '':
         chain_name = get_chain_name()
@@ -95,6 +109,7 @@ def get_all_posts(api):
 def connect_chain(ip, port, chain_name, nickname):
     """ Connect to the chain at 'ip' address where 'chain_name' is the name of the chain you want to create and where 'nickname' is the nickname you want to be identified by."""
     set_chain_name(chain_name)
+    set_state('Connecting to chain ' + get_chain_name())
 
     call("multichain-cli " + chain_name + " stop", shell=True)
     time.sleep(2)
@@ -132,7 +147,7 @@ def connect_chain(ip, port, chain_name, nickname):
     print(apirpc.publish("nickname_resolve", "nickname", str(hex_nick)))
     #apirpc.publish("nickname_resolve", "pubkey", pubkey)
     print('connect chain finished')
-
+    set_state('Connected to ' + get_chain_name())
 
 
 
@@ -142,6 +157,7 @@ def connect_chain(ip, port, chain_name, nickname):
 def create_chain(chain_name, nickname):
     """ Create a new chain where 'chain_name' is the name of the chain you want to create and where 'nickname' is the nickname you want to be identified by."""
     set_chain_name(chain_name)
+    set_state('Creating chain ' + get_chain_name())
     call("multichain-cli " + chain_name + " stop", shell=True)
     time.sleep(2)
     # call("firewall-cmd", "--permanent", "--zone=public", "--add-port=" + port + "/tcp")
@@ -181,3 +197,4 @@ def create_chain(chain_name, nickname):
     print(apirpc.publish("nickname_resolve", "nickname", hex_nick))
     # apirpc.publish("nickname_resolve", "pubkey", pubkey)
     print('create chain finished')
+    set_state('Connected to ' + get_chain_name())

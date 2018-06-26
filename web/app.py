@@ -54,7 +54,13 @@ def show_post(num_stream):
 # return jsonify(stream)
 
 
+@app.route('/state')
+def state():
+    return get_state()
+
+
 if __name__ == '__main__':
+    set_state('Not connected')
     name = get_chain_name()
     if name != '':
         call("multichaind " + name + " -daemon", shell=True)
