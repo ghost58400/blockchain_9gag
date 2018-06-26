@@ -55,19 +55,22 @@ def get_api(host=default_rpc_host, port=default_rpc_port, chain_name=''):
     rpcuser = ""
     rpcpassword = ""
 
-    with open(pathconf, "r") as f:
-        line_list = [c for c in f.readlines()]
-        for line in line_list:
-            if "rpcuser=" in line:
-                rpcuser = line.split("=")[1]
-            elif "rpcpassword=" in line:
-                rpcpassword = line.split("=")[1]
-        if rpcuser == "":
-            print("Couldn't retrieve rpcuser from " + chain_name)
-            return None
-        elif rpcpassword == "":
-            print("Couldn't retrieve rpcpassword from " + chain_name)
-            return None
+    try:
+        with open(pathconf, "r") as f:
+            line_list = [c for c in f.readlines()]
+            for line in line_list:
+                if "rpcuser=" in line:
+                    rpcuser = line.split("=")[1]
+                elif "rpcpassword=" in line:
+                    rpcpassword = line.split("=")[1]
+            if rpcuser == "":
+                print("Couldn't retrieve rpcuser from " + chain_name)
+                return None
+            elif rpcpassword == "":
+                print("Couldn't retrieve rpcpassword from " + chain_name)
+                return None
+    except:
+        return None
 
     rpcuser = rpcuser.replace('\n', '')
     rpcpassword = rpcpassword.replace('\n', '')
@@ -92,6 +95,8 @@ def resolve_address(pubkey, api):
     return None
 
 def get_all_posts(api):
+    if api is None:
+        return []
     fsapi = ipfsapi.connect('127.0.0.1', 5001)
     raw_stream_names = api.liststreams()
     streams = []
@@ -180,6 +185,8 @@ def create_chain(chain_name="chain1", nickname="admin"):
     time.sleep(5)
 
     apirpc = get_api()
+    print('api :')
+    print(apirpc)
 
     json_rep = apirpc.createkeypairs()
     address = json_rep[0]['address']

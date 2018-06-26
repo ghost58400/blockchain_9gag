@@ -34,6 +34,9 @@ wget https://www.multichain.com/download/multichain-1.0.5.tar.gz
 tar -xvzf multichain-1.0.5.tar.gz
 cd multichain-1.0.5
 mv multichaind multichain-cli multichain-util /usr/bin/
+mkdir /root/keys
+touch /root/keys/public.pem
+touch /root/keys/private.pem
 echo 'ipfs daemon &' >> /root/.bashrc
 echo 'python /root/web/app.py >> /root/web/log.txt 2>> /root/web/log.txt &' >> /root/.bashrc
 echo "-------------"
