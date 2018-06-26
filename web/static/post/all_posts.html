@@ -2,21 +2,26 @@
     <h3>
         Posts :
     </h3>
-    <ul id="list_posts">
+    <ul class="list-unstyled" id="list_posts">
         <li ng-repeat="stream in list_stream">
             <div class="card w-80">
-                <div ng-if="stream.type == 'img'" id="data" class="card_img-top">
-                    <img src="{{ stream.data }}" alt="Image not found">
+                <div ng-if="stream.type == 'image'" id="data" class="card-img-top">
+                    <img class="img-fluid img-thumbnail" src="{{ stream.data }}" alt="Image not found">
                 </div>
                 <div class="card-body">
                     <h3 class="card-title">{{ stream.title }}</h3>
-                    <div ng-if="stream.type != 'img'" id="data" class="card-text">
+                    <div ng-if="stream.type == 'text'" id="data" class="card-text">
                         <p>{{ stream.data }}</p>
                     </div>
                 </div>
+                <div ng-if="stream.type != 'image' && stream.type != 'text'">
+                    <p>Unknown type of post. Sorry.</p>
+                </div>
                 <div class="card-footer">
-                    <button ng-click="upvote(stream)"><span class="glyphicon glyphicon-arrow-up"></span></button>
-                    <button ng-click="downvote(stream)"><span class="glyphicon glyphicon-arrow-down"></span></button>
+                    <label for="upvote_btn">{{ stream.upvotes }}</label>
+                    <button id="upvote_btn" ng-click="upvote(stream)"><span class="glyphicon glyphicon-arrow-up"></span></button>
+                    <label for="downvote_btn">{{ stream.downvotes }}</label>
+                    <button id="downvote_btn" ng-click="downvote(stream)"><span class="glyphicon glyphicon-arrow-down"></span></button>
                 </div>
             </div>
         </li>
