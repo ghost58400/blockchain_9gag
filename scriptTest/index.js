@@ -2,7 +2,7 @@ web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 VotingContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"upVotes","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"Like","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"totalVotesFor","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"downVotes","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"totalVotesAgainst","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"Dislike","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}]);
 // In your nodejs console, execute contractInstance.address to get the address at which the contract is deployed and change the line below to use your deployed address
 nbPost = $('.container').length;
-
+addr = web3.eth.accounts[1]
 addrs = [];
 $("img").each(function(i) {
   addr = $(this).attr('id');
@@ -30,7 +30,7 @@ function actualize() {
 
 function Like(nb) {
   i = nb-1;
-  contracts[i].Like({from: web3.eth.accounts[0]});
+  contracts[i].Like({from: account});
   let like = contracts[i].totalVotesFor.call().toString();
   let dis = contracts[i].totalVotesAgainst.call().toString();
   $("#like_"+nb).text("Liked: "+like);
@@ -39,7 +39,7 @@ function Like(nb) {
 
 function Dislike(nb) {
   i = nb-1;
-  contracts[i].Dislike({from: web3.eth.accounts[0]});
+  contracts[i].Dislike({from: account});
   let like = contracts[i].totalVotesFor.call().toString();
   let dis = contracts[i].totalVotesAgainst.call().toString();
   $("#like_"+nb).text("Liked: "+like);

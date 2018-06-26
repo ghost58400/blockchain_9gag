@@ -7,6 +7,7 @@ from consts import *
 import ipfsapi
 import rsa
 import json
+from Naked.toolshed.shell import muterun_js
 
 def get_myaddr():
     api = get_api()
@@ -118,15 +119,18 @@ def get_all_posts(api):
             ipfs = ''
             type_contenu = ''
             author_account = ''
+            sm_address = ''
             for it in stream:
                 if it['key'] == 'ipfs':
                     ipfs = binascii.unhexlify(it['data'])
                     author_account = it['publishers'][0]
                 if it['key'] == 'type':
                     type_contenu = binascii.unhexlify(it['data'])
+                if it['key'] == 'smartcontract':
+                    sm_address = binascii.unhexlify(it['data'])
             if ipfs != '' and type_contenu != '' and author_account != '':
                 author = resolve_name(author_account, api)
-                posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author})
+                posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author, 'smartcontract': sm_address})
         elif stream_name[0:7] != "[Group]":
             nom = "[" + binascii.unhexlify(stream_name[1:stream_name.find(']')]) + ']' + binascii.unhexlify(stream_name[stream_name.find(']') + 1:])
             stream = api.liststreamitems(stream_name)
@@ -238,6 +242,15 @@ def create_chain(chain_name, nickname):
     # apirpc.publish("nickname_resolve", "pubkey", pubkey)
     print('create chain finished')
 
+def deployContractForPost():
+    response = muterun_js('/root/scriptTest/EtherUtils.js')
+    if response.exitcode == 0:
+      addr = response.stdout[:-1]
+      return addr
+    else:
+      print('Deploy contract error')
+      return ''
+
 def create_post(title, content, type):
     apirpc = get_api()
     api = ipfsapi.connect('127.0.0.1', 5001)
@@ -253,6 +266,9 @@ def create_post(title, content, type):
     apirpc.create('stream', streamname, False)
     apirpc.publish(streamname, 'ipfs', binascii.hexlify(res))
     apirpc.publish(streamname, 'type', binascii.hexlify(type))
+    # Decommenter apres lancer la VM Ethereum et executer scriptTest/test2.sh
+    #addr = deployContractForPost()
+    #apirpc.publish(streamname, 'smartcontract', binascii.hexlify(addr))
     print(apirpc.liststreamitems(streamname))
 
 
