@@ -11,10 +11,14 @@ angular.module('App', ['ngRoute','App.post', 'App.login', 'App.chain',])
 }])
 
 .config(['$routeProvider', function ($routeProvider) {
-    // $routeProvider.when('/login', {
-    //     templateUrl: 'static/login/login.html',
-    //     controller: 'LoginController'
-    // });
+    $routeProvider.when('/connect_chain', {
+        templateUrl: 'static/chain/connect_chain.html',
+        controller: 'ChainController'
+    });
+    $routeProvider.when('/create_chain', {
+        templateUrl: 'static/chain/create_chain.html',
+        controller: 'ChainController'
+    });
     $routeProvider.when('/home', {
         templateUrl: 'static/post/all_posts.html',
         controller: 'PostController'
@@ -27,9 +31,9 @@ angular.module('App', ['ngRoute','App.post', 'App.login', 'App.chain',])
         templateUrl: 'static/post/show_post.html',
         controller: 'PostController'
     });
-    $routeProvider.when('/connect_chain', {
-        templateUrl: 'static/chain/connect_chain.html',
-        controller: 'ChainController'
-    });
+    // $routeProvider.when('/login', {
+    //     templateUrl: 'static/login/login.html',
+    //     controller: 'LoginController'
+    // });
 }]);
 

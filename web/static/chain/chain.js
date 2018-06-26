@@ -14,12 +14,32 @@ angular.module('App.chain', ['ngRoute'])
                 $http.get('/connect_blockchain/' + String($scope.name_chain) + '/' + String($scope.ip_chain) + '/' + String($scope.port_chain)+'/'+String($scope.nickname_chain))
                     .then(function success(e) {
                         $scope.errors = [];
-                        if (e.data !== '')
+                        if (e.data !== '') {
                             console.log("/connect_blockchain");
-                        console.log(e.data);
+                            console.log(e.data);
+                        }
                     }, function error(e) {
                         console.log("error connect_blockchain");
                         $scope.errors = e.data.errors;
+                    });
+            }
+        };
+
+        $scope.new_chain_name = null;
+        $scope.new_chain_nickname = null;
+
+        $scope.createChain = function () {
+            if ($scope.new_chain_name !== null && $scope.new_chain_nickname !== null ) {
+                $http.get('/create_chain/'+String($scope.new_chain_name)+'/'+String($scope.new_chain_nickname))
+                    .then(function success(e) {
+                        $scope.errors = [];
+                        if (e.data !== '') {
+                            console.log("/connect_blockchain");
+                            console.log(e.data);
+                        }
+                    }, function error(e) {
+                            console.log("error create chain");
+                            $scope.errors = e.data.errors;
                     });
             }
         };
