@@ -14,9 +14,7 @@ port=1234
 
 multichain-cli $chain_name stop
 sleep 2
-mv ~/.multichain/multichain.conf ~
-rm -rf ~/.multichain/*
-mv ~/multichain.conf ~/.multichain/
+rm -rf ~/.multichain/$chain_name
 
 multichaind $chain_name@$ip:$port -daemon -autosubscribe=streams
 ipfs daemon &

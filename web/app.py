@@ -50,11 +50,22 @@ def get_posts():
 
 
 
+
+
 @app.route('/new_post', methods=['POST'])
 def new_post():
     a = request.form
-    create_post(a['title'], a['content'], a['type'], a['privkey'])
-    return 'ok'
+    f = request.files
+    if len(f) ==1 and a['type'] == 'Image':
+        create_post(a['title'], f['image'], a['type'])
+        return 'ok'
+    if len(f) == 0 and a['type'] == 'Text':
+        create_post(a['title'], a['content'], a['type'])
+        return 'ok'
+    return 'coherency problem'
+
+
+
 
 
 
@@ -75,5 +86,4 @@ if __name__ == '__main__':
     name = get_chain_name()
     if name != '':
         call("nohup multichaind " + name + " -daemon", shell=True)
-    app.config['UPLOAD_FOLDER'] = '/tmp/'
     app.run(host='0.0.0.0', port=80, debug=False)

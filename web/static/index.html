@@ -5,18 +5,58 @@
     <title>Index</title>
     <!-- Bootstrap CSS File  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
-    <link href="static/css/main.css" rel="stylesheet" type="text/css">
 
 </head>
-<body ng-app="App">
-<!-- supplement sponsor -->
-<a href="#" class="sponsor g"></a>
-<a href="#" class="sponsor d"></a>
-<!-- fin sponsor -->
+<body ng-app="App" style="padding-top: 120px">
 <div class="container">
-    <div id="top-nav row">
+    <div class="row">
+        <nav class="navbar fixed-top navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="/static/images/memes.png" width="50" height="50" alt="">
+                INSAMemes
+            </a>
+            <a class="navbar-brand"></a>
+            <form class="form-inline">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <div class="user-functions">
+                <ul class="nav nav-pills">
+                    <li class="nav-item"><a class="nav-link active" href="#!/show_post/">Random memes</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#!/create_post/"> Upload a funny</a></li>
+                </ul>
+            </div>
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#!/home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#!/news">News</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#!/home/">What's Hot</a>
+                </li>
+                <li ><a class="nav-link" href="#!/login">Login</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+<!-- Fin du nav -->
+<!-- begin main content-->
+    <div class="row justify-content-end">
+        <div ng-controller="ChainController">
+            <h4 class="alert alert-info">State : <span>{{ userstate }}</span></h4>
+        </div>
+    </div>
+    <div class="row justify-content-start">
+        <div ng-view class="row justify-content-end"></div>
+    </div>
+</div>
+<!--end top nav bar
+<div class="container">
+    <div id="top-nav">
         <div class="main-nav">
-            <h1><a href="/">Memes.com : all your memes</a></h1>
+            <h1><a href="/static">Memes.com : all your memes</a></h1>
             <div class="menu-items">
                 <ul>
                     <li><a href="#!/news/">best</a></li>
@@ -45,18 +85,13 @@
             </div>
             <div class="clear"></div>
         </div>
-        <div class="col col-md-2 align-self-end">
-            <p>State : {{ is_user_connected() }}</p>
-        </div>
     </div>
-    <!-- end top nav bar-->
-    <!-- begin main content-->
-<div ng-view></div>
-<!--<p class ="ex1">Infite Powaaaaaaa </p>-->
-</div>
+-->
 
 
-<!-- Jquery JS file -->
+
+
+<!- Jquery JS file -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 <!-- AngularJS files -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.10/angular.js"></script>

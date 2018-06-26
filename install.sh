@@ -6,12 +6,13 @@ echo dhclient >> /etc/rc.d/rc.local
 chmod +x /etc/rc.d/rc.local
 yum -y --enablerepo=extras install epel-release
 yum update -y
-yum install -y nano wget ntpdate vim-common python-pip dhclient net-tools nodejs git
+yum install -y nano screen wget ntpdate vim-common python-pip dhclient net-tools nodejs git
 pip install --upgrade pip
 pip install flask
 pip install Savoir
 pip install ipfsapi
 pip install Naked
+pip install rsa
 
 #remplacer from Savoir.Savoir import *
 #par from Savoir import Savoir

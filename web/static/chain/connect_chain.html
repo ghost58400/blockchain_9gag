@@ -1,8 +1,8 @@
 <div class="row justify-content-md-center">
-    <h3>
+    <h3 class="col-12">
         Connect to a chain :
     </h3>
-    <form ng-submit="connectToChain()">
+    <form ng-submit="connectToChain()" action="#!/home/" target="_blank" class="col-12">
         <div class="form-group">
             <label for="chain_name">Chain name : </label>
             <input type="text" class="form-control" id="chain_name" ng-model="name_chain">
@@ -19,6 +19,6 @@
             <label for="nickname_chain">Nickname : </label>
             <input type="text" class="form-control" id="nickname_chain" ng-model="nickname_chain">
         </div>
-        <button type="submit" class="btn btn-primary">Connect</button>
+        <button type="submit" class="btn btn-primary" >Connect</button>
     </form>
 </div>
