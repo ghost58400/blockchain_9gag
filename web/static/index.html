@@ -9,42 +9,48 @@
 </head>
 <body ng-app="App" style="padding-top: 120px">
 <div class="container">
-    <nav class="navbar fixed-top navbar-light bg-light">
-        <a class="navbar-brand" href="#">
-            <img src="/static/images/memes.png" width="50" height="50" alt="">
-            INSAMemes
-        </a>
-        <a class="navbar-brand"></a>
-        <form class="form-inline">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
-        <div class="user-functions">
-            <ul class="nav nav-pills">
-                <li class="nav-item"><a class="nav-link active" href="#!/show_post/">Random memes</a></li>
-                <li class="nav-item"><a class="nav-link active" href="#!/create_post/"> Upload a funny</a></li>
+    <div class="row">
+        <nav class="navbar fixed-top navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="/static/images/memes.png" width="50" height="50" alt="">
+                INSAMemes
+            </a>
+            <a class="navbar-brand"></a>
+            <form class="form-inline">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <div class="user-functions">
+                <ul class="nav nav-pills">
+                    <li class="nav-item"><a class="nav-link active" href="#!/show_post/">Random memes</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#!/create_post/"> Upload a funny</a></li>
+                </ul>
+            </div>
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#!/home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#!/news">News</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#!/home/">What's Hot</a>
+                </li>
+                <li ><a class="nav-link" href="#!/login">Login</a>
+                </li>
             </ul>
-        </div>
-        <ul class="nav justify-content-center">
-            <li class="nav-item">
-                <a class="nav-link active" href="#!/home">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#!/news">News</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#!/home/">What's Hot</a>
-            </li>
-            <li ><a class="nav-link" href="#!/login">Login</a>
-            </li>
-        </ul>
-    </nav>
+        </nav>
+    </div>
 <!-- Fin du nav -->
 <!-- begin main content-->
-    <div class="col col-md-2 align-self-end" ng-controller="ChainController">
-        <h4>State : <span>{{ userstate }}</span></h4>
+    <div class="row justify-content-end">
+        <div ng-controller="ChainController">
+            <h4>State : <span>{{ userstate }}</span></h4>
+        </div>
     </div>
-
+    <div class="row justify-content-start">
+        <div ng-view class="row justify-content-end"></div>
+    </div>
 </div>
 <!--end top nav bar
 <div class="container">
@@ -81,7 +87,7 @@
         </div>
     </div>
 -->
-<div ng-view></div>
+
 
 
 

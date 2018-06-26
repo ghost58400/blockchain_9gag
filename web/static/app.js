@@ -6,7 +6,7 @@ angular.module('App', ['ngRoute','App.post', 'App.login', 'App.chain',])
 
     $locationProvider.hashPrefix('!');
 
-    $routeProvider.otherwise({redirectTo: '/connect_chain'});
+    $routeProvider.otherwise({redirectTo: '/home'});
 
 }])
 
