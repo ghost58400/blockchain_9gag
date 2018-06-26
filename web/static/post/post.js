@@ -20,7 +20,7 @@ angular.module('App.post', ['ngRoute'])
                     $scope.list_stream = e.data;
                     console.log($scope.list_stream);
             }, function error(e) {
-                console.log("error");
+                console.log("error get_posts");
                 $scope.errors = e.data.errors;
             });
 
