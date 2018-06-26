@@ -42,7 +42,12 @@ angular.module('App.chain', ['ngRoute'])
             //         $scope.userstate = "error";
             //     });
             // return $scope.userstate;
+            console.log("/state");
             console.log($http.get('/state'));
             return $http.get('/state');
+        };
+
+        window.onload = function() {
+            window.getElementById("state_user").innerHTML = $scope.is_user_connected();
         }
     });
