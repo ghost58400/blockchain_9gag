@@ -19,6 +19,21 @@ def set_chain_name(name):
     file.write(name)
     file.close()
 
+
+def get_state():
+    file = open(os.path.dirname(os.path.realpath(__file__)) + '/state.txt', 'r')
+    val = file.read()
+    file.close()
+    val = val.replace('\n', '')
+    return val
+
+
+def set_state(state):
+    file = open(os.path.dirname(os.path.realpath(__file__)) + '/state.txt', 'w')
+    file.write(state)
+    file.close()
+
+
 def get_api(host=default_rpc_host, port=default_rpc_port, chain_name=''):
     if chain_name == '':
         chain_name = get_chain_name()
@@ -92,6 +107,7 @@ def get_all_posts(api):
 def connect_chain(ip="172.17.0.2", port="1234", chain_name="chain1", nickname="user"):
     """ Connect to the chain at 'ip' address where 'chain_name' is the name of the chain you want to create and where 'nickname' is the nickname you want to be identified by."""
     set_chain_name(chain_name)
+    set_state('Connecting to chain ' + get_chain_name())
 
     call("multichain-cli " + chain_name + " stop", shell=True)
     time.sleep(2)
@@ -112,13 +128,13 @@ def connect_chain(ip="172.17.0.2", port="1234", chain_name="chain1", nickname="u
     default_privkey = hex_priv.decode("hex")
     default_address = hex_addr.decode("hex")
 
-    apirpc.importaddress(default_address)
+    print(apirpc.importaddress(default_address))
 
     txid = apirpc.createrawsendfrom(default_address, {my_addr:0})
     signed_hex_json = apirpc.signrawtransaction(txid, None, [default_privkey])
 
     signed_hex = signed_hex_json['hex']
-    apirpc.sendrawtransaction(signed_hex)
+    print(apirpc.sendrawtransaction(signed_hex))
 
     print("Please wait...")
     time.sleep(20)
@@ -132,6 +148,7 @@ def connect_chain(ip="172.17.0.2", port="1234", chain_name="chain1", nickname="u
 def create_chain(chain_name="chain1", nickname="admin"):
     """ Create a new chain where 'chain_name' is the name of the chain you want to create and where 'nickname' is the nickname you want to be identified by."""
     set_chain_name(chain_name)
+    set_state('Creating chain ' + get_chain_name())
     call("multichain-cli " + chain_name + " stop", shell=True)
     time.sleep(2)
     # call("firewall-cmd", "--permanent", "--zone=public", "--add-port=" + port + "/tcp")

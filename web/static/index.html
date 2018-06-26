@@ -28,7 +28,6 @@
                 <ul>
                     <li><a href="#!/show_post/" class="random-meme" title="randomize">random memes</a></li>
                     <li><a href="#!/create_post/" class="upload-meme"><span>upload a funny</span></a></li>
-                    <li><a href="#!/caption/" class="make-meme"><span>caption a meme</span></a></li>
                 </ul>
             </div>
             <div class="nav-search">
@@ -45,6 +44,9 @@
                 </ul>
             </div>
             <div class="clear"></div>
+        </div>
+        <div class="col col-md-2 align-self-end">
+            <p>State : {{ is_user_connected() }}</p>
         </div>
     </div>
     <!-- end top nav bar-->
