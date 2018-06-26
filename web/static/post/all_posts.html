@@ -2,19 +2,19 @@
     <h3>
         Posts :
     </h3>
-    <ul class="list-unstyled" id="list_posts">
+    <ul id="list_posts">
         <li ng-repeat="stream in list_stream">
             <div class="card w-80">
-                <div ng-if="stream.type == 'image'" id="data" class="card-img-top">
+                <div ng-if="stream.type == 'Image'" id="data" class="card-img-top">
                     <img class="img-fluid img-thumbnail" src="{{ stream.data }}" alt="Image not found">
                 </div>
                 <div class="card-body">
                     <h3 class="card-title">{{ stream.title }}</h3>
-                    <div ng-if="stream.type == 'text'" id="data" class="card-text">
+                    <div ng-if="stream.type == 'Text'" id="data" class="card-text">
                         <p>{{ stream.data }}</p>
                     </div>
                 </div>
-                <div ng-if="stream.type != 'image' && stream.type != 'text'">
+                <div ng-if="stream.type != 'Image' && stream.type != 'Text'">
                     <p>Unknown type of post. Sorry.</p>
                 </div>
                 <div class="card-footer">

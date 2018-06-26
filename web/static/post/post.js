@@ -7,7 +7,7 @@ angular.module('App.post', ['ngRoute'])
 
         $scope.new_post_title = null;
         $scope.new_post_content = null;
-        $scope.new_post_type = 'text';
+        $scope.new_post_type = 'Text';
         $scope.new_post_visibility = null;
 
         console.log("PostController");
