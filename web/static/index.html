@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <!-- Bootstrap CSS File  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+
+</head>
+<body ng-app="App" style="padding-top: 120px">
+<div class="container">
+    <nav class="navbar fixed-top navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="/static/images/memes.png" width="50" height="50" alt="">
+            INSAMemes
+        </a>
+        <a class="navbar-brand"></a>
+        <form class="form-inline">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        <div class="user-functions">
+            <ul class="nav nav-pills">
+                <li class="nav-item"><a class="nav-link active" href="#!/show_post/">Random memes</a></li>
+                <li class="nav-item"><a class="nav-link active" href="#!/create_post/"> Upload a funny</a></li>
+            </ul>
+        </div>
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link active" href="#!/home">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#!/news">News</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#!/home/">What's Hot</a>
+            </li>
+            <li ><a class="nav-link" href="#!/login">Login</a>
+            </li>
+        </ul>
+    </nav>
+<!-- Fin du nav -->
+<!-- begin main content-->
+    <div class="col col-md-2 align-self-end" ng-controller="ChainController">
+        <h4>State : <span>{{ userstate }}</span></h4>
+    </div>
+
+</div>
+<!--end top nav bar
+<div class="container">
+    <div id="top-nav">
+        <div class="main-nav">
+            <h1><a href="/static">Memes.com : all your memes</a></h1>
+            <div class="menu-items">
+                <ul>
+                    <li><a href="#!/news/">best</a></li>
+                    <li><a href="#!/home/" class="current">what's hot</a></li>
+
+                </ul>
+            </div>
+            <div class="user-functions">
+                <ul>
+                    <li><a href="#!/show_post/" class="random-meme" title="randomize">random memes</a></li>
+                    <li><a href="#!/create_post/" class="upload-meme"><span>upload a funny</span></a></li>
+                </ul>
+            </div>
+            <div class="nav-search">
+                <form id="search" name="search" action="search/" method="GET" role="search" class="navbar-search">
+                    <input id="searchwords" placeholder="search..." class="search-query" name="searchwords" type="text">
+                </form>
+            </div>
+            <div class="menu-items user-login">
+                <ul>
+                    <li id="shownsfw"><a href="javascript:void(0)" onclick="toggleNSFW();" id="shownsfwlink">show
+                        NSFW</a></li>
+                    <li id="fblogin"><a href="javascript:void(0)" onclick="doLogin();" id="fbloginlink">login</a><a
+                            href="javascript:void(0)" id="fblogintext" style="display:none;"></a></li>
+                </ul>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+<div ng-view></div>
+
+
+
+<!- Jquery JS file -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+<!-- AngularJS files -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.10/angular.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.10/angular-route.js"></script>
+<!-- Bootstrap JS file -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.js"></script>
+
+<script src="static/app.js" type="text/javascript" rel="script"></script>
+<script src="static/post/post.js" type="text/javascript" rel="script"></script>
+<script src="static/login/login.js" type="text/javascript" rel="script"></script>
+<script src="static/chain/chain.js" type="text/javascript" rel="script"></script>
+</body>
+</html>
