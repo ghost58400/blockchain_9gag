@@ -54,7 +54,8 @@ angular.module('App.chain', ['ngRoute'])
                     $scope.errors = [];
                     if (e.data !== '') {
                         console.log("/state");
-                        document.getElementById("state_user").innerHTML = e.data;
+                        $scope.userstate = e.data;
+                        // document.getElementById("state_user").innerHTML = e.data;
                         return String(e.data);
                     }
                 }, function error(e) {
