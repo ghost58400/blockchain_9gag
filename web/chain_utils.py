@@ -128,7 +128,7 @@ def get_all_posts(api):
             post['ipfs'] = fsapi.get_json(post['ipfs'])
     return posts
 
-def connect_chain(ip="172.17.0.2", port="1234", chain_name="chain1", nickname="user"):
+def connect_chain(ip, port, chain_name, nickname):
     """ Connect to the chain at 'ip' address where 'chain_name' is the name of the chain you want to create and where 'nickname' is the nickname you want to be identified by."""
     set_chain_name(chain_name)
     set_state('Connecting to chain ' + get_chain_name())

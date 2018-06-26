@@ -43,15 +43,6 @@ def get_posts():
     return jsonify(posts)
 
 
-
-
-
-
-
-
-
-
-
 @app.route('/new_post', methods=['POST'])
 def new_post():
     a = request.form
@@ -65,6 +56,9 @@ def new_post():
     return 'coherency problem'
 
 
+@app.route('/log')
+def log():
+    return send_from_directory('/root/web', 'log.txt')
 
 
 
