@@ -222,6 +222,6 @@ def post_group(chain_name, group_name, name_post, file, type):
 
     value = json.dumps({'ipfs': binascii.hexlify(res['Hash']), 'type': binascii.hexlify(str(type))})
     for key in listkeys:
-        # à finir
+        # a finir
         apirpc.publish(streamname, 'ipfs', binascii.hexlify(res['Hash']))
         apirpc.publish(streamname, 'type', binascii.hexlify(sys.argv[4]))
