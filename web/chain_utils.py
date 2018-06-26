@@ -95,26 +95,48 @@ def get_all_posts(api):
     fsapi = ipfsapi.connect('127.0.0.1', 5001)
     raw_stream_names = api.liststreams()
     streams = []
+    with open('/root/keys/public.pem', mode='rb') as f:
+        pubkey = f.read()
+    with open('/root/keys/private.pem', mode='rb') as f:
+        private = f.read()
+    private = rsa.PrivateKey.load_pkcs1(private)
+
     for stream in raw_stream_names:
-        if stream['name'] != 'root' and stream['name'] != 'default_account' and stream['name'] != 'nickname_resolve' and stream['name'][0] != '[':
+        if stream['name'] != 'root' and stream['name'] != 'default_account' and stream['name'] != 'nickname_resolve':
             streams.append(stream['name'])
 
     posts = []
     for stream_name in streams:
-        stream = api.liststreamitems(stream_name)
-        nom = binascii.unhexlify(stream_name)
-        ipfs = ''
-        type_contenu = ''
-        author_account = ''
-        for it in stream:
-            if it['key'] == 'ipfs':
-                ipfs = binascii.unhexlify(it['data'])
-                author_account = it['publishers'][0]
-            if it['key'] == 'type':
-                type_contenu = binascii.unhexlify(it['data'])
-        if ipfs != '' and type_contenu != '' and author_account != '':
-            author = resolve_name(author_account, api)
-            posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author})
+        if stream_name[0] != '[':
+            nom = binascii.unhexlify(stream_name)
+            stream = api.liststreamitems(stream_name)
+            ipfs = ''
+            type_contenu = ''
+            author_account = ''
+            for it in stream:
+                if it['key'] == 'ipfs':
+                    ipfs = binascii.unhexlify(it['data'])
+                    author_account = it['publishers'][0]
+                if it['key'] == 'type':
+                    type_contenu = binascii.unhexlify(it['data'])
+            if ipfs != '' and type_contenu != '' and author_account != '':
+                author = resolve_name(author_account, api)
+                posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author})
+        elif stream_name[0:7] != "[Group]":
+            nom = "[" + binascii.unhexlify(stream_name[1:stream_name.find(']')]) + ']' + binascii.unhexlify(stream_name[stream_name.find(']') + 1:])
+            stream = api.liststreamitems(stream_name)
+            myaddr = get_myaddr()
+            for it in stream:
+                if it['key'] == myaddr:
+                    content = rsa.decrypt(binascii.unhexlify(it['data']), private).decode('utf8')
+                    content = json.loads(content)
+                    ipfs = binascii.unhexlify(content['ipfs'])
+                    author_account = it['publishers'][0]
+                    type_contenu = binascii.unhexlify(content['type'])
+                    author = resolve_name(author_account, api)
+                    posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author})
+                    print("DECODED")
+                    print(json.dumps({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author}))
 
     for post in posts:
         if post['type'] == 'Image':
@@ -257,7 +279,7 @@ def post_group(name_post, file, type, chain_name="chain1", group_name="illuminat
     apirpc = get_api()
     api = ipfsapi.connect('127.0.0.1', 5001)
     res = api.add(file)
-    streamname = ("[" + binascii.hexlify(str(group_name) + "]" + str(name_post)))[0:32]
+    streamname = ("[" + binascii.hexlify(str(group_name)) + "]" + binascii.hexlify(str(name_post)))[0:32]
     print(streamname)
     groupstream = ("[Group]" + binascii.hexlify(str(group_name)))[0:32]
     apirpc.create('stream', streamname, False)
