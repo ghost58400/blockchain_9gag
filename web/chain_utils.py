@@ -28,7 +28,7 @@ def get_myaddr():
         if addr['ismine']:
             return addr['address']
     return None
-    
+
 def createEtherAddr():
     response = muterun_js('/root/scriptTest/createAccount.js')
     if response.exitcode == 0:
@@ -36,10 +36,10 @@ def createEtherAddr():
       ethaddr = addr
     else:
       print('create Ethereum address error')
-      
+
 def get_ethaddr():
     return ethaddr
-    
+
 
 def get_chain_name():
     file = open(os.path.dirname(os.path.realpath(__file__)) + '/chain_name.txt', 'r')
@@ -122,21 +122,19 @@ def resolve_address(pubkey, api):
             return nickname['publishers'][0]
     return None
 
-<<<<<<< HEAD
 def resolve_group(group_tag, api):
     """ Return the full name of a group from its tag """
-    streamname = "[Group]" + str(group_tag)
+    streamname = "[Group]" + binascii.hexlify(str(group_tag))
     listitems = api.liststreamitems(streamname)
-    return binascii.unhexlify(listitems['name'])
+    for key in listitems:
+        if key['key'] == 'name':
+            return binascii.unhexlify(key['data'])
+    return "Group not found"
 
 def get_all_posts(api, from_group=''):
     """ If you want to get only the posts from a specific group, set the optional parameter 'from_group' to the group tag you want to filter """
-=======
-
-def get_all_posts(api):
     print('in get all posts')
     print(api)
->>>>>>> 39dd7d13ba18387a0cc0a8d4d8464086749a3d70
     if api is None:
         return []
     fsapi = ipfsapi.connect('127.0.0.1', 5001)
@@ -342,14 +340,8 @@ def create_group(chain_name="chain1", group_tag="PGM", group_name="Pro Gamers"):
     apirpc.publish(streamname, 'name', binascii.hexlify(group_name))
     apirpc.publish(streamname, get_myaddr(), binascii.hexlify(pubkey))
 
-<<<<<<< HEAD
 def join_group(chain_name="chain1", group_tag="PGM"):
     """ Join a group in chain 'chain_name', with the name 'group_tag'.
-=======
-
-def join_group(chain_name="chain1", group_name="illuminati"):
-    """ Join a group in chain 'chain_name', with the name 'group_name'.
->>>>>>> 39dd7d13ba18387a0cc0a8d4d8464086749a3d70
     Ex usage: createGroup("chain1", "insa_group") """
     apirpc = get_api()
     with open('/root/keys/public.pem', mode='rb') as f:
@@ -357,24 +349,13 @@ def join_group(chain_name="chain1", group_name="illuminati"):
     streamname = ("[Group]" + binascii.hexlify(str(group_tag)))[0:32]
     apirpc.publish(streamname, get_myaddr(), binascii.hexlify(pubkey))
 
-<<<<<<< HEAD
 def add_to_group(address, chain_name="chain1", group_tag="PGM"):
     """ Add the user identified by 'address' to the group 'group_tag' in 'chain_name' """
-=======
-
-def add_to_group(address, chain_name="chain1", group_name="illuminati"):
-    """ Add the user identified by 'address' to the group 'group_name' in 'chain_name' """
->>>>>>> 39dd7d13ba18387a0cc0a8d4d8464086749a3d70
     apirpc = get_api()
     streamname = ("[Group]" + binascii.hexlify(str(group_tag)))[0:32]
     apirpc.grant(address, streamname + ".write")
 
-<<<<<<< HEAD
 def post_group(name_post, file, type, chain_name="chain1", group_tag="PGM"):
-=======
-
-def post_group(name_post, file, type, chain_name="chain1", group_name="illuminati"):
->>>>>>> 39dd7d13ba18387a0cc0a8d4d8464086749a3d70
     """ Post a file in a group """
     apirpc = get_api()
     api = ipfsapi.connect('127.0.0.1', 5001)
