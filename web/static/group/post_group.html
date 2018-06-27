@@ -1,5 +1,4 @@
-
-<div class="row">
+<div class="row" ng-controller="GroupController">
     <h3 style="width: 100%">
         Post in a group :
     </h3>
@@ -15,7 +14,8 @@
 
         <div class="form-group">
             <label for="new_post_group_title_input">Title</label>
-            <input name="title" type="text" class="form-control" id="new_post_group_title_input" ng-model="new_post_group_title">
+            <input name="title" type="text" class="form-control" id="new_post_group_title_input"
+                   ng-model="new_post_group_title">
         </div>
 
         <div class="form-group">
@@ -28,11 +28,13 @@
 
         <div ng-if="new_post_group_type == 'Text'" class="form-group">
             <label for="new_post_group_content_input">Content</label>
-            <input name="content" type="text" class="form-control" id="new_post_group_content_input" ng-model="new_post_group_content">
+            <input name="content" type="text" class="form-control" id="new_post_group_content_input"
+                   ng-model="new_post_group_content">
         </div>
         <div ng-if="new_post_group_type == 'Image'" class="form-group">
             <label for="new_post_group_content_input_img">Image</label>
-            <input name="image" type="file" class="form-control-file" id="new_post_group_content_input_img" ng-model="new_post_group_image">
+            <input name="image" type="file" class="form-control-file" id="new_post_group_content_input_img"
+                   ng-model="new_post_group_image">
         </div>
 
         <button type="submit" class="btn btn-primary">Post</button>

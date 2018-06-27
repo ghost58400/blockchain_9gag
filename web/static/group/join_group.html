@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" ng-controller="GroupController">
     <h3 style="width: 100%">
         Join a group :
     </h3>
@@ -15,10 +15,9 @@
             <button type="submit" class="btn btn-primary">Join group</button>
         </form>
     </div>
-</div>
-<div ng-if="list_to_join_group.length == 0">
-    <h3 class="alert alert-info">
-        You don't have any pending invitations.
-    </h3>
-</div>
+    <div ng-if="list_to_join_group.length == 0">
+        <h3 class="alert alert-info">
+            You don't have any pending invitations.
+        </h3>
+    </div>
 </div>

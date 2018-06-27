@@ -21,6 +21,8 @@ angular.module('App.group', ['ngRoute'])
 
         $scope.join_group_tag = null;
 
+        $scope.current_group = null;
+
         console.log("GroupController");
 
 
@@ -32,7 +34,7 @@ angular.module('App.group', ['ngRoute'])
                         console.log("success /get_my_groups");
                         console.log(e.data);
                         $scope.list_my_group = e.data;
-                        for(let i in e.data) console.log(i);
+                        return e.data;
                     }
                 }, function error(e) {
                     console.log("error /get_my_groups");
