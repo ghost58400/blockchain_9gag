@@ -82,7 +82,7 @@ if __name__ == '__main__':
     kill_old_daemon()
     set_state('Not connected')
     name = get_chain_name()
-    createEtherAddr()
+    #createEtherAddr()
     if name != '':
         call("nohup multichaind " + name + " -daemon", shell=True)
         set_state('Connected to ' + name)
