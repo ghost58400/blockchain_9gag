@@ -9,6 +9,7 @@ import rsa
 import json
 from Naked.toolshed.shell import muterun_js
 import psutil
+from flask import redirect
 
 
 def kill_old_daemon():
@@ -70,6 +71,8 @@ def generate_key_pair():
         f.write(pubkey.save_pkcs1())
     with open("/root/keys/private.pem", "w") as f:
         f.write(privkey.save_pkcs1())
+    time.sleep(2)
+    print("Keys generated")
 
 def set_state(state):
     file = open(os.path.dirname(os.path.realpath(__file__)) + '/state.txt', 'w')
@@ -181,7 +184,7 @@ def get_list_group(address, api, resolve_tag=False):
             for key in listkeys:
                 if key['key'] == address:
                     if resolve_tag:
-                        dictgroup.update(binascii.unhexlify(stream['name'][7:]), resolve_group(binascii.unhexlify(stream['name'][7:]), api))
+                        dictgroup[binascii.unhexlify(stream['name'][7:])] = resolve_group(binascii.unhexlify(stream['name'][7:]), api)
                     else:
                         listgroup.append(binascii.unhexlify(stream['name'][7:]))
                     break
@@ -387,7 +390,7 @@ def create_post(title, content, type):
     #addr = deployContractForPost()
     #apirpc.publish(streamname, 'smartcontract', binascii.hexlify(addr))
     print(apirpc.liststreamitems(streamname))
-    return 'ok'
+    return redirect("/", code=302)
 
 
 def create_group(group_tag, group_name):
@@ -439,4 +442,4 @@ def post_group(name_post, file, type, group_tag):
         crypto = rsa.encrypt(message, pubkey)
         apirpc.publish(streamname, key['key'], binascii.hexlify(crypto))
 
-    return 'ok'
+    return redirect("/", code=302)
