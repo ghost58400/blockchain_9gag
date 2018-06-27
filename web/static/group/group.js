@@ -26,6 +26,16 @@ angular.module('App.group', ['ngRoute'])
 
         console.log("GroupController");
 
+        if(!$cookies.get("addrEth")){
+            $http.get('/myetheraddr')
+                .then(function success(e){
+                    $cookies.put('addrEth', e.data);
+                    //console.log($cookies.get("addrEth"))
+                }, function error(e) {
+                    console.log("error getting my Ethereum address");
+                    $scope.errors = e.data.errors
+                });
+        }
 
         $scope.get_my_groups = function () {
             $http.get('/get_my_groups')
@@ -120,6 +130,15 @@ angular.module('App.group', ['ngRoute'])
                     $scope.errors = [];
                     if (e.data !== '') {
                         console.log("success /get_posts/group");
+                        for(i=0; i < e.data.length; i++){
+                            var sm_address = e.data[i].smartcontract;
+                            console.log("listposts");
+                            console.log(sm_address);
+                            console.log("endlist_post");
+                            var contract = VotingContract.at(sm_address);
+                            e.data[i].upvotes = contract.totalVotesFor.call().toString();
+                            e.data[i].downvotes = contract.totalVotesAgainst.call().toString();
+                        }
                         console.log(e.data);
                         $scope.current_group_posts = e.data;
                         return e.data
@@ -132,7 +151,43 @@ angular.module('App.group', ['ngRoute'])
                 });
         };
 
+        $scope.upvote = function (stream) {
+            var found = $scope.list_stream.find(function(element) {
+                return element.title === stream.title;
+            });
+            if (found) {
+                $scope.current_post = found;
+                var sm_address = stream.smartcontract;
+                var addr = $cookies.get('addrEth');
+                console.log(sm_address);
+                var contract = VotingContract.at(sm_address);
+                contract.Like({from: addr});
+                $scope.stream = stream
+                $scope.stream.upvotes = contract.totalVotesFor.call().toString();
+                $scope.stream.downvotes = contract.totalVotesAgainst.call().toString();
+                console.log($scope.stream.upvotes);
+            }
 
+        };
+
+        $scope.downvote = function (stream) {
+            var found = $scope.list_stream.find(function(element) {
+                return element.title === stream.title;
+            });
+            if (found) {
+                $scope.current_post = found;
+                var sm_address = stream.smartcontract;
+                var addr = $cookies.get('addrEth');
+                console.log(sm_address);
+                var contract = VotingContract.at(sm_address);
+                contract.Dislike({from: addr});
+                $scope.stream = stream
+                $scope.stream.upvotes = contract.totalVotesFor.call().toString();
+                $scope.stream.downvotes = contract.totalVotesAgainst.call().toString();
+                console.log($scope.stream.downvotes);
+            }
+
+        };
 
         $scope.get_my_groups();
         $scope.get_to_join_groups();

@@ -20,7 +20,7 @@
                 <h5>Author : {{ stream.author }}</h5>
                 <label for="upvote_btn_{{stream.smartcontract}}">{{ stream.upvotes }}</label>
             <a class=""  id="upvote_btn_{{stream.smartcontract}}" ng-click="upvote(stream)"><span class="glyphicon glyphicon-arrow-up"></span></a>
-            <label for="downvote_btn{{stream.smartcontract}}">{{ stream.downvotes }}</label>
+            <label for="downvote_btn_{{stream.smartcontract}}">{{ stream.downvotes }}</label>
             <a class="" id="downvote_btn_{{stream.smartcontract}}" ng-click="downvote(stream)"><span class="glyphicon glyphicon-arrow-down"></span></a>
             </div>
         </div>
