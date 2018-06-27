@@ -38,7 +38,7 @@ def createEtherAddr():
 
 def get_ethaddr():
   addr = 'Not defined'
-  with open("ethaddr.txt", "r") as f:
+  with open("/root/web/ethaddr.txt", "r") as f:
       addr = f.read()
   return addr
 
@@ -173,6 +173,7 @@ def get_list_group(address, api, resolve_tag=False):
     """ Get the list of all groups where user identified by 'address' is in.
     If resolve_tag is set to True, return the name of the group ; it is set to False, return the tags"""
     listgroup = []
+    dictgroup = dict()
     liststream = api.liststreams()
     for stream in liststream:
         if stream['name'][0:7] == '[Group]':
@@ -180,11 +181,14 @@ def get_list_group(address, api, resolve_tag=False):
             for key in listkeys:
                 if key['key'] == address:
                     if resolve_tag:
-                        listgroup.append("[" + binascii.unhexlify(stream['name'][7:]) + "]" + resolve_group(binascii.unhexlify(stream['name'][7:]), api))
+                        dictgroup.update(binascii.unhexlify(stream['name'][7:]), resolve_group(binascii.unhexlify(stream['name'][7:]), api))
                     else:
                         listgroup.append(binascii.unhexlify(stream['name'][7:]))
                     break
-    return listgroup
+    if resolve_tag:
+        return dictgroup
+    else:
+        return listgroup
 
 
 def get_all_posts(api, from_group=''):
