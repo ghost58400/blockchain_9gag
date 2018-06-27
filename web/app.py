@@ -62,6 +62,35 @@ def log():
     return send_from_directory('/root/web', 'log.txt')
 
 
+@app.route('/create_group/<group_tag>/<group_name>')
+def create_group_handler(group_tag, group_name):
+    create_group(group_tag, group_name)
+    return 'ok'
+
+
+@app.route('/join_group/<group_tag>')
+def join_group_handler(group_tag):
+    join_group(group_tag)
+    return 'ok'
+
+
+@app.route('/add_to_group/<address>/<group_tag>')
+def add_to_group_handler(address, group_tag):
+    add_to_group(address, group_tag)
+    return 'ok'
+
+
+@app.route('/post_to_group', methods=['POST'])
+def post_to_group():
+    a = request.form
+    f = request.files
+    if len(f) == 1 and a['type'] == 'Image':
+        return post_group(a['title'], f['image'], a['type'], a['tag'])
+    if len(f) == 0 and a['type'] == 'Text':
+        return post_group(a['title'], a['content'], a['type'], a['tag'])
+    return 'coherency problem'
+
+
 if __name__ == '__main__':
     kill_old_daemon()
     set_state('Not connected')
