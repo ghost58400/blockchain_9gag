@@ -117,6 +117,13 @@ def start_eth(ip):
     call('sh /root/scriptTest/test.sh ' + ip, shell=True)
 
 
+@app.route('/my_address')
+def my_address():
+    addr = get_myaddr()
+    if addr is None:
+        return ''
+    return addr
+
 if __name__ == '__main__':
     kill_old_daemon()
     set_state('Not connected')
