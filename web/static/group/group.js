@@ -111,6 +111,23 @@ angular.module('App.group', ['ngRoute'])
             }
         };
 
+        $scope.getGroupPosts = function (group) {
+            $http.get('/get_posts/' + String(group))
+                .then(function success(e) {
+                    $scope.errors = [];
+                    if (e.data !== '') {
+                        console.log("success /get_posts/group");
+                        console.log(e.data);
+                        return e.data
+                        // window.location.href = "#!/home";
+                    }
+                }, function error(e) {
+                    console.log("error /get_posts/group");
+                    $scope.errors = e.data.errors;
+                    return []
+                });
+        };
+
         $scope.get_my_groups();
         $scope.get_to_join_groups();
     });

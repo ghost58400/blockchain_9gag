@@ -43,5 +43,9 @@ angular.module('App', ['ngRoute','App.post', 'App.chain', 'App.group'])
         templateUrl: 'static/group/post_group.html',
         controller: 'GroupController'
     });
+    $routeProvider.when('/posts_group', {
+        templateUrl: 'static/group/all_posts_group.html',
+        controller: 'GroupController'
+    })
 }]);
 
