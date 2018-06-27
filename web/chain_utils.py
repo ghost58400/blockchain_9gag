@@ -27,22 +27,23 @@ def get_myaddr():
             return addr['address']
     return None
 
+
 def createEtherAddr():
     response = muterun_js('/root/scriptTest/createAccount.js')
     if response.exitcode == 0:
-      addr = response.stdout[:-1]
-      print(addr)
-      with open("ethaddr.txt", "w") as f:
-        f.write(addr)
+        addr = response.stdout[:-1]
+        print(addr)
+        with open("ethaddr.txt", "w") as f:
+            f.write(addr)
     else:
-      print('create Ethereum address error')
+        print('create Ethereum address error')
+
 
 def get_ethaddr():
-  addr = 'Not defined'
-  with open("/root/web/ethaddr.txt", "r") as f:
-      addr = f.read()
-  return addr
-
+    addr = 'Not defined'
+    with open("/root/web/ethaddr.txt", "r") as f:
+        addr = f.read()
+    return addr
 
 
 def get_chain_name():
@@ -52,10 +53,12 @@ def get_chain_name():
     val = val.replace('\n', '')
     return val
 
+
 def set_chain_name(name):
     file = open(os.path.dirname(os.path.realpath(__file__)) + '/chain_name.txt', 'w')
     file.write(name)
     file.close()
+
 
 def get_state():
     file = open(os.path.dirname(os.path.realpath(__file__)) + '/state.txt', 'r')
@@ -63,6 +66,7 @@ def get_state():
     file.close()
     val = val.replace('\n', '')
     return val
+
 
 def generate_key_pair():
     """ Generate two files in the keys/ folder, with your public and private rsa key """
@@ -74,10 +78,12 @@ def generate_key_pair():
     time.sleep(2)
     print("Keys generated")
 
+
 def set_state(state):
     file = open(os.path.dirname(os.path.realpath(__file__)) + '/state.txt', 'w')
     file.write(state)
     file.close()
+
 
 def get_api(host=default_rpc_host, port=default_rpc_port, chain_name=''):
     if chain_name == '':
@@ -119,6 +125,7 @@ def resolve_name(account, api):
             ret = binascii.unhexlify(nickname['data'])
     return ret
 
+
 def resolve_address(pubkey, api):
     """ Return the address of user identified by 'pubkey'"""
     nicknames = api.liststreamitems('nickname_resolve')
@@ -126,6 +133,7 @@ def resolve_address(pubkey, api):
         if nickname['key'] == pubkey:
             return nickname['publishers'][0]
     return None
+
 
 def resolve_group(group_tag, api):
     """ Return the full name of a group from its tag """
@@ -135,6 +143,7 @@ def resolve_group(group_tag, api):
         if key['key'] == 'name':
             return binascii.unhexlify(key['data'])
     return "Group not found"
+
 
 def get_list_addresses(api):
     """ Get all addresses in the blockchain """
@@ -146,6 +155,7 @@ def get_list_addresses(api):
         if key['publishers'][0] not in listaddresses:
             listaddresses.append(str(key['publishers'][0]))
     return listaddresses
+
 
 def get_pending_invite(address, api, resolve_tag=False):
     """ Get pending invite in a group for user identified by 'address'
@@ -184,7 +194,8 @@ def get_list_group(address, api, resolve_tag=False):
             for key in listkeys:
                 if key['key'] == address:
                     if resolve_tag:
-                        dictgroup[binascii.unhexlify(stream['name'][7:])] = resolve_group(binascii.unhexlify(stream['name'][7:]), api)
+                        dictgroup[binascii.unhexlify(stream['name'][7:])] = resolve_group(
+                            binascii.unhexlify(stream['name'][7:]), api)
                     else:
                         listgroup.append(binascii.unhexlify(stream['name'][7:]))
                     break
@@ -235,7 +246,8 @@ def get_all_posts(api, from_group=''):
                     sm_address = binascii.unhexlify(it['data'])
             if ipfs != '' and type_contenu != '' and author_account != '':
                 author = resolve_name(author_account, api)
-                posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author, 'smartcontract': sm_address})
+                posts.append(
+                    {'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author, 'smartcontract': sm_address})
         elif stream_name[0:7] != "[Group]":
             group_tag = stream_name[1:4]
             if from_group != '' and from_group != group_tag:
@@ -292,7 +304,7 @@ def connect_chain(ip, port, chain_name, nickname):
 
     print(apirpc.importaddress(default_address))
 
-    txid = apirpc.createrawsendfrom(default_address, {my_addr:0})
+    txid = apirpc.createrawsendfrom(default_address, {my_addr: 0})
     signed_hex_json = apirpc.signrawtransaction(txid, None, [default_privkey])
 
     signed_hex = signed_hex_json['hex']
@@ -319,7 +331,9 @@ def create_chain(chain_name, nickname):
     # call("firewall-cmd", "--permanent", "--zone=public", "--add-port=" + port + "/tcp")
     # call("systemctl", "restart", "firewalld.service")
     call('rm -rf /root/.multichain/' + chain_name, shell=True)
-    call("multichain-util create " + chain_name + " -default-network-port=" + default_chain_port + " -default-rpc-port=" + default_rpc_port + " -anyone-can-connect=true -anyone-can-create=true -anyone-can-mine=true -anyone-can-receive=true", shell=True)
+    call(
+        "multichain-util create " + chain_name + " -default-network-port=" + default_chain_port + " -default-rpc-port=" + default_rpc_port + " -anyone-can-connect=true -anyone-can-create=true -anyone-can-mine=true -anyone-can-receive=true",
+        shell=True)
     call("multichaind " + chain_name + " -daemon -autosubscribe=streams", shell=True)
 
     time.sleep(5)
@@ -361,11 +375,11 @@ def create_chain(chain_name, nickname):
 def deployContractForPost():
     response = muterun_js('/root/scriptTest/EtherUtils.js')
     if response.exitcode == 0:
-      addr = response.stdout[:-1]
-      return addr
+        addr = response.stdout[:-1]
+        return addr
     else:
-      print('Deploy contract error')
-      return ''
+        print('Deploy contract error')
+        return ''
 
 
 def create_post(title, content, type):
@@ -387,8 +401,8 @@ def create_post(title, content, type):
     apirpc.publish(streamname, 'ipfs', binascii.hexlify(res))
     apirpc.publish(streamname, 'type', binascii.hexlify(type))
     # Decommenter apres lancer la VM Ethereum et executer scriptTest/test2.sh
-    #addr = deployContractForPost()
-    #apirpc.publish(streamname, 'smartcontract', binascii.hexlify(addr))
+    # addr = deployContractForPost()
+    # apirpc.publish(streamname, 'smartcontract', binascii.hexlify(addr))
     print(apirpc.liststreamitems(streamname))
     return redirect("/", code=302)
 
@@ -405,6 +419,7 @@ def create_group(group_tag, group_name):
     apirpc.publish(streamname, get_myaddr(), binascii.hexlify(pubkey))
     print("Group created")
 
+
 def join_group(group_tag):
     """ Join a group in chain 'chain_name', with the name 'group_tag'.
     Ex usage: createGroup("chain1", "insa_group") """
@@ -415,12 +430,14 @@ def join_group(group_tag):
     apirpc.publish(streamname, get_myaddr(), binascii.hexlify(pubkey))
     print("Group joined")
 
+
 def add_to_group(address, group_tag):
     """ Add the user identified by 'address' to the group 'group_tag' in 'chain_name' """
     apirpc = get_api()
     streamname = ("[Group]" + binascii.hexlify(str(group_tag)[0:3]))[0:32]
     apirpc.grant(address, streamname + ".write")
     print("Invitation to group done")
+
 
 def post_group(name_post, file, type, group_tag):
     """ Post a file in a group """
@@ -435,7 +452,6 @@ def post_group(name_post, file, type, group_tag):
     groupstream = ("[Group]" + binascii.hexlify(str(group_tag)[0:3]))[0:32]
     apirpc.create('stream', streamname, False)
     listkeys = apirpc.liststreamitems(groupstream)
-
 
     message = json.dumps({'ipfs': binascii.hexlify(res), 'type': binascii.hexlify(str(type))}).encode('utf8')
     apirpc.publish(streamname, 'title', binascii.hexlify("[" + str(group_tag)[0:3] + "]" + str(name_post)))
