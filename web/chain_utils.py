@@ -168,7 +168,7 @@ def get_all_posts(api, from_group=''):
             author_account = ''
             sm_address = ''
             for it in stream:
-                if it['key'] == 'title'
+                if it['key'] == 'title':
                     nom = binascii.unhexlify(it['data'])
                 elif it['key'] == 'ipfs':
                     ipfs = binascii.unhexlify(it['data'])
