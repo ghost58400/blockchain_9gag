@@ -1,6 +1,10 @@
 <div class="row justify-content-md-center" id="posts" tabindex="-1">
-    <h3 class="col-md-12">
+    <h3 ng-if="list_stream.length != 0" class="col-md-12">
         Posts :
+    </h3>
+    <h3 ng-if="list_stream.length == 0" class="alert alert-danger">
+        There is no post to show. The current chain might be empty.<br>
+        Also, please check that you are connected to a chain.
     </h3>
 
     <div ng-repeat="stream in list_stream" class="card">

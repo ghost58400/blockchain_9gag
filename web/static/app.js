@@ -1,5 +1,5 @@
 
-angular.module('App', ['ngRoute','App.post', 'App.login', 'App.chain',])
+angular.module('App', ['ngRoute','App.post', 'App.chain', 'App.group'])
 
 //routage
     .config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
@@ -31,9 +31,21 @@ angular.module('App', ['ngRoute','App.post', 'App.login', 'App.chain',])
         templateUrl: 'static/post/show_post.html',
         controller: 'PostController'
     });
-    // $routeProvider.when('/login', {
-    //     templateUrl: 'static/login/login.html',
-    //     controller: 'LoginController'
-    // });
+    $routeProvider.when('/create_group', {
+        templateUrl: 'static/group/create_group.html',
+        controller: 'GroupController'
+    });
+    $routeProvider.when('/invite_group', {
+        templateUrl: 'static/group/invite_group.html',
+        controller: 'GroupController'
+    });
+    $routeProvider.when('/join_group', {
+        templateUrl: 'static/group/join_group.html',
+        controller: 'GroupController'
+    });
+    $routeProvider.when('/post_group', {
+        templateUrl: 'static/group/post_group.html',
+        controller: 'GroupController'
+    });
 }]);
 
