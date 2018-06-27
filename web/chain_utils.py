@@ -71,6 +71,7 @@ def get_api(host=default_rpc_host, port=default_rpc_port, chain_name=''):
                 print("Couldn't retrieve rpcpassword from " + chain_name)
                 return None
     except:
+        print("Cannot get API")
         return None
 
     rpcuser = rpcuser.replace('\n', '')
@@ -95,7 +96,14 @@ def resolve_address(pubkey, api):
             return nickname['publishers'][0]
     return None
 
-def get_all_posts(api):
+def resolve_group(group_tag, api):
+    """ Return the full name of a group from its tag """
+    streamname = "[Group]" + str(group_tag)
+    listitems = api.liststreamitems(streamname)
+    return binascii.unhexlify(listitems['name'])
+
+def get_all_posts(api, from_group=''):
+    """ If you want to get only the posts from a specific group, set the optional parameter 'from_group' to the group tag you want to filter """
     if api is None:
         return []
     fsapi = ipfsapi.connect('127.0.0.1', 5001)
@@ -113,14 +121,16 @@ def get_all_posts(api):
 
     posts = []
     for stream_name in streams:
-        if stream_name[0] != '[':
-            nom = binascii.unhexlify(stream_name)
+        nameFound = False
+        contentFound = False
+        if stream_name[0] != '[' and from_group == '':
             stream = api.liststreamitems(stream_name)
             ipfs = ''
             type_contenu = ''
             author_account = ''
             sm_address = ''
             for it in stream:
+                nom = binascii.unhexlify(it['title'])
                 if it['key'] == 'ipfs':
                     ipfs = binascii.unhexlify(it['data'])
                     author_account = it['publishers'][0]
@@ -132,20 +142,26 @@ def get_all_posts(api):
                 author = resolve_name(author_account, api)
                 posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author, 'smartcontract': sm_address})
         elif stream_name[0:7] != "[Group]":
-            nom = "[" + binascii.unhexlify(stream_name[1:stream_name.find(']')]) + ']' + binascii.unhexlify(stream_name[stream_name.find(']') + 1:])
+            group_tag = stream_name[1:4]
+            if from_group != '' and from_group != group_tag:
+                continue
             stream = api.liststreamitems(stream_name)
             myaddr = get_myaddr()
             for it in stream:
-                if it['key'] == myaddr:
+                if it['key'] == 'title':
+                    nom = binascii.unhexlify(it['data'])
+                    nameFound = True
+                elif it['key'] == myaddr:
                     content = rsa.decrypt(binascii.unhexlify(it['data']), private).decode('utf8')
                     content = json.loads(content)
                     ipfs = binascii.unhexlify(content['ipfs'])
                     author_account = it['publishers'][0]
                     type_contenu = binascii.unhexlify(content['type'])
                     author = resolve_name(author_account, api)
-                    posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author})
-                    print("DECODED")
-                    print(json.dumps({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author}))
+                    contentFound = True
+            if contentFound and nameFound:
+                posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author})
+                print(json.dumps({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author}))
 
     for post in posts:
         if post['type'] == 'Image':
@@ -254,7 +270,7 @@ def deployContractForPost():
 def create_post(title, content, type):
     apirpc = get_api()
     api = ipfsapi.connect('127.0.0.1', 5001)
-    streamname = binascii.hexlify(title)
+    streamname = binascii.hexlify(title)[0:32]
     if type == 'Text':
         res = api.add_json(content)
     if type == 'Image':
@@ -264,6 +280,7 @@ def create_post(title, content, type):
     print(res)
 
     apirpc.create('stream', streamname, False)
+    apirpc.publish(streamname, 'title', binascii.hexlify(title))
     apirpc.publish(streamname, 'ipfs', binascii.hexlify(res))
     apirpc.publish(streamname, 'type', binascii.hexlify(type))
     # Decommenter apres lancer la VM Ethereum et executer scriptTest/test2.sh
@@ -272,45 +289,49 @@ def create_post(title, content, type):
     print(apirpc.liststreamitems(streamname))
 
 
-def create_group(chain_name="chain1", group_name="illuminati"):
-    """ Create a group in chain 'chain_name', with the name 'group_name'.
+def create_group(chain_name="chain1", group_tag="PGM", group_name="Pro Gamers"):
+    """ Create a group in chain 'chain_name', with the name 'group_tag'.
     Ex usage: createGroup("chain1", "insa_group") """
     apirpc = get_api()
     with open('/root/keys/public.pem', mode='rb') as f:
         pubkey = f.read()
-    streamname = "[Group]" + binascii.hexlify(str(group_name))
-    apirpc.create('stream', streamname[0:32], False)
-    apirpc.publish(streamname[0:32], get_myaddr(), binascii.hexlify(pubkey))
+    streamname = ("[Group]" + binascii.hexlify(str(group_tag)))[0:32]
+    apirpc.create('stream', streamname, False)
+    apirpc.publish(streamname, 'name', binascii.hexlify(group_name))
+    apirpc.publish(streamname, get_myaddr(), binascii.hexlify(pubkey))
 
-def join_group(chain_name="chain1", group_name="illuminati"):
-    """ Join a group in chain 'chain_name', with the name 'group_name'.
+def join_group(chain_name="chain1", group_tag="PGM"):
+    """ Join a group in chain 'chain_name', with the name 'group_tag'.
     Ex usage: createGroup("chain1", "insa_group") """
     apirpc = get_api()
     with open('/root/keys/public.pem', mode='rb') as f:
         pubkey = f.read()
-    streamname = "[Group]" + binascii.hexlify(str(group_name))
-    apirpc.publish(streamname[0:32], get_myaddr(), binascii.hexlify(pubkey))
+    streamname = ("[Group]" + binascii.hexlify(str(group_tag)))[0:32]
+    apirpc.publish(streamname, get_myaddr(), binascii.hexlify(pubkey))
 
-def add_to_group(address, chain_name="chain1", group_name="illuminati"):
-    """ Add the user identified by 'address' to the group 'group_name' in 'chain_name' """
+def add_to_group(address, chain_name="chain1", group_tag="PGM"):
+    """ Add the user identified by 'address' to the group 'group_tag' in 'chain_name' """
     apirpc = get_api()
-    streamname = "[Group]" + binascii.hexlify(str(group_name))
-    apirpc.grant(address, streamname[0:32] + ".write")
+    streamname = ("[Group]" + binascii.hexlify(str(group_tag)))[0:32]
+    apirpc.grant(address, streamname + ".write")
 
-def post_group(name_post, file, type, chain_name="chain1", group_name="illuminati"):
+def post_group(name_post, file, type, chain_name="chain1", group_tag="PGM"):
     """ Post a file in a group """
     apirpc = get_api()
     api = ipfsapi.connect('127.0.0.1', 5001)
     res = api.add(file)
-    streamname = ("[" + binascii.hexlify(str(group_name)) + "]" + binascii.hexlify(str(name_post)))[0:32]
-    print(streamname)
-    groupstream = ("[Group]" + binascii.hexlify(str(group_name)))[0:32]
+    streamname = ("[" + str(group_tag) + "]" + binascii.hexlify(str(name_post)))[0:31]
+    groupstream = ("[Group]" + binascii.hexlify(str(group_tag)))[0:32]
     apirpc.create('stream', streamname, False)
     listkeys = apirpc.liststreamitems(groupstream)
 
+
     message = json.dumps({'ipfs': binascii.hexlify(res['Hash']), 'type': binascii.hexlify(str(type))}).encode('utf8')
+    apirpc.publish(streamname, 'title', binascii.hexlify("[" + str(group_tag) + "]" + str(name_post)))
 
     for key in listkeys:
+        if key['key'] == 'name':
+            continue
         print(binascii.unhexlify(key['data']))
         print(key['key'])
         pubkey = rsa.PublicKey.load_pkcs1(binascii.unhexlify(key['data']))
