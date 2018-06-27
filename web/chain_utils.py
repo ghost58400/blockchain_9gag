@@ -145,7 +145,8 @@ def get_pending_invite(address, api, resolve_tag=False):
     """ Get pending invite in a group for user identified by 'address'
     If resolve_tag is set to True, return the name of the group ; it is set to False, return the tags"""
     if api == '':
-        return []listinvite = []
+        return []
+    listinvite = []
     liststream = api.liststreams()
     for stream in liststream:
         if stream['name'][0:7] == '[Group]':
