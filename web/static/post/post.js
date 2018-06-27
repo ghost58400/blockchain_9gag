@@ -1,3 +1,6 @@
+//web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+//VotingContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"upVotes","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"Like","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"totalVotesFor","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"downVotes","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"totalVotesAgainst","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"Dislike","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}]);
+
 angular.module('App.post', ['ngRoute', 'ngCookies'])
 
     .controller('PostController', function ($scope, $http, $cookies) {
@@ -29,9 +32,9 @@ angular.module('App.post', ['ngRoute', 'ngCookies'])
                     for(stream in $scope.list_stream){
                       var sm_address = stream.smartcontract;
                       var addr = $cookies.get('addrEth');
-                      var contract = VotingContract.at(sm_address);
-                      stream.upvotes = contract.totalVotesFor.call().toString();
-                      stream.downvotes = contract.totalVotesAgainst.call().toString();
+  //                    var contract = VotingContract.at(sm_address);
+    //                  stream.upvotes = contract.totalVotesFor.call().toString();
+      //                stream.downvotes = contract.totalVotesAgainst.call().toString();
                     }
                     console.log($scope.list_stream);
             }, function error(e) {
@@ -56,11 +59,11 @@ angular.module('App.post', ['ngRoute', 'ngCookies'])
                 $scope.current_post = found;
                 var sm_address = title.smartcontract;
                 var addr = $cookies.get('addrEth');
-                var contract = VotingContract.at(sm_address);
-                contract.Like({from: addr});
-                $scope.stream = title
-                $scope.stream.upvotes = contract.totalVotesFor.call().toString();
-                $scope.stream.downvotes = contract.totalVotesAgainst.call().toString();
+        //        var contract = VotingContract.at(sm_address);
+          //      contract.Like({from: addr});
+            //    $scope.stream = title
+              //  $scope.stream.upvotes = contract.totalVotesFor.call().toString();
+                //$scope.stream.downvotes = contract.totalVotesAgainst.call().toString();
             }
         };
 
@@ -72,11 +75,11 @@ angular.module('App.post', ['ngRoute', 'ngCookies'])
                 $scope.current_post = found;
                 var sm_address = title.smartcontract;
                 var addr = $cookie.get('addrEth');
-                var contract = VotingContract.at(sm_address);
-                contract.Dislike({from: addr});
-                $scope.stream = title
-                $scope.stream.upvotes = contract.totalVotesFor.call().toString();
-                $scope.stream.downvotes = contract.totalVotesAgainst.call().toString();
+           //     var contract = VotingContract.at(sm_address);
+              //  contract.Dislike({from: addr});
+             //   $scope.stream = title
+             //   $scope.stream.upvotes = contract.totalVotesFor.call().toString();
+             //   $scope.stream.downvotes = contract.totalVotesAgainst.call().toString();
                 
                 
             }
