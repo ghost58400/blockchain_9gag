@@ -38,10 +38,13 @@ mv multichaind multichain-cli multichain-util /usr/bin/
 mkdir /root/keys
 touch /root/keys/public.pem
 touch /root/keys/private.pem
+echo 'sh /root/scriptTest/test.sh' >> /root/.bashrc
 echo 'ipfs daemon &' >> /root/.bashrc
 echo 'cd /root/web' >> /root/.bashrc
 echo 'python app.py >> log.txt 2>> log.txt &' >> /root/.bashrc
 echo 'cd' >> /root/.bashrc
+sh /root/scriptTest/test2.sh
+echo 'installed npm packages'
 echo "-------------"
 echo "INSTALLATION FINISHED"
 echo "-------------"
