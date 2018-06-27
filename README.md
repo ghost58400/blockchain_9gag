@@ -45,3 +45,11 @@ remove your running containers (this action cannot be undone!):
 ```
 sudo docker rm xxxxxxxxxxxx
 ```
+Pour être sur de supprimer tous les dockers :
+
+sudo docker images -q | sudo  xargs docker rmi --force
+
+Une fois le docker lancé, il ne reste qu'à se connecter sur l'adresse locale (par défaut http://172.17.0.2/ ) Puis de créer ou se connecter à une chain grace au menu déroulant : Chain 
+Une fois connecté à une chain on peut créér un post et le site met automatiquement à jour les posts sans devoir actualiser.
+
+Enfin, le menu déroulant Groupe nous permet de gérer des groupes d'utilisateurs de maniere à ce seul les membres du groupe puissent voir les posts du groupe.Pour rejoindre un groupe il faut se faire inviter par un de ses membres.Il s'affiche alors une liste des groupes dans lequel l'utilisateur et inviter , il ne suffit plus que de join le groupe voulu.
