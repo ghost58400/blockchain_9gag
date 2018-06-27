@@ -114,8 +114,8 @@ angular.module('App.group', ['ngRoute'])
             }
         };
 
-        $scope.getGroupPosts = function (group) {
-            $http.get('/get_posts/' + String(group))
+        $scope.getGroupPosts = function () {
+            $http.get('/get_posts/' + String($scope.current_group))
                 .then(function success(e) {
                     $scope.errors = [];
                     if (e.data !== '') {

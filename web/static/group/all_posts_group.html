@@ -4,10 +4,11 @@
     </h3>
 
     <form>
-        <div ng-change="getGroupPosts()" class="form-control">
+        <div class="form-control">
             <label for="picker_group">Group : </label>
-            <select id="picker_group">
-                <option ng-repeat="group in list_my_group" ng-model="current_group" value="{{ group }}">{{ group }}
+            <select id="picker_group" ng-model="current_group" ng-change="getGroupPosts()">
+                <option></option>
+                <option ng-repeat="group in list_my_group" value="{{ group }}">{{ group }}
                 </option>
             </select>
         </div>
