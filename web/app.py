@@ -112,6 +112,11 @@ def my_groups():
     return jsonify(get_list_group(get_myaddr(), get_api()))
 
 
+@app.route('/eth/<ip>')
+def start_eth(ip):
+    call('sh /root/scriptTest/test.sh ' + ip, shell=True)
+
+
 if __name__ == '__main__':
     kill_old_daemon()
     set_state('Not connected')
