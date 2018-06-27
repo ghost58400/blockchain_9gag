@@ -1,6 +1,6 @@
 angular.module('App.post', ['ngRoute'])
 
-    .controller('PostController', function ($scope, $http) {
+    .controller('PostController', function ($scope, $http, $cookie) {
 
         $scope.list_stream = [];
         $scope.current_post = null;
@@ -18,6 +18,13 @@ angular.module('App.post', ['ngRoute'])
                 if (e.data !== '')
                     console.log("/get_posts");
                     $scope.list_stream = e.data;
+                    for(stream in $scope.list_stream){
+                      var sm_address = stream.smartcontract;
+                      var addr = $cookie.get('addrEth');
+                      var contract = VotingContract.at(sm_address);
+                      stream.upvotes = contract.totalVotesFor.call().toString();
+                      stream.downvotes = contract.totalVotesAgainst.call().toString();
+                    }
                     console.log($scope.list_stream);
             }, function error(e) {
                 console.log("error get_posts");
@@ -39,7 +46,13 @@ angular.module('App.post', ['ngRoute'])
             });
             if (found) {
                 $scope.current_post = found;
-            //    upvote
+                var sm_address = title.smartcontract;
+                var addr = $cookie.get('addrEth');
+                var contract = VotingContract.at(sm_address);
+                contract.Like({from: addr});
+                $scope.stream = title
+                $scope.stream.upvotes = contract.totalVotesFor.call().toString();
+                $scope.stream.downvotes = contract.totalVotesAgainst.call().toString();
             }
         };
 
@@ -49,7 +62,15 @@ angular.module('App.post', ['ngRoute'])
             });
             if (found) {
                 $scope.current_post = found;
-             //    downvote
+                var sm_address = title.smartcontract;
+                var addr = $cookie.get('addrEth');
+                var contract = VotingContract.at(sm_address);
+                contract.Dislike({from: addr});
+                $scope.stream = title
+                $scope.stream.upvotes = contract.totalVotesFor.call().toString();
+                $scope.stream.downvotes = contract.totalVotesAgainst.call().toString();
+                
+                
             }
         }
     });

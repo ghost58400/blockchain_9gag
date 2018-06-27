@@ -34,6 +34,9 @@ def create_blockchain(chain_name, nickname):
 def state():
     return get_state()
 
+@app.route('/myetheraddr')
+def myetheraddr():
+    return get_ethaddr()
 
 @app.route('/get_posts')
 def get_posts():
@@ -79,6 +82,7 @@ if __name__ == '__main__':
     kill_old_daemon()
     set_state('Not connected')
     name = get_chain_name()
+    createEtherAddr()
     if name != '':
         call("nohup multichaind " + name + " -daemon", shell=True)
         set_state('Connected to ' + name)

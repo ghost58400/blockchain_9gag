@@ -17,6 +17,9 @@ def kill_old_daemon():
             call('kill ' + proc.pid)
 
 
+
+ethaddr = ''
+
 def get_myaddr():
     api = get_api()
     listaddr = api.getaddresses(True)
@@ -24,6 +27,18 @@ def get_myaddr():
         if addr['ismine'] == True:
             return addr['address']
     return None
+    
+def createEtherAddr():
+    response = muterun_js('/root/scriptTest/createAccount.js')
+    if response.exitcode == 0:
+      addr = response.stdout[:-1]
+      ethaddr = addr
+    else:
+      print('create Ethereum address error')
+      
+def get_ethaddr():
+    return ethaddr
+    
 
 def get_chain_name():
     file = open(os.path.dirname(os.path.realpath(__file__)) + '/chain_name.txt', 'r')
