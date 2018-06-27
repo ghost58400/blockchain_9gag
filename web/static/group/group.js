@@ -22,6 +22,7 @@ angular.module('App.group', ['ngRoute'])
         $scope.join_group_tag = null;
 
         $scope.current_group = null;
+        $scope.current_group_posts = null;
 
         console.log("GroupController");
 
@@ -120,6 +121,7 @@ angular.module('App.group', ['ngRoute'])
                     if (e.data !== '') {
                         console.log("success /get_posts/group");
                         console.log(e.data);
+                        $scope.current_group_posts = e.data;
                         return e.data
                         // window.location.href = "#!/home";
                     }
@@ -129,6 +131,8 @@ angular.module('App.group', ['ngRoute'])
                     return []
                 });
         };
+
+
 
         $scope.get_my_groups();
         $scope.get_to_join_groups();

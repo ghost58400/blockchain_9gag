@@ -3,13 +3,19 @@
         Group posts :
     </h3>
 
-    <select>
-        <option ng-repeat="group in list_my_group" ng-model="current_group" value="{{ group }}">{{ group }}</option>
-    </select>
+    <form>
+        <div ng-change="getGroupPosts()" class="form-control">
+            <label for="picker_group">Group : </label>
+            <select id="picker_group">
+                <option ng-repeat="group in list_my_group" ng-model="current_group" value="{{ group }}">{{ group }}
+                </option>
+            </select>
+        </div>
+    </form>
 
     <div ng-if="current_group != null">
-        <div ng-if="getGroupPosts(current_group).length != 0">
-            <div ng-repeat="stream in getGroupPosts(current_group) track by $index" class="card">
+        <div ng-if="current_group_posts.length != 0">
+            <div ng-repeat="stream in current_group_posts track by $index" class="card">
                 <div ng-if="stream.type == 'Image'" id="data" class="card-img-top">
                     <img class="img-fluid img-thumbnail" src="{{ stream.ipfs }}" alt="Image not found">
                 </div>
@@ -35,7 +41,7 @@
                 </div>
             </div>
         </div>
-        <div ng-if="getGroupPosts(current_group).length == 0" class="alert alert-danger">
+        <div ng-if="current_group_posts.length == 0" class="alert alert-danger">
             <p>No post found in this group</p>
         </div>
     </div>
