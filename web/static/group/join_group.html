@@ -3,15 +3,22 @@
         Join a group :
     </h3>
     <div ng-if="list_to_join_group.length != 0">
-        <div ng-repeat="group in list_to_join_group track by $index">
-            <form ng-submit="joinGroup(group)" action="#!/post_group" class="col-md-12">
-                <button type="submit" class="btn btn-primary">Join group</button>
-            </form>
-        </div>
+        <form ng-submit="joinGroup(join_group_tag)" action="#!/post_group" class="col-md-12">
+            <div class="form-group">
+                <label for="tag_member_input">Group tag</label>
+                <div id="tag_member_input">
+                    <select class="form-control" ng-model="join_group_teg">
+                        <option ng-repeat="group in list_to_join_group" value="{{ group }}">{{ group }}</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Join group</button>
+        </form>
     </div>
-    <div ng-if="list_to_join_group.length == 0">
-        <h3 class="alert alert-info">
-            You don't have any pending invitations.
-        </h3>
-    </div>
+</div>
+<div ng-if="list_to_join_group.length == 0">
+    <h3 class="alert alert-info">
+        You don't have any pending invitations.
+    </h3>
+</div>
 </div>
