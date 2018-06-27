@@ -215,7 +215,7 @@ def connect_chain(ip, port, chain_name, nickname):
     set_chain_name(chain_name)
     set_state('Connecting to chain ' + get_chain_name())
 
-    call("multichain-cli " + chain_name + " stop", shell=True)
+    kill_old_daemon()
     time.sleep(2)
     call('rm -rf /root/.multichain/' + chain_name, shell=True)
 
@@ -258,7 +258,7 @@ def create_chain(chain_name, nickname):
     """ Create a new chain where 'chain_name' is the name of the chain you want to create and where 'nickname' is the nickname you want to be identified by."""
     set_chain_name(chain_name)
     set_state('Creating chain ' + get_chain_name())
-    call("multichain-cli " + chain_name + " stop", shell=True)
+    kill_old_daemon()
     time.sleep(2)
     # call("firewall-cmd", "--permanent", "--zone=public", "--add-port=" + port + "/tcp")
     # call("systemctl", "restart", "firewalld.service")
