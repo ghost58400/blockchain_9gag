@@ -7,7 +7,7 @@
         <div class="form-group">
             <label for="tag_member_input">Group tag</label>
             <div id="tag_member_input">
-                <select class="form-control" ng-model="new_post_group_tag">
+                <select class="form-control" ng-model="new_post_group_tag" name="tag">
                     <option ng-repeat="group in list_my_group" value="{{ group }}">{{ group }}</option>
                 </select>
             </div>
@@ -20,7 +20,7 @@
 
         <div class="form-group">
             <label for="new_post_group_type_input">Type</label>
-            <select class="form-control" id="new_post_group_type_input" ng-model="new_post_group_type" name="new_post_group_type">
+            <select class="form-control" id="new_post_group_type_input" ng-model="new_post_group_type" name="type">
                 <option>Text</option>
                 <option>Image</option>
             </select>
