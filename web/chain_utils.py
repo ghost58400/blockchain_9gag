@@ -9,6 +9,7 @@ import rsa
 import json
 from Naked.toolshed.shell import muterun_js
 import psutil
+from flask import redirect
 
 
 def kill_old_daemon():
@@ -389,7 +390,7 @@ def create_post(title, content, type):
     #addr = deployContractForPost()
     #apirpc.publish(streamname, 'smartcontract', binascii.hexlify(addr))
     print(apirpc.liststreamitems(streamname))
-    return 'ok'
+    return redirect("/", code=302)
 
 
 def create_group(group_tag, group_name):
@@ -441,4 +442,4 @@ def post_group(name_post, file, type, group_tag):
         crypto = rsa.encrypt(message, pubkey)
         apirpc.publish(streamname, key['key'], binascii.hexlify(crypto))
 
-    return 'ok'
+    return redirect("/", code=302)
