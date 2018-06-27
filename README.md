@@ -59,3 +59,14 @@ sudo docker system prune
 * Une fois connecté à une chaîne, il devient possible de poster du contenu et de voir celui des autres directement sur la page d'accueil.
 * Le menu déroulant *Group* permet de gérer les groupes et les posts de groupes. Un post de groupe est un post chiffré sur la blockchain déchiffrable uniquement par les membres dudit groupe.
 Pour créer un groupe, utilisez l'option *Create*. Pour rejoindre un groupe avec l'option *Join*, il faut au préalable avoir été invité par un membre du groupe avec l'option *Invite*. Il devient ensuite possible de faire des posts de groupes chiffrés via l'option *Post* du menu déroulant *Groups*.
+
+## Installer la VM Ethereum dans un conteneur Docker
+
+```
+docker pull trufflesuite/ganache-cli
+```
+* Lancer le conteneur
+
+```
+docker run -it trufflesuite/ganache-cli --hostname <IP>
+```
