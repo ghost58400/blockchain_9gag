@@ -288,6 +288,8 @@ def deployContractForPost():
 
 def create_post(title, content, type):
     apirpc = get_api()
+    if apirpc is None:
+        return 'not connected'
     api = ipfsapi.connect('127.0.0.1', 5001)
     streamname = binascii.hexlify(title)
     if type == 'Text':
@@ -305,6 +307,7 @@ def create_post(title, content, type):
     #addr = deployContractForPost()
     #apirpc.publish(streamname, 'smartcontract', binascii.hexlify(addr))
     print(apirpc.liststreamitems(streamname))
+    return 'ok'
 
 
 def create_group(chain_name="chain1", group_name="illuminati"):

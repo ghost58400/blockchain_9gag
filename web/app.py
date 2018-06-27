@@ -51,11 +51,9 @@ def new_post():
     a = request.form
     f = request.files
     if len(f) ==1 and a['type'] == 'Image':
-        create_post(a['title'], f['image'], a['type'])
-        return 'ok'
+        return create_post(a['title'], f['image'], a['type'])
     if len(f) == 0 and a['type'] == 'Text':
-        create_post(a['title'], a['content'], a['type'])
-        return 'ok'
+        return create_post(a['title'], a['content'], a['type'])
     return 'coherency problem'
 
 
