@@ -128,7 +128,7 @@ def resolve_address(pubkey, api):
 
 def resolve_group(group_tag, api):
     """ Return the full name of a group from its tag """
-    streamname = "[Group]" + binascii.hexlify(str(group_tag))
+    streamname = "[Group]" + binascii.hexlify(str(group_tag)[0:3])
     listitems = api.liststreamitems(streamname)
     for key in listitems:
         if key['key'] == 'name':
@@ -398,7 +398,7 @@ def create_group(group_tag, group_name):
     apirpc = get_api()
     with open('/root/keys/public.pem', mode='rb') as f:
         pubkey = f.read()
-    streamname = ("[Group]" + binascii.hexlify(str(group_tag)))[0:32]
+    streamname = ("[Group]" + binascii.hexlify(str(group_tag)[0:3]))[0:32]
     apirpc.create('stream', streamname, False)
     apirpc.publish(streamname, 'name', binascii.hexlify(group_name))
     apirpc.publish(streamname, get_myaddr(), binascii.hexlify(pubkey))
@@ -410,14 +410,14 @@ def join_group(group_tag):
     apirpc = get_api()
     with open('/root/keys/public.pem', mode='rb') as f:
         pubkey = f.read()
-    streamname = ("[Group]" + binascii.hexlify(str(group_tag)))[0:32]
+    streamname = ("[Group]" + binascii.hexlify(str(group_tag)[0:3]))[0:32]
     apirpc.publish(streamname, get_myaddr(), binascii.hexlify(pubkey))
     print("Group joined")
 
 def add_to_group(address, group_tag):
     """ Add the user identified by 'address' to the group 'group_tag' in 'chain_name' """
     apirpc = get_api()
-    streamname = ("[Group]" + binascii.hexlify(str(group_tag)))[0:32]
+    streamname = ("[Group]" + binascii.hexlify(str(group_tag)[0:3]))[0:32]
     apirpc.grant(address, streamname + ".write")
     print("Invitation to group done")
 
@@ -430,14 +430,14 @@ def post_group(name_post, file, type, group_tag):
     elif type == 'Image':
         res = api.add(file)
         res = res['Hash']
-    streamname = ("[" + str(group_tag) + "]" + binascii.hexlify(str(name_post)))[0:31]
-    groupstream = ("[Group]" + binascii.hexlify(str(group_tag)))[0:32]
+    streamname = ("[" + str(group_tag)[0:3] + "]" + binascii.hexlify(str(name_post)))[0:31]
+    groupstream = ("[Group]" + binascii.hexlify(str(group_tag)[0:3]))[0:32]
     apirpc.create('stream', streamname, False)
     listkeys = apirpc.liststreamitems(groupstream)
 
 
     message = json.dumps({'ipfs': binascii.hexlify(res['Hash']), 'type': binascii.hexlify(str(type))}).encode('utf8')
-    apirpc.publish(streamname, 'title', binascii.hexlify("[" + str(group_tag) + "]" + str(name_post)))
+    apirpc.publish(streamname, 'title', binascii.hexlify("[" + str(group_tag)[0:3] + "]" + str(name_post)))
 
     for key in listkeys:
         if key['key'] == 'name':
