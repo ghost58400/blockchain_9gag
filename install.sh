@@ -6,13 +6,14 @@ echo dhclient >> /etc/rc.d/rc.local
 chmod +x /etc/rc.d/rc.local
 yum -y --enablerepo=extras install epel-release
 yum update -y
-yum install -y nano screen wget ntpdate vim-common python-pip dhclient net-tools nodejs git make gcc gcc-c++
+yum install -y nano screen wget ntpdate vim-common python-pip dhclient net-tools nodejs git make gcc gcc-c++ python-devel
 pip install --upgrade pip
 pip install flask
 pip install Savoir
 pip install ipfsapi
 pip install Naked
 pip install rsa
+pip install psutil
 
 #remplacer from Savoir.Savoir import *
 #par from Savoir import Savoir
@@ -38,7 +39,9 @@ mkdir /root/keys
 touch /root/keys/public.pem
 touch /root/keys/private.pem
 echo 'ipfs daemon &' >> /root/.bashrc
-echo 'python /root/web/app.py >> /root/web/log.txt 2>> /root/web/log.txt &' >> /root/.bashrc
+echo 'cd /root/web' >> /root/.bashrc
+echo 'python app.py >> log.txt 2>> log.txt &' >> /root/.bashrc
+echo 'cd' >> /root/.bashrc
 echo "-------------"
 echo "INSTALLATION FINISHED"
 echo "-------------"

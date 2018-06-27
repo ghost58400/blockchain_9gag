@@ -23,9 +23,9 @@
         <div class="card-footer">
             <h5>Author : {{ stream.author }}</h5>
             <label for="upvote_btn">{{ stream.upvotes }}</label>
-            <a class="btn" id="upvote_btn" ng-click="upvote(stream.smartcontract)"><span class="glyphicon glyphicon-arrow-up"></span></a>
+            <a class="btn" id="upvote_btn" ng-click="upvote(stream)"><span class="glyphicon glyphicon-arrow-up"></span></a>
             <label for="downvote_btn">{{ stream.downvotes }}</label>
-            <a class="btn" id="downvote_btn" ng-click="downvote(stream.smartcontract)"><span
+            <a class="btn" id="downvote_btn" ng-click="downvote(stream)"><span
                     class="glyphicon glyphicon-arrow-down"></span></a>
         </div>
     </div>

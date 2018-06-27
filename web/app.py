@@ -34,6 +34,9 @@ def create_blockchain(chain_name, nickname):
 def state():
     return get_state()
 
+@app.route('/myetheraddr')
+def myetheraddr():
+    return get_ethaddr()
 
 @app.route('/get_posts')
 def get_posts():
@@ -48,11 +51,9 @@ def new_post():
     a = request.form
     f = request.files
     if len(f) ==1 and a['type'] == 'Image':
-        create_post(a['title'], f['image'], a['type'])
-        return 'ok'
+        return create_post(a['title'], f['image'], a['type'])
     if len(f) == 0 and a['type'] == 'Text':
-        create_post(a['title'], a['content'], a['type'])
-        return 'ok'
+        return create_post(a['title'], a['content'], a['type'])
     return 'coherency problem'
 
 
@@ -61,23 +62,12 @@ def log():
     return send_from_directory('/root/web', 'log.txt')
 
 
-
-
-
-
-
-
-
-@app.route('/show_post/<num_stream>', methods=['GET'])
-def show_post(num_stream):
-    return "Post : {}".format(num_stream)
-# stream = récupération stream
-# return jsonify(stream)
-
-
 if __name__ == '__main__':
+    kill_old_daemon()
     set_state('Not connected')
     name = get_chain_name()
+    #createEtherAddr()
     if name != '':
-        call("nohup multichaind " + name + " -daemon", shell=True)
+        call("multichaind " + name + " -daemon -autosubscribe=streams", shell=True)
+        set_state('Connected to ' + name)
     app.run(host='0.0.0.0', port=80, debug=False)
