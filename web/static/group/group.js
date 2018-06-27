@@ -12,7 +12,7 @@ angular.module('App.group', ['ngRoute'])
 
         $scope.new_post_group_tag = null;
         $scope.new_post_group_title = null;
-        $scope.new_post_group_type = 'Text';
+        $scope.new_post_group_type = null;
         $scope.new_post_group_content = null;
         $scope.new_post_group_image = null;
 
@@ -109,4 +109,6 @@ angular.module('App.group', ['ngRoute'])
             }
         };
 
+        $scope.get_my_groups();
+        $scope.get_to_join_groups();
     });

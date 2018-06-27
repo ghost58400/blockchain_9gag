@@ -1,4 +1,3 @@
-
 <div class="row">
     <h3 style="width: 100%">
         Invite an user to a group :
@@ -6,7 +5,11 @@
     <form ng-submit="inviteMember()" action="#!/home/" target="_blank" class="col-md-12">
         <div class="form-group">
             <label for="tag_member_input">Group tag</label>
-            <input type="text" class="form-control" id="tag_member_input" ng-model="new_member_tag">
+            <div id="tag_member_input" ng-if="list_my_group.length != 0">
+                <select ng-repeat="group in list_my_group track by $index" ng-model="new_member_tag">
+                    <option>{{ group }}</option>
+                </select>
+            </div>
         </div>
         <div class="form-group">
             <label for="address_member_input">User address</label>

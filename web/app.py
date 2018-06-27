@@ -109,7 +109,7 @@ def posts_group(group_tag):
 
 @app.route('/get_my_groups')
 def my_groups():
-    return jsonify(get_list_group(get_myaddr(), get_api(), True))
+    return jsonify(get_list_group(get_myaddr(), get_api()))
 
 
 if __name__ == '__main__':
