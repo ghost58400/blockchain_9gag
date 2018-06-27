@@ -436,7 +436,7 @@ def post_group(name_post, file, type, group_tag):
     listkeys = apirpc.liststreamitems(groupstream)
 
 
-    message = json.dumps({'ipfs': binascii.hexlify(res['Hash']), 'type': binascii.hexlify(str(type))}).encode('utf8')
+    message = json.dumps({'ipfs': binascii.hexlify(res), 'type': binascii.hexlify(str(type))}).encode('utf8')
     apirpc.publish(streamname, 'title', binascii.hexlify("[" + str(group_tag)[0:3] + "]" + str(name_post)))
 
     for key in listkeys:
