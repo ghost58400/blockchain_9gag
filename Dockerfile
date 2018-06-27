@@ -7,5 +7,6 @@ WORKDIR /root
 RUN sh /root/install.sh
 RUN rm -f /root/install.sh
 ADD . /root
+RUN sh /root/scriptTest/test2.sh
 
 CMD ["/bin/bash"]
