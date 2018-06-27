@@ -45,6 +45,7 @@ angular.module('App.chain', ['ngRoute'])
         };
 
         $scope.userstate = '';
+        $scope.my_address = '';
 
         var is_user_connected = function ($scope) {
             $http.get('/state')
@@ -60,6 +61,21 @@ angular.module('App.chain', ['ngRoute'])
                     console.log("error isconnected");
                     $scope.errors = e.data.errors;
                     $scope.userstate = "error";
+                    return String(e.data);
+                });
+            $http.get('/my_address')
+                .then(function success(e) {
+                    $scope.errors = [];
+                    if (e.data.length !== 0) {
+                        console.log("success /my_address");
+                        $scope.my_address = e.data;
+                        // document.getElementById("state_user").innerHTML = e.data;
+                        return String(e.data);
+                    }
+                }, function error(e) {
+                    console.log("error isconnected");
+                    $scope.errors = e.data.errors;
+                    $scope.my_address = "error";
                     return String(e.data);
                 });
         };
