@@ -1,15 +1,17 @@
-
-
-
 <div class="row">
     <h3 style="width: 100%">
         Join a group :
     </h3>
-    <form ng-submit="joinGroup()" action="#!/home/" target="_blank" class="col-md-12">
-        <div class="form-group">
-            <label for="tag_join_input">Tag</label>
-            <input type="text" class="form-control" id="tag_join_input" ng-model="join_group_tag">
+    <div ng-if="list_to_join_group.length != 0">
+        <div ng-repeat="group in list_to_join_group track by $index">
+            <form ng-submit="joinGroup(group)" action="#!/post_group" class="col-md-12">
+                <button type="submit" class="btn btn-primary">Join group</button>
+            </form>
         </div>
-        <button type="submit" class="btn btn-primary">Join group</button>
-    </form>
+    </div>
+    <div ng-if="list_to_join_group.length == 0">
+        <h3 class="alert alert-info">
+            You don't have any pending invitations.
+        </h3>
+    </div>
 </div>
