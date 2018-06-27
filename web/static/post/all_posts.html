@@ -7,7 +7,7 @@
         Also, please check that you are connected to a chain.
     </h3>
 
-    <div ng-repeat="stream in list_stream" class="card">
+    <div ng-repeat="stream in list_stream" class="card" class="col-md-12">
         <div ng-if="stream.type == 'Image'" id="data" class="card-img-top">
             <img class="img-fluid img-thumbnail" src="{{ stream.ipfs }}" alt="Image not found">
         </div>
