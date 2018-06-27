@@ -76,8 +76,10 @@ def show_post(num_stream):
 
 
 if __name__ == '__main__':
+    kill_old_daemon()
     set_state('Not connected')
     name = get_chain_name()
     if name != '':
         call("nohup multichaind " + name + " -daemon", shell=True)
+        set_state('Connected to ' + name)
     app.run(host='0.0.0.0', port=80, debug=False)

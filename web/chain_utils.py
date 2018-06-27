@@ -8,6 +8,14 @@ import ipfsapi
 import rsa
 import json
 from Naked.toolshed.shell import muterun_js
+import psutil
+
+
+def kill_old_daemon():
+    for proc in psutil.process_iter():
+        if proc.name == 'multichaind':
+            call('kill ' + proc.pid)
+
 
 def get_myaddr():
     api = get_api()
@@ -195,6 +203,8 @@ def connect_chain(ip, port, chain_name, nickname):
     hex_nick = nickname.encode("hex")
     generate_key_pair()
     apirpc.publish("nickname_resolve", pubkey, str(hex_nick))
+    set_state('Connected to ' + chain_name)
+
 
 def create_chain(chain_name, nickname):
     """ Create a new chain where 'chain_name' is the name of the chain you want to create and where 'nickname' is the nickname you want to be identified by."""
@@ -241,6 +251,7 @@ def create_chain(chain_name, nickname):
     print(apirpc.publish("nickname_resolve", pubkey, str(hex_nick)))
     # apirpc.publish("nickname_resolve", "pubkey", pubkey)
     print('create chain finished')
+    set_state('Connected to ' + chain_name)
 
 def deployContractForPost():
     response = muterun_js('/root/scriptTest/EtherUtils.js')
