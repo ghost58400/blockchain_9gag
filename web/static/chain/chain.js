@@ -1,6 +1,6 @@
 angular.module('App.chain', ['ngRoute'])
 
-    .controller('ChainController', function ($scope, $http) {
+    .controller('ChainController', function ($scope, $http, $interval) {
         $scope.current_chain = null;
         $scope.ip_chain = null;
         $scope.port_chain = 1234;
@@ -18,7 +18,6 @@ angular.module('App.chain', ['ngRoute'])
                             console.log("/connect_blockchain");
                             console.log(e.data);
                             window.location.href = "#!/home";
-                            is_user_connected()
                         }
                     }, function error(e) {
                         console.log("error connect_blockchain");
@@ -39,7 +38,6 @@ angular.module('App.chain', ['ngRoute'])
                             console.log("/create_blockchain");
                             console.log(e.data);
                             window.location.href = "#!/home";
-                            is_user_connected()
                         }
                     }, function error(e) {
                             console.log("error create chain");
@@ -50,7 +48,7 @@ angular.module('App.chain', ['ngRoute'])
 
         $scope.userstate = '';
 
-        var is_user_connected = function () {
+        var is_user_connected = function ($scope) {
             $http.get('/state')
                 .then(function success(e) {
                     $scope.errors = [];
@@ -68,6 +66,6 @@ angular.module('App.chain', ['ngRoute'])
                 });
         };
 
-        is_user_connected();
+        $scope.check_status = $interval(function() {is_user_connected($scope)}, 1000);
 
     });
