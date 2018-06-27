@@ -5,12 +5,10 @@
     <title>Index</title>
     <!-- Bootstrap CSS File  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.1/angular-cookies.min.js"></script>
-
 </head>
 <body ng-app="App" style="padding-top: 120px">
 <div class="container">
-    <div class="row">
+    <div class="row">1
         <nav class="navbar fixed-top navbar-light bg-light">
             <a class="navbar-brand" href="#">
                 <img src="/static/images/memes.png" width="50" height="50" alt="">
@@ -36,7 +34,7 @@
                        aria-haspopup="true" aria-expanded="false">
                         Posts
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown_posts">
+                    <div class="dropdown-menu" aria-labelledby="dropdown_posts">
                         <a class="dropdown-item" href="#!/create_post">New post</a>
                         <a class="dropdown-item" href="#!/home">All posts</a>
                     </div>
@@ -46,11 +44,10 @@
                        aria-haspopup="true" aria-expanded="false">
                         Groups
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown_groups">
-                        <a class="dropdown-item" href="#!/create_group">Create</a>
-                        <a class="dropdown-item" href="#!/invite_group">Invite</a>
-                        <a class="dropdown-item" href="#!/join_group">Join</a>
-                        <a class="dropdown-item" href="#!/post_group">Post</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown_groups">
+                        <a class="dropdown-item" href="#">Create a group</a>
+                        <a class="dropdown-item" href="#">See groups</a>
+                        <a class="dropdown-item" href="#">Manage group</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -58,7 +55,7 @@
                        aria-haspopup="true" aria-expanded="false">
                         Chain
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown_chain">
+                    <div class="dropdown-menu" aria-labelledby="dropdown_chain">
                         <a class="dropdown-item" href="#!/create_chain">Create chain</a>
                         <a class="dropdown-item" href="#!/connect_chain">Connect</a>
                     </div>
@@ -117,15 +114,16 @@
 <!- Jquery JS file -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 <!-- AngularJS files -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.10/angular.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.10/angular-route.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-cookies.js" > </script>
+<script src="https://code.angularjs.org/1.5.8/angular.js"></script>
+<script src="https://code.angularjs.org/1.5.8/angular-cookies.js"></script>
+<script src="https://code.angularjs.org/1.5.8/angular-route.js"></script>
+
 <!-- Bootstrap JS file -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.js"></script>
 <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
 <script src="static/app.js" type="text/javascript" rel="script"></script>
 <script src="static/post/post.js" type="text/javascript" rel="script"></script>
+<script src="static/login/login.js" type="text/javascript" rel="script"></script>
 <script src="static/chain/chain.js" type="text/javascript" rel="script"></script>
-<script src="static/group/group.js" type="text/javascript" rel="script"></script>
 </body>
 </html>
