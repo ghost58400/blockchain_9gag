@@ -1,4 +1,4 @@
-provider = "http://localhost:8545"
+provider = "http://192.168.43.131:8545"
 
 //Create an account
 function createAccount(){
