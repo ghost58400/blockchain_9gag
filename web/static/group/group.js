@@ -152,7 +152,7 @@ angular.module('App.group', ['ngRoute'])
         };
 
         $scope.upvote = function (stream) {
-            var found = $scope.list_stream.find(function(element) {
+            var found = $scope.current_group_posts.find(function(element) {
                 return element.title === stream.title;
             });
             if (found) {
@@ -171,7 +171,7 @@ angular.module('App.group', ['ngRoute'])
         };
 
         $scope.downvote = function (stream) {
-            var found = $scope.list_stream.find(function(element) {
+            var found = $scope.current_group_posts.find(function(element) {
                 return element.title === stream.title;
             });
             if (found) {
