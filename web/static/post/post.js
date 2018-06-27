@@ -17,7 +17,8 @@ angular.module('App.post', ['ngRoute', 'ngCookies'])
         if(!$cookies.get("addrEth")){
             $http.get('/myetheraddr')
                 .then(function success(e){
-                  $cookies.put("addrEth", e.data);
+                  $cookies.put('addrEth', e.data);
+                  console.log($cookies.get("addrEth"))
                 }, function error(e) {
                   console.log("error getting my Ethereum address");
                   $scope.errors = e.data.errors
@@ -52,31 +53,32 @@ angular.module('App.post', ['ngRoute', 'ngCookies'])
             }
         };
 
-        $scope.upvote = function (addr, title) {
+        $scope.upvote = function (stream) {
             var found = $scope.list_posts.find(function(element) {
-                return element.title === title;
+                return element.title === stream.title;
             });
             if (found) {
                 $scope.current_post = found;
-                var sm_address = addr;
+                var sm_address = stream;
                 var addr = $cookies.get('addrEth');
-                //var contract = VotingContract.at(sm_address);
-                //contract.Like({from: addr});
+                console.log(addr)
+               // var contract = VotingContract.at(sm_address);
+               // contract.Like({from: addr});
                 //$scope.stream = title
-                //$scope.stream.upvotes = contract.totalVotesFor.call().toString();
+               // $scope.stream.upvotes = contract.totalVotesFor.call().toString();
                 //$scope.stream.downvotes = contract.totalVotesAgainst.call().toString();
             }
         };
 
-        $scope.downvote = function (addr,title) {
+        $scope.downvote = function (stream) {
             var found = $scope.list_posts.find(function(element) {
-                return element.title === title;
+                return element.title === stream.title;
             });
             if (found) {
                 $scope.current_post = found;
-                var sm_address = addr;
+                var sm_address = stream.title;
                 var addr = $cookie.get('addrEth');
-                //var contract = VotingContract.at(sm_address);
+              //  var contract = VotingContract.at(sm_address);
                 //contract.Dislike({from: addr});
                 //$scope.stream = title
                 //$scope.stream.upvotes = contract.totalVotesFor.call().toString();

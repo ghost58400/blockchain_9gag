@@ -66,6 +66,7 @@ angular.module('App.chain', ['ngRoute'])
                 });
         };
 
-        $scope.check_status = $interval(function() {is_user_connected($scope)}, 5000);
+        is_user_connected($scope);
+        $scope.check_status = $interval(function() {is_user_connected($scope)}, 2000);
 
     });

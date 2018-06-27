@@ -18,9 +18,6 @@ def kill_old_daemon():
             time.sleep(2)
 
 
-
-ethaddr = ''
-
 def get_myaddr():
     api = get_api()
     listaddr = api.getaddresses(True)
@@ -33,12 +30,18 @@ def createEtherAddr():
     response = muterun_js('/root/scriptTest/createAccount.js')
     if response.exitcode == 0:
       addr = response.stdout[:-1]
-      ethaddr = addr
+      print(addr)
+      with open("ethaddr.txt", "w") as f:
+        f.write(addr)
     else:
       print('create Ethereum address error')
 
 def get_ethaddr():
-    return ethaddr
+  addr = 'Not defined'  
+  with open("ethaddr.txt", "r") as f:
+      addr = f.read()
+  return addr
+    
 
 
 def get_chain_name():
