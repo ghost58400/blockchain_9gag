@@ -5,7 +5,7 @@ angular.module('App.post', ['ngRoute', 'ngCookies'])
 
     .controller('PostController', function ($scope, $http, $cookies) {
 
-        $scope.list_stream = [];
+        $scope.list_stream = null;
         $scope.current_post = null;
 
         $scope.new_post_title = null;
@@ -29,6 +29,7 @@ angular.module('App.post', ['ngRoute', 'ngCookies'])
                 if (e.data !== '')
                     console.log("/get_posts");
                     $scope.list_stream = e.data;
+                    console.log(e.data);
                     for(stream in $scope.list_stream){
                       var sm_address = stream.smartcontract;
                       var addr = $cookies.get('addrEth');
