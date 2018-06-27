@@ -17,7 +17,7 @@ angular.module('App.chain', ['ngRoute'])
                         if (e.data !== '') {
                             console.log("/connect_blockchain");
                             console.log(e.data);
-                            window.location.href = "#!/home";
+                            //window.location.href = "#!/home";
                         }
                     }, function error(e) {
                         console.log("error connect_blockchain");
@@ -37,7 +37,7 @@ angular.module('App.chain', ['ngRoute'])
                         if (e.data !== '') {
                             console.log("/create_blockchain");
                             console.log(e.data);
-                            window.location.href = "#!/home";
+                            //window.location.href = "#!/home";
                         }
                     }, function error(e) {
                             console.log("error create chain");
