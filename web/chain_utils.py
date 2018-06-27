@@ -348,7 +348,7 @@ def create_post(title, content, type):
     return 'ok'
 
 
-def create_group(chain_name="chain1", group_tag="PGM", group_name="Pro Gamers"):
+def create_group(group_tag, group_name):
     """ Create a group in chain 'chain_name', with the name 'group_tag'.
     Ex usage: createGroup("chain1", "insa_group") """
     apirpc = get_api()
@@ -359,7 +359,7 @@ def create_group(chain_name="chain1", group_tag="PGM", group_name="Pro Gamers"):
     apirpc.publish(streamname, 'name', binascii.hexlify(group_name))
     apirpc.publish(streamname, get_myaddr(), binascii.hexlify(pubkey))
 
-def join_group(chain_name="chain1", group_tag="PGM"):
+def join_group(group_tag):
     """ Join a group in chain 'chain_name', with the name 'group_tag'.
     Ex usage: createGroup("chain1", "insa_group") """
     apirpc = get_api()
@@ -368,13 +368,13 @@ def join_group(chain_name="chain1", group_tag="PGM"):
     streamname = ("[Group]" + binascii.hexlify(str(group_tag)))[0:32]
     apirpc.publish(streamname, get_myaddr(), binascii.hexlify(pubkey))
 
-def add_to_group(address, chain_name="chain1", group_tag="PGM"):
+def add_to_group(address, group_tag):
     """ Add the user identified by 'address' to the group 'group_tag' in 'chain_name' """
     apirpc = get_api()
     streamname = ("[Group]" + binascii.hexlify(str(group_tag)))[0:32]
     apirpc.grant(address, streamname + ".write")
 
-def post_group(name_post, file, type, chain_name="chain1", group_tag="PGM"):
+def post_group(name_post, file, type, group_tag):
     """ Post a file in a group """
     apirpc = get_api()
     api = ipfsapi.connect('127.0.0.1', 5001)
@@ -396,35 +396,3 @@ def post_group(name_post, file, type, chain_name="chain1", group_tag="PGM"):
         pubkey = rsa.PublicKey.load_pkcs1(binascii.unhexlify(key['data']))
         crypto = rsa.encrypt(message, pubkey)
         apirpc.publish(streamname, key['key'], binascii.hexlify(crypto))
-
-
-# WORK IN PROGRESS
-# def get_all_posts_group(api, group_name="illuminati"):
-#     """ EXTREME """
-#     posts = []
-#     groupstream = ("[Group]" + binascii.hexlify(str(group_name)))[0:32]
-#     with open('/root/keys/public.pem', mode='rb') as f:
-#         pubkey = f.read()
-#     with open('/root/keys/private.pem', mode='rb') as f:
-#         private = f.read()
-#     private = rsa.PrivateKey.load_pkcs1(private)
-#     raw_stream_names = api.liststreams()
-#     streams = []
-#     for stream in raw_stream_names:
-#         if stream['name'] != 'root' and stream['name'] != 'default_account' and stream['name'] != 'nickname_resolve' and stream['name'][0] == '[' and stream['name'][0:7] != "[Group]":
-#             streams.append(stream['name'])
-#     for content in streams:
-#         liststream = api.liststreamkeyitems(content, binascii.hexlify(pubkey))
-#         print(liststream)
-#         nom = '[' + binascii.unhexlify(liststream[1:])
-#         if nom.find("[" + str(group_name) + "]") < 0:
-#             continue
-#         content = binascii.unhexlify(rsa.decrypt(content['data'], private)).decode('utf8')
-#         content = json.load(content)
-#         ipfs = content['ipfs']
-#         author_account = content['publishers'][0]
-#         type_contenu = content['type']
-#         author = resolve_name(author_account, api)
-#         posts.append({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author})
-#         print(json.dumps({'title': nom, 'ipfs': ipfs, 'type': type_contenu, 'author': author}))
-#     return posts
