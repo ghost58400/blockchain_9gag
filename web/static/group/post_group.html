@@ -22,11 +22,11 @@
             </select>
         </div>
 
-        <div ng-if="new_stream_type == 'Text'" class="form-group">
+        <div ng-if="new_post_group_type == 'Text'" class="form-group">
             <label for="new_post_group_content_input">Content</label>
             <input name="content" type="text" class="form-control" id="new_post_group_content_input" ng-model="new_post_group_content">
         </div>
-        <div ng-if="new_stream_type == 'Image'" class="form-group">
+        <div ng-if="new_post_group_type == 'Image'" class="form-group">
             <label for="new_post_group_content_input_img">Image</label>
             <input name="image" type="file" class="form-control-file" id="new_post_group_content_input_img" ng-model="new_post_group_image">
         </div>
