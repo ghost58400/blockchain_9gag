@@ -130,12 +130,23 @@ def resolve_group(group_tag, api):
             return binascii.unhexlify(key['data'])
     return "Group not found"
 
-def get_list_group(address, api):
-    """ Get the list of all groups where user identified by 'address' is in """
+def get_list_group(address, api, resolve_tag=False):
+    """ Get the list of all groups where user identified by 'address' is in.
+    If resolve_tag is set to True, return the name of the group ; it is set to False, return the tags"""
+    listgroup = []
     liststream = api.liststreams()
     for stream in liststream:
         if stream['name'][0:7] == '[Group]':
-            pass
+            listkeys = api.liststreamitems(stream['name'])
+            for key in listkeys:
+                if key['key'] == address:
+                    if resolve_tag:
+                        listgroup.append(resolve_group(binascii.unhexlify(stream['name'][7:]), api))
+                    else:
+                        listgroup.append(binascii.unhexlify(stream['name'][7:]))
+                    break
+    return listgroup
+
 
 
 def get_all_posts(api, from_group=''):
@@ -168,7 +179,7 @@ def get_all_posts(api, from_group=''):
             author_account = ''
             sm_address = ''
             for it in stream:
-                if it['key'] == 'title'
+                if it['key'] == 'title':
                     nom = binascii.unhexlify(it['data'])
                 elif it['key'] == 'ipfs':
                     ipfs = binascii.unhexlify(it['data'])
