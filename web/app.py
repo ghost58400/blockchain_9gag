@@ -41,7 +41,7 @@ def myetheraddr():
 @app.route('/get_posts')
 def get_posts():
     if get_chain_name() == '':
-        return 'pas de chaine configuree'
+        return jsonify([])
     posts = get_all_posts(get_api())
     return jsonify(posts)
 
@@ -89,6 +89,26 @@ def post_to_group():
     if len(f) == 0 and a['type'] == 'Text':
         return post_group(a['title'], a['content'], a['type'], a['tag'])
     return 'coherency problem'
+
+
+@app.route('/get_pending_invites')
+def invites():
+    return jsonify(get_pending_invite(get_myaddr(), get_api()))
+
+
+@app.route('/get_addresses')
+def addresses():
+    return jsonify(get_list_addresses(get_api()))
+
+
+@app.route('/get_posts/<group_tag>')
+def posts_group(group_tag):
+    return jsonify(get_all_posts(get_api(), group_tag))
+
+
+@app.route('/get_my_groups')
+def my_groups():
+    return jsonify(get_list_group(get_myaddr(), get_api(), True))
 
 
 if __name__ == '__main__':
