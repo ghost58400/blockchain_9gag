@@ -1,4 +1,4 @@
-angular.module('App.post', ['ngRoute'])
+angular.module('App.post', ['ngRoute', 'ngCookies'])
 
     .controller('PostController', function ($scope, $http, $cookie) {
 
@@ -11,7 +11,15 @@ angular.module('App.post', ['ngRoute'])
         $scope.new_post_visibility = null;
 
         console.log("PostController");
-
+        if(!$cookie.get("addrEth")){
+            $http.get('/myetheraddr')
+                .then(function success(e){
+                  $cookie.put("addrEth", e.data);
+                }, function error(e) {
+                  console.log("error getting my Ethereum address");
+                  $scope.errors = e.data.errors
+                });
+        }
         $http.get('/get_posts')
             .then(function success(e) {
                 $scope.errors = [];
