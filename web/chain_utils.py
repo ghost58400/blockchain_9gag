@@ -9,7 +9,6 @@ import rsa
 import json
 from Naked.toolshed.shell import muterun_js
 import psutil
-from flask import redirect
 
 
 def kill_old_daemon():
@@ -390,7 +389,7 @@ def create_post(title, content, type):
     #addr = deployContractForPost()
     #apirpc.publish(streamname, 'smartcontract', binascii.hexlify(addr))
     print(apirpc.liststreamitems(streamname))
-    return redirect("/", code=302)
+    return 'ok'
 
 
 def create_group(group_tag, group_name):
@@ -403,6 +402,7 @@ def create_group(group_tag, group_name):
     apirpc.create('stream', streamname, False)
     apirpc.publish(streamname, 'name', binascii.hexlify(group_name))
     apirpc.publish(streamname, get_myaddr(), binascii.hexlify(pubkey))
+    print("Group created")
 
 def join_group(group_tag):
     """ Join a group in chain 'chain_name', with the name 'group_tag'.
@@ -412,18 +412,24 @@ def join_group(group_tag):
         pubkey = f.read()
     streamname = ("[Group]" + binascii.hexlify(str(group_tag)))[0:32]
     apirpc.publish(streamname, get_myaddr(), binascii.hexlify(pubkey))
+    print("Group joined")
 
 def add_to_group(address, group_tag):
     """ Add the user identified by 'address' to the group 'group_tag' in 'chain_name' """
     apirpc = get_api()
     streamname = ("[Group]" + binascii.hexlify(str(group_tag)))[0:32]
     apirpc.grant(address, streamname + ".write")
+    print("Invitation to group done")
 
 def post_group(name_post, file, type, group_tag):
     """ Post a file in a group """
     apirpc = get_api()
     api = ipfsapi.connect('127.0.0.1', 5001)
-    res = api.add(file)
+    if type == 'Text':
+        res = api.add_json(file)
+    elif type == 'Image':
+        res = api.add(file)
+        res = res['Hash']
     streamname = ("[" + str(group_tag) + "]" + binascii.hexlify(str(name_post)))[0:31]
     groupstream = ("[Group]" + binascii.hexlify(str(group_tag)))[0:32]
     apirpc.create('stream', streamname, False)
@@ -442,4 +448,4 @@ def post_group(name_post, file, type, group_tag):
         crypto = rsa.encrypt(message, pubkey)
         apirpc.publish(streamname, key['key'], binascii.hexlify(crypto))
 
-    return redirect("/", code=302)
+    return 'ok'
