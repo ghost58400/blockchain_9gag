@@ -54,7 +54,7 @@ sudo docker system prune
 
 ## Utilisation de l'interface web
 * Lancez un conteneur docker pour démarrer votre propre noeud sur la blockchain.
-* L'interface web est accessible sur [localhost](127.0.0.1)
+* L'interface web est accessible sur [localhost](http://127.0.0.1).
 * Pour créer une nouvelle chaîne, utilisez le menu déroulant *Chain* et sélectionnez *Create chain*. Pour rejoindre une chaîne existante, sélectionnez *Connect*.
 * Une fois connecté à une chaîne, il devient possible de poster du contenu et de voir celui des autres directement sur la page d'accueil.
 * Le menu déroulant *Group* permet de gérer les groupes et les posts de groupes. Un post de groupe est un post chiffré sur la blockchain déchiffrable uniquement par les membres dudit groupe.
