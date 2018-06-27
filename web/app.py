@@ -64,20 +64,6 @@ def log():
     return send_from_directory('/root/web', 'log.txt')
 
 
-
-
-
-
-
-
-
-@app.route('/show_post/<num_stream>', methods=['GET'])
-def show_post(num_stream):
-    return "Post : {}".format(num_stream)
-# stream = récupération stream
-# return jsonify(stream)
-
-
 if __name__ == '__main__':
     kill_old_daemon()
     set_state('Not connected')
