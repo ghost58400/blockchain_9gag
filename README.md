@@ -16,11 +16,11 @@ sudo docker build -t blockchain_9gag ~/blockchain_9gag
 ## Running a new Docker Container
 * Simply run the following command to create a new container:
 ```
-sudo docker run -it blockchain_9gag
+sudo docker run -p 80:80 -p 1234:1234 -it blockchain_9gag
 ```
 * If you want to create a container in detached mode, run:
 ```
-sudo docker run -dit blockchain_9gag
+sudo docker run -p 80:80 -p 1234:1234 -dit blockchain_9gag
 ```
 * To join a detached container, get its ID by running:
 ```
@@ -44,4 +44,9 @@ If the following error occur : (*Error response from daemon: conflict: unable to
 remove your running containers (this action cannot be undone!):
 ```
 sudo docker rm xxxxxxxxxxxx
+```
+
+* Clean old build images :
+```
+sudo docker system prune
 ```
