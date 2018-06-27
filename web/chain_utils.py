@@ -70,6 +70,8 @@ def generate_key_pair():
         f.write(pubkey.save_pkcs1())
     with open("/root/keys/private.pem", "w") as f:
         f.write(privkey.save_pkcs1())
+    time.sleep(2)
+    print("Keys generated")
 
 def set_state(state):
     file = open(os.path.dirname(os.path.realpath(__file__)) + '/state.txt', 'w')
