@@ -193,7 +193,7 @@ def connect_chain(ip, port, chain_name, nickname):
     time.sleep(2)
     call('rm -rf /root/.multichain/' + chain_name, shell=True)
 
-    call("nohup multichaind " + chain_name + "@" + ip + ":" + port + " -daemon -autosubscribe=streams", shell=True)
+    call("multichaind " + chain_name + "@" + ip + ":" + port + " -daemon -autosubscribe=streams", shell=True)
     time.sleep(2)
 
     apirpc = get_api()
@@ -238,7 +238,7 @@ def create_chain(chain_name, nickname):
     # call("systemctl", "restart", "firewalld.service")
     call('rm -rf /root/.multichain/' + chain_name, shell=True)
     call("multichain-util create " + chain_name + " -default-network-port=" + default_chain_port + " -default-rpc-port=" + default_rpc_port + " -anyone-can-connect=true -anyone-can-create=true -anyone-can-mine=true -anyone-can-receive=true", shell=True)
-    call("nohup multichaind " + chain_name + " -daemon -autosubscribe=streams", shell=True)
+    call("multichaind " + chain_name + " -daemon -autosubscribe=streams", shell=True)
 
     time.sleep(5)
 

@@ -70,6 +70,6 @@ if __name__ == '__main__':
     name = get_chain_name()
     #createEtherAddr()
     if name != '':
-        call("nohup multichaind " + name + " -daemon", shell=True)
+        call("multichaind " + name + " -daemon -autosubscribe=streams", shell=True)
         set_state('Connected to ' + name)
     app.run(host='0.0.0.0', port=80, debug=False)
