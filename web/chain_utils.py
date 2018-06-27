@@ -37,11 +37,11 @@ def createEtherAddr():
       print('create Ethereum address error')
 
 def get_ethaddr():
-  addr = 'Not defined'  
+  addr = 'Not defined'
   with open("ethaddr.txt", "r") as f:
       addr = f.read()
   return addr
-    
+
 
 
 def get_chain_name():
@@ -180,7 +180,7 @@ def get_list_group(address, api, resolve_tag=False):
             for key in listkeys:
                 if key['key'] == address:
                     if resolve_tag:
-                        listgroup.append(binascii.unhexlify(stream['name'][7:]) + " : "+ resolve_group(binascii.unhexlify(stream['name'][7:]), api))
+                        listgroup.append("[" + binascii.unhexlify(stream['name'][7:]) + "]" + resolve_group(binascii.unhexlify(stream['name'][7:]), api))
                     else:
                         listgroup.append(binascii.unhexlify(stream['name'][7:]))
                     break
