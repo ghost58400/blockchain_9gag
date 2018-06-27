@@ -181,7 +181,7 @@ def get_list_group(address, api, resolve_tag=False):
             for key in listkeys:
                 if key['key'] == address:
                     if resolve_tag:
-                        dictgroup.update(binascii.unhexlify(stream['name'][7:]), resolve_group(binascii.unhexlify(stream['name'][7:]), api))
+                        dictgroup[binascii.unhexlify(stream['name'][7:])] = resolve_group(binascii.unhexlify(stream['name'][7:]), api)
                     else:
                         listgroup.append(binascii.unhexlify(stream['name'][7:]))
                     break
