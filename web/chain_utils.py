@@ -130,6 +130,20 @@ def resolve_group(group_tag, api):
             return binascii.unhexlify(key['data'])
     return "Group not found"
 
+def get_list_addresses(api):
+    """ Get all addresses in the blockchain """
+    listaddresses = []
+    streamname = api.liststreamitems('nickname_resolve')
+    for key in streamname:
+        if key['publishers'][0] not in listaddresses:
+            listaddresses.append(str(key['publishers'][0]))
+    return listaddresses
+
+
+def get_pending_invite(address, api):
+    """ Get pending invite in a group for user identified by 'address' """
+    pass
+
 def get_list_group(address, api, resolve_tag=False):
     """ Get the list of all groups where user identified by 'address' is in.
     If resolve_tag is set to True, return the name of the group ; it is set to False, return the tags"""
@@ -391,8 +405,8 @@ def post_group(name_post, file, type, group_tag):
     for key in listkeys:
         if key['key'] == 'name':
             continue
-        print(binascii.unhexlify(key['data']))
-        print(key['key'])
+        # print(binascii.unhexlify(key['data']))
+        # print(key['key'])
         pubkey = rsa.PublicKey.load_pkcs1(binascii.unhexlify(key['data']))
         crypto = rsa.encrypt(message, pubkey)
         apirpc.publish(streamname, key['key'], binascii.hexlify(crypto))
