@@ -5,15 +5,11 @@
     <h3 style="width: 100%">
         Join a group :
     </h3>
-    <form ng-submit="createChain()" action="#!/home/" target="_blank" class="col-md-12">
+    <form ng-submit="joinGroup()" action="#!/home/" target="_blank" class="col-md-12">
         <div class="form-group">
-            <label for="name_chain_input">Name</label>
-            <input type="text" class="form-control" id="name_chain_input" ng-model="new_chain_name">
+            <label for="tag_join_input">Tag</label>
+            <input type="text" class="form-control" id="tag_join_input" ng-model="join_group_tag">
         </div>
-        <div class="form-group">
-            <label for="nickname_chain_input">Nickname</label>
-            <input type="text" class="form-control" id="nickname_chain_input" ng-model="new_chain_nickname">
-        </div>
-        <button type="submit" class="btn btn-primary">Create blockchain</button>
+        <button type="submit" class="btn btn-primary">Join group</button>
     </form>
 </div>
