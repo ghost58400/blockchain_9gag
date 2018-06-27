@@ -36,7 +36,8 @@ def state():
 
 @app.route('/myetheraddr')
 def myetheraddr():
-    return get_ethaddr()
+    #return get_ethaddr()
+    return 'no eth'
 
 @app.route('/get_posts')
 def get_posts():
