@@ -2,6 +2,7 @@ FROM centos
 
 EXPOSE 80
 EXPOSE 1234
+EXPOSE 4001
 ADD ./install.sh /root
 WORKDIR /root
 RUN sh /root/install.sh
