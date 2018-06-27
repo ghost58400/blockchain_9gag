@@ -132,6 +132,8 @@ def resolve_group(group_tag, api):
 
 def get_list_addresses(api):
     """ Get all addresses in the blockchain """
+    if api == '':
+        return []
     listaddresses = []
     streamname = api.liststreamitems('nickname_resolve')
     for key in streamname:
@@ -139,10 +141,29 @@ def get_list_addresses(api):
             listaddresses.append(str(key['publishers'][0]))
     return listaddresses
 
+def get_pending_invite(address, api, resolve_tag=False):
+    """ Get pending invite in a group for user identified by 'address'
+    If resolve_tag is set to True, return the name of the group ; it is set to False, return the tags"""
+    if api == '':
+        return []listinvite = []
+    liststream = api.liststreams()
+    for stream in liststream:
+        if stream['name'][0:7] == '[Group]':
+            listkeys = api.liststreamitems(stream['name'])
+            keyFound = False
+            for key in listkeys:
+                if key['key'] == address:
+                    keyFound = True
+                    break
+            if not keyFound:
+                permission = api.listpermissions(stream['name'] + ".write", address)
+                if len(permission) != 0:
+                    if resolve_tag:
+                        listinvite.append(resolve_group(binascii.unhexlify(stream['name'][7:]), api))
+                    else:
+                        listinvite.append(binascii.unhexlify(stream['name'][7:]))
+    return listinvite
 
-def get_pending_invite(address, api):
-    """ Get pending invite in a group for user identified by 'address' """
-    pass
 
 def get_list_group(address, api, resolve_tag=False):
     """ Get the list of all groups where user identified by 'address' is in.
@@ -155,12 +176,11 @@ def get_list_group(address, api, resolve_tag=False):
             for key in listkeys:
                 if key['key'] == address:
                     if resolve_tag:
-                        listgroup.append(resolve_group(binascii.unhexlify(stream['name'][7:]), api))
+                        listgroup.append(binascii.unhexlify(stream['name'][7:]) + " : "+ resolve_group(binascii.unhexlify(stream['name'][7:]), api))
                     else:
                         listgroup.append(binascii.unhexlify(stream['name'][7:]))
                     break
     return listgroup
-
 
 
 def get_all_posts(api, from_group=''):
@@ -410,3 +430,5 @@ def post_group(name_post, file, type, group_tag):
         pubkey = rsa.PublicKey.load_pkcs1(binascii.unhexlify(key['data']))
         crypto = rsa.encrypt(message, pubkey)
         apirpc.publish(streamname, key['key'], binascii.hexlify(crypto))
+
+    return 'ok'
