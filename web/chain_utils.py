@@ -8,14 +8,38 @@ import ipfsapi
 import rsa
 import json
 from Naked.toolshed.shell import muterun_js
+import psutil
+
+
+def kill_old_daemon():
+    for proc in psutil.process_iter():
+        if proc.name() == 'multichaind':
+            call('kill ' + str(proc.pid), shell=True)
+            time.sleep(2)
+
+
+
+ethaddr = ''
 
 def get_myaddr():
     api = get_api()
     listaddr = api.getaddresses(True)
     for addr in listaddr:
-        if addr['ismine'] == True:
+        if addr['ismine']:
             return addr['address']
     return None
+    
+def createEtherAddr():
+    response = muterun_js('/root/scriptTest/createAccount.js')
+    if response.exitcode == 0:
+      addr = response.stdout[:-1]
+      ethaddr = addr
+    else:
+      print('create Ethereum address error')
+      
+def get_ethaddr():
+    return ethaddr
+    
 
 def get_chain_name():
     file = open(os.path.dirname(os.path.realpath(__file__)) + '/chain_name.txt', 'r')
@@ -79,6 +103,7 @@ def get_api(host=default_rpc_host, port=default_rpc_port, chain_name=''):
 
     return Savoir(rpcuser, rpcpassword, host, port, chain_name)
 
+
 def resolve_name(account, api):
     """ Returns the most recent nickname associated with the address passed by argument. """
     nicknames = api.liststreamitems('nickname_resolve')
@@ -88,6 +113,7 @@ def resolve_name(account, api):
             ret = binascii.unhexlify(nickname['data'])
     return ret
 
+
 def resolve_address(pubkey, api):
     """ Return the address of user identified by 'pubkey'"""
     nicknames = api.liststreamitems('nickname_resolve')
@@ -96,6 +122,7 @@ def resolve_address(pubkey, api):
             return nickname['publishers'][0]
     return None
 
+<<<<<<< HEAD
 def resolve_group(group_tag, api):
     """ Return the full name of a group from its tag """
     streamname = "[Group]" + str(group_tag)
@@ -104,6 +131,12 @@ def resolve_group(group_tag, api):
 
 def get_all_posts(api, from_group=''):
     """ If you want to get only the posts from a specific group, set the optional parameter 'from_group' to the group tag you want to filter """
+=======
+
+def get_all_posts(api):
+    print('in get all posts')
+    print(api)
+>>>>>>> 39dd7d13ba18387a0cc0a8d4d8464086749a3d70
     if api is None:
         return []
     fsapi = ipfsapi.connect('127.0.0.1', 5001)
@@ -170,6 +203,7 @@ def get_all_posts(api, from_group=''):
             post['ipfs'] = fsapi.get_json(post['ipfs'])
     return posts
 
+
 def connect_chain(ip, port, chain_name, nickname):
     """ Connect to the chain at 'ip' address where 'chain_name' is the name of the chain you want to create and where 'nickname' is the nickname you want to be identified by."""
     set_chain_name(chain_name)
@@ -179,7 +213,7 @@ def connect_chain(ip, port, chain_name, nickname):
     time.sleep(2)
     call('rm -rf /root/.multichain/' + chain_name, shell=True)
 
-    call("nohup multichaind " + chain_name + "@" + ip + ":" + port + " -daemon -autosubscribe=streams", shell=True)
+    call("multichaind " + chain_name + "@" + ip + ":" + port + " -daemon -autosubscribe=streams", shell=True)
     time.sleep(2)
 
     apirpc = get_api()
@@ -211,6 +245,8 @@ def connect_chain(ip, port, chain_name, nickname):
     hex_nick = nickname.encode("hex")
     generate_key_pair()
     apirpc.publish("nickname_resolve", pubkey, str(hex_nick))
+    set_state('Connected to ' + chain_name)
+
 
 def create_chain(chain_name, nickname):
     """ Create a new chain where 'chain_name' is the name of the chain you want to create and where 'nickname' is the nickname you want to be identified by."""
@@ -222,7 +258,7 @@ def create_chain(chain_name, nickname):
     # call("systemctl", "restart", "firewalld.service")
     call('rm -rf /root/.multichain/' + chain_name, shell=True)
     call("multichain-util create " + chain_name + " -default-network-port=" + default_chain_port + " -default-rpc-port=" + default_rpc_port + " -anyone-can-connect=true -anyone-can-create=true -anyone-can-mine=true -anyone-can-receive=true", shell=True)
-    call("nohup multichaind " + chain_name + " -daemon -autosubscribe=streams", shell=True)
+    call("multichaind " + chain_name + " -daemon -autosubscribe=streams", shell=True)
 
     time.sleep(5)
 
@@ -257,6 +293,8 @@ def create_chain(chain_name, nickname):
     print(apirpc.publish("nickname_resolve", pubkey, str(hex_nick)))
     # apirpc.publish("nickname_resolve", "pubkey", pubkey)
     print('create chain finished')
+    set_state('Connected to ' + chain_name)
+
 
 def deployContractForPost():
     response = muterun_js('/root/scriptTest/EtherUtils.js')
@@ -267,8 +305,11 @@ def deployContractForPost():
       print('Deploy contract error')
       return ''
 
+
 def create_post(title, content, type):
     apirpc = get_api()
+    if apirpc is None:
+        return 'not connected'
     api = ipfsapi.connect('127.0.0.1', 5001)
     streamname = binascii.hexlify(title)[0:32]
     if type == 'Text':
@@ -287,6 +328,7 @@ def create_post(title, content, type):
     #addr = deployContractForPost()
     #apirpc.publish(streamname, 'smartcontract', binascii.hexlify(addr))
     print(apirpc.liststreamitems(streamname))
+    return 'ok'
 
 
 def create_group(chain_name="chain1", group_tag="PGM", group_name="Pro Gamers"):
@@ -300,8 +342,14 @@ def create_group(chain_name="chain1", group_tag="PGM", group_name="Pro Gamers"):
     apirpc.publish(streamname, 'name', binascii.hexlify(group_name))
     apirpc.publish(streamname, get_myaddr(), binascii.hexlify(pubkey))
 
+<<<<<<< HEAD
 def join_group(chain_name="chain1", group_tag="PGM"):
     """ Join a group in chain 'chain_name', with the name 'group_tag'.
+=======
+
+def join_group(chain_name="chain1", group_name="illuminati"):
+    """ Join a group in chain 'chain_name', with the name 'group_name'.
+>>>>>>> 39dd7d13ba18387a0cc0a8d4d8464086749a3d70
     Ex usage: createGroup("chain1", "insa_group") """
     apirpc = get_api()
     with open('/root/keys/public.pem', mode='rb') as f:
@@ -309,13 +357,24 @@ def join_group(chain_name="chain1", group_tag="PGM"):
     streamname = ("[Group]" + binascii.hexlify(str(group_tag)))[0:32]
     apirpc.publish(streamname, get_myaddr(), binascii.hexlify(pubkey))
 
+<<<<<<< HEAD
 def add_to_group(address, chain_name="chain1", group_tag="PGM"):
     """ Add the user identified by 'address' to the group 'group_tag' in 'chain_name' """
+=======
+
+def add_to_group(address, chain_name="chain1", group_name="illuminati"):
+    """ Add the user identified by 'address' to the group 'group_name' in 'chain_name' """
+>>>>>>> 39dd7d13ba18387a0cc0a8d4d8464086749a3d70
     apirpc = get_api()
     streamname = ("[Group]" + binascii.hexlify(str(group_tag)))[0:32]
     apirpc.grant(address, streamname + ".write")
 
+<<<<<<< HEAD
 def post_group(name_post, file, type, chain_name="chain1", group_tag="PGM"):
+=======
+
+def post_group(name_post, file, type, chain_name="chain1", group_name="illuminati"):
+>>>>>>> 39dd7d13ba18387a0cc0a8d4d8464086749a3d70
     """ Post a file in a group """
     apirpc = get_api()
     api = ipfsapi.connect('127.0.0.1', 5001)
@@ -337,6 +396,7 @@ def post_group(name_post, file, type, chain_name="chain1", group_tag="PGM"):
         pubkey = rsa.PublicKey.load_pkcs1(binascii.unhexlify(key['data']))
         crypto = rsa.encrypt(message, pubkey)
         apirpc.publish(streamname, key['key'], binascii.hexlify(crypto))
+
 
 # WORK IN PROGRESS
 # def get_all_posts_group(api, group_name="illuminati"):
