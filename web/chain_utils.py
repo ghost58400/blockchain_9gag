@@ -401,8 +401,8 @@ def create_post(title, content, type):
     apirpc.publish(streamname, 'ipfs', binascii.hexlify(res))
     apirpc.publish(streamname, 'type', binascii.hexlify(type))
     # Decommenter apres lancer la VM Ethereum et executer scriptTest/test2.sh
-    # addr = deployContractForPost()
-    # apirpc.publish(streamname, 'smartcontract', binascii.hexlify(addr))
+    addr = deployContractForPost()
+    apirpc.publish(streamname, 'smartcontract', binascii.hexlify(addr))
     print(apirpc.liststreamitems(streamname))
     return redirect("/", code=302)
 

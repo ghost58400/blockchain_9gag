@@ -70,3 +70,8 @@ docker pull trufflesuite/ganache-cli
 ```
 docker run -it trufflesuite/ganache-cli --hostname <IP>
 ```
+## Run avec Ethereum
+* Attention ! il faut que les arguments soient passé avant le nom de l'image. Après le nom de l'image c'est pour lancer un programme au lancement du contener.
+```
+docker run -it -e "Eth=<Ip>:<Port>" my_image
+```

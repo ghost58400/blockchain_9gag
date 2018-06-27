@@ -8,6 +8,6 @@ WORKDIR /root
 RUN sh /root/install.sh
 RUN rm -f /root/install.sh
 ADD . /root
-#RUN sh /root/scriptTest/test2.sh
+RUN cd /root/scriptTest/; sh test2.sh; cd
 
 CMD ["/bin/bash"]

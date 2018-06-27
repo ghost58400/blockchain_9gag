@@ -36,8 +36,7 @@ def state():
 
 @app.route('/myetheraddr')
 def myetheraddr():
-    #return get_ethaddr()
-    return 'no eth'
+    return get_ethaddr()
 
 @app.route('/get_posts')
 def get_posts():
@@ -112,11 +111,6 @@ def my_groups():
     return jsonify(get_list_group(get_myaddr(), get_api()))
 
 
-@app.route('/eth/<ip>')
-def start_eth(ip):
-    call('sh /root/scriptTest/test.sh ' + ip, shell=True)
-
-
 @app.route('/my_address')
 def my_address():
     addr = get_myaddr()
@@ -128,7 +122,7 @@ if __name__ == '__main__':
     kill_old_daemon()
     set_state('Not connected')
     name = get_chain_name()
-    #createEtherAddr()
+    createEtherAddr()
     if name != '':
         call("multichaind " + name + " -daemon -autosubscribe=streams", shell=True)
         set_state('Connected to ' + name)
