@@ -2,12 +2,12 @@
     <h3 style="width: 100%">
         Invite an user to a group :
     </h3>
-    <form ng-submit="inviteMember()" action="#!/home/" target="_blank" class="col-md-12">
+    <form ng-submit="inviteMember()" action="#!/home/" class="col-md-12">
         <div class="form-group">
             <label for="tag_member_input">Group tag</label>
-            <div id="tag_member_input" ng-if="list_my_group.length != 0">
-                <select ng-repeat="group in list_my_group track by $index" ng-model="new_member_tag">
-                    <option>{{ group }}</option>
+            <div id="tag_member_input">
+                <select class="form-control" ng-model="new_member_tag">
+                    <option ng-repeat="group in list_my_group" value="{{ group }}">{{ group }}</option>
                 </select>
             </div>
         </div>

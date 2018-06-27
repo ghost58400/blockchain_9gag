@@ -5,8 +5,12 @@
     </h3>
     <form method="post" enctype="multipart/form-data" action="/post_group" id="form_file" class="col-md-12">
         <div class="form-group">
-            <label for="new_post_group_tag_input">Group tag</label>
-            <input name="tag" type="text" class="form-control" id="new_post_group_tag_input" ng-model="new_post_group_tag">
+            <label for="tag_member_input">Group tag</label>
+            <div id="tag_member_input">
+                <select class="form-control" ng-model="new_post_group_tag">
+                    <option ng-repeat="group in list_my_group" value="{{ group }}">{{ group }}</option>
+                </select>
+            </div>
         </div>
 
         <div class="form-group">

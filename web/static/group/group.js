@@ -31,6 +31,8 @@ angular.module('App.group', ['ngRoute'])
                     if (e.data !== '') {
                         console.log("success /get_my_groups");
                         console.log(e.data);
+                        $scope.list_my_group = e.data;
+                        for(let i in e.data) console.log(i);
                     }
                 }, function error(e) {
                     console.log("error /get_my_groups");
@@ -45,6 +47,7 @@ angular.module('App.group', ['ngRoute'])
                     if (e.data !== '') {
                         console.log("success /get_to_join_groups");
                         console.log(e.data);
+                        $scope.list_to_join_group = e.data;
                     }
                 }, function error(e) {
                     console.log("error /get_to_join_groups");
@@ -69,7 +72,6 @@ angular.module('App.group', ['ngRoute'])
                 $scope.new_group_tag = null;
                 $scope.new_group_name = null;
             }
-
         };
 
         $scope.inviteMember = function () {
