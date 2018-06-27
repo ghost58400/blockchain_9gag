@@ -109,4 +109,6 @@ angular.module('App.group', ['ngRoute'])
             }
         };
 
+        $scope.get_my_groups();
+        $scope.get_to_join_groups();
     });
