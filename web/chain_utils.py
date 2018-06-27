@@ -113,7 +113,6 @@ def resolve_name(account, api):
             ret = binascii.unhexlify(nickname['data'])
     return ret
 
-
 def resolve_address(pubkey, api):
     """ Return the address of user identified by 'pubkey'"""
     nicknames = api.liststreamitems('nickname_resolve')
@@ -130,6 +129,14 @@ def resolve_group(group_tag, api):
         if key['key'] == 'name':
             return binascii.unhexlify(key['data'])
     return "Group not found"
+
+def get_list_group(address, api):
+    """ Get the list of all groups where user identified by 'address' is in """
+    liststream = api.liststreams()
+    for stream in liststream:
+        if stream['name'][0:7] == '[Group]':
+            pass
+
 
 def get_all_posts(api, from_group=''):
     """ If you want to get only the posts from a specific group, set the optional parameter 'from_group' to the group tag you want to filter """
@@ -161,13 +168,14 @@ def get_all_posts(api, from_group=''):
             author_account = ''
             sm_address = ''
             for it in stream:
-                nom = binascii.unhexlify(it['title'])
-                if it['key'] == 'ipfs':
+                if it['key'] == 'title'
+                    nom = binascii.unhexlify(it['data'])
+                elif it['key'] == 'ipfs':
                     ipfs = binascii.unhexlify(it['data'])
                     author_account = it['publishers'][0]
-                if it['key'] == 'type':
+                elif it['key'] == 'type':
                     type_contenu = binascii.unhexlify(it['data'])
-                if it['key'] == 'smartcontract':
+                elif it['key'] == 'smartcontract':
                     sm_address = binascii.unhexlify(it['data'])
             if ipfs != '' and type_contenu != '' and author_account != '':
                 author = resolve_name(author_account, api)
