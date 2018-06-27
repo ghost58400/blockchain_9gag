@@ -39,7 +39,7 @@ angular.module('App.group', ['ngRoute'])
         };
 
         $scope.get_to_join_groups = function () {
-            $http.get('/get_to_join_groups')
+            $http.get('/get_pending_invites')
                 .then(function success(e) {
                     $scope.errors = [];
                     if (e.data !== '') {
@@ -60,7 +60,7 @@ angular.module('App.group', ['ngRoute'])
                         if (e.data !== '') {
                             console.log("success /create_group");
                             console.log(e.data);
-                            window.location.href = "#!/home";
+                            // window.location.href = "#!/home";
                         }
                     }, function error(e) {
                         console.log("error /create_group");
@@ -80,7 +80,7 @@ angular.module('App.group', ['ngRoute'])
                         if (e.data !== '') {
                             console.log("success /add_to_group");
                             console.log(e.data);
-                            window.location.href = "#!/home";
+                            // window.location.href = "#!/home";
                         }
                     }, function error(e) {
                         console.log("error /add_to_group");
@@ -99,7 +99,7 @@ angular.module('App.group', ['ngRoute'])
                         if (e.data !== '') {
                             console.log("success /join_group");
                             console.log(e.data);
-                            window.location.href = "#!/home";
+                            // window.location.href = "#!/home";
                         }
                     }, function error(e) {
                         console.log("error /join_group");
